@@ -105,7 +105,7 @@
                                                 <option value="burkina_faso">BURKINA FASO</option>
                                                 <option value="mali">MALI</option>
                                                 <option value="mali">COTE D'IVOIRE</option>
-                                                <option value="mali">SENEGALE</option>
+                                                <option value="mali">SENEGAL</option>
                                                 <option value="mali">BENIN</option>
                                                 <option value="mali">TOGO</option>
                                             </select>
