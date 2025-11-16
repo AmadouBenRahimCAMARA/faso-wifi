@@ -109,7 +109,7 @@
                             BURKINA FASO <br>
                             Bobo-Dioulasso<br>
                             Secteur 22 <br><br>
-                            <strong>Téléphone:</strong> +226 20660249<br>
+                            <strong>Téléphone:</strong> (+226)54 78 19 78<br>
                             <strong>Email:</strong> info@wilinktickets.com<br>
                         </p>
                     </div>

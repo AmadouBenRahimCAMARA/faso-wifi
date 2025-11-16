@@ -92,7 +92,7 @@
                                 <div class="info-box mt-4">
                                     <i class="bx bx-phone-call"></i>
                                     <h3>Téléphone</h3>
-                                    <p>+226 66 33 92 92<br>+226 73 13 00 38</p>
+                                    <p>(+226)54 78 19 78</p>
 
                                 </div>
                             </div>
