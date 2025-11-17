@@ -128,8 +128,8 @@
 
                     <div class="col-lg-4 col-md-6 footer-newsletter">
                         <h4>Nos réferences</h4>
-                        <p>RCCM : BFBBD 2018A0714</p>
-                        <p>IFU : 00105455A</p>
+                        <p>RCCM : BFBBD 01202581301633</p>
+                        <p>IFU : 00277389V </p>
                         <!--div class="social-links text-center text-md-end pt-3 pt-md-0">
                             <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
                             <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
