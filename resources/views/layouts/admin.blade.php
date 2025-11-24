@@ -27,6 +27,19 @@
                     <li class="nav-item"><a class="nav-link @if (Route::currentRouteName() == 'home') active @endif"
                             href="{{ route('home') }}"><i class="fas fa-tachometer-alt"></i><span>Accueil</span></a>
                     </li>
+
+                    @if(Auth::user()->isAdmin())
+                    <hr class="sidebar-divider">
+                    <div class="sidebar-heading text-light p-2">Administration</div>
+                    <li class="nav-item"><a class="nav-link @if (Route::currentRouteName() == 'admin.dashboard') active @endif"
+                            href="{{ route('admin.dashboard') }}"><i class="fas fa-chart-line"></i><span>Global Stats</span></a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link @if (Route::currentRouteName() == 'admin.users') active @endif"
+                            href="{{ route('admin.users') }}"><i class="fas fa-users"></i><span>Utilisateurs</span></a>
+                    </li>
+                    <hr class="sidebar-divider">
+                    @endif
+
                     <li class="nav-item"><a class="nav-link @if (Route::currentRouteName() == 'wifi.index') active @endif"
                             href="{{ route('wifi.index') }}"><i class="fas fa-wifi"></i><span>Mes Wifi Zone</span></a>
                     </li>

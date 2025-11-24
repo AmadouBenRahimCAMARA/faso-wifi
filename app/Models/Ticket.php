@@ -29,4 +29,8 @@ class Ticket extends Model
         $this->hasMany(Paiement::class);
     }
 
+    public function owner(){
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
 }

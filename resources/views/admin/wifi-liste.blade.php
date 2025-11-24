@@ -45,6 +45,9 @@
                                     <th>Nom</th>
                                     <th>Description</th>
                                     <th>Date d'ajout</th>
+                                    @if(Auth::user()->isAdmin())
+                                    <th>Vendeur</th>
+                                    @endif
                                     <th>Code d'integration</th>
                                     <th>Action</th>
                                 </tr>
@@ -57,6 +60,9 @@
                                         <th>{{ $values->nom }}</th>
                                         <th>{{ $values->description }}</th>
                                         <th>{{ date_format($values->created_at, 'd/m/Y H:i:s') }}</th>
+                                        @if(Auth::user()->isAdmin())
+                                        <th>{{ $values->user->nom }} {{ $values->user->prenom }}</th>
+                                        @endif
                                         <td><button class="btn btn-primary btn-fixed-width" data-bs-toggle="modal" data-bs-target="#modalCopier" onclick="copyCode('{{$values->slug}}')">copier le code</button></td>
                                         <th class="d-flex justify-content-start align-items-center">
                                             <a href="" class="btn btn-primary btn-fixed-width me-1 mb-1"

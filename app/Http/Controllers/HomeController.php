@@ -30,25 +30,31 @@ class HomeController extends Controller
     {
         $dateDuJour = Carbon::today(); // Récupère la date d'aujourd'hui
 
-        $paiements = Paiement::whereDate('updated_at', $dateDuJour)
-                    ->where('user_id', Auth::user()->id)
-                    ->latest()->paginate(10);
+        if (Auth::user()->isAdmin()) {
+            $paiements = Paiement::latest()->paginate(10);
+            $ticketsDuJour = Ticket::whereDate('updated_at', $dateDuJour)->where('etat_ticket', 'VENDU')->get();
+            $ticketsTotalVendu = Ticket::where('etat_ticket', 'VENDU')->get();
+            $solde = Solde::orderBy('id', 'desc')->first(); // This might need more thought for a global admin view
+        } else {
+            $paiements = Paiement::whereDate('updated_at', $dateDuJour)
+                        ->where('user_id', Auth::user()->id)
+                        ->latest()->paginate(10);
 
-        $ticketsDuJour = Ticket::whereDate('updated_at', $dateDuJour)
-                        ->where([
-                            'etat_ticket' => 'VENDU',
-                            'user_id' => Auth::user()->id
-                        ])
-                        ->get();
+            $ticketsDuJour = Ticket::whereDate('updated_at', $dateDuJour)
+                            ->where([
+                                'etat_ticket' => 'VENDU',
+                                'user_id' => Auth::user()->id
+                            ])
+                            ->get();
 
-        $ticketsTotalVendu = Ticket::where([
-                            'etat_ticket' => 'VENDU',
-                            'user_id' => Auth::user()->id
-                        ])
-                        ->get();
+            $ticketsTotalVendu = Ticket::where([
+                                'etat_ticket' => 'VENDU',
+                                'user_id' => Auth::user()->id
+                            ])
+                            ->get();
 
-        //$solde = Solde::whereDate('updated_at', $dateDuJour)->where('user_id', Auth::user()->id)->orderBy('id', 'desc')->first();
-        $solde = Solde::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->first();
+            $solde = Solde::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->first();
+        }
         //dd($solde);
         $soldesDuJour = 0;
         foreach($ticketsDuJour as $ticket){

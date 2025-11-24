@@ -18,4 +18,8 @@ class Retrait extends Model
         "statut",
         "user_id",
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

@@ -25,8 +25,11 @@ class WifiController extends Controller
      */
     public function index()
     {
-        //dd(Auth::user()->wifis()->paginate(10));
-        $datas = Auth::user()->wifis()->paginate(10);
+        if (Auth::user()->isAdmin()) {
+            $datas = Wifi::with('user')->latest()->paginate(10);
+        } else {
+            $datas = Auth::user()->wifis()->paginate(10);
+        }
         return view("admin.wifi-liste",compact("datas"));
     }
 

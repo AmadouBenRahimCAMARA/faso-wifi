@@ -123,6 +123,9 @@
                                     <th>Moyen de paiement</th>
                                     <th>Montant</th>
                                     <th>Status</th>
+                                    @if(Auth::user()->isAdmin())
+                                    <th>Vendeur</th>
+                                    @endif
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -136,6 +139,9 @@
 
                                         <td>{{ $values->montant." FCFA" }}</td>
                                         <td>{{ $values->statut  }}</td>
+                                        @if(Auth::user()->isAdmin())
+                                        <th>{{ $values->user->nom }} {{ $values->user->prenom }}</th>
+                                        @endif
                                         <td class="d-flex justify-content-start align-items-center">
                                             <a href="" class="btn btn-primary btn-fixed-width me-1 mb-1"
                                                 data-bs-target="#view{{ $values->slug }}" data-bs-toggle="modal">Voir</a>

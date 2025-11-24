@@ -49,6 +49,9 @@
                                     <th>Mot de passe</th>
                                     <th>Durée</th>
                                     <th>Etat</th>
+                                    @if(Auth::user()->isAdmin())
+                                    <th>Vendeur</th>
+                                    @endif
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -64,6 +67,9 @@
                                         <th>{{ $values->password}}</th>
                                         <th>{{ $values->dure }}</th>
                                         <th>{{ $values->etat_ticket ==="EN_VENTE" ? "En vente" : "Vendu" }}</th>
+                                        @if(Auth::user()->isAdmin())
+                                        <th>{{ $values->owner->nom }} {{ $values->owner->prenom }}</th>
+                                        @endif
                                         <!--th>{{ date_format($values->created_at, 'd/m/Y H:i:s') }}</th-->
                                         <th class="d-flex justify-content-start align-items-center">
                                             <a href="" class="btn btn-primary btn-fixed-width me-1 mb-1" data-bs-target="#view{{$values->slug}}"

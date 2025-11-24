@@ -27,7 +27,11 @@ class TarifController extends Controller
      */
     public function index()
     {
-        $datas = Auth::user()->tarifs()->latest()->paginate(10);
+        if (Auth::user()->isAdmin()) {
+            $datas = Tarif::with('user')->latest()->paginate(10);
+        } else {
+            $datas = Auth::user()->tarifs()->latest()->paginate(10);
+        }
         return view("admin.tarif-liste",compact("datas"));
     }
 
@@ -38,7 +42,11 @@ class TarifController extends Controller
      */
     public function create()
     {
-        $wifi = Auth::user()->wifis()->get();
+        if (Auth::user()->isAdmin()) {
+            $wifi = Wifi::all(); // Admin can see all Wifis
+        } else {
+            $wifi = Auth::user()->wifis()->get();
+        }
         return view("admin.tarif-create", compact('wifi'));
     }
 

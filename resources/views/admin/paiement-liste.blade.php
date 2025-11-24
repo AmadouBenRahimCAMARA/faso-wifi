@@ -47,6 +47,9 @@
                                     <th>Code acheter</th>
                                     <th>Moyen de paiement</th>
                                     <th>Montant</th>
+                                    @if(Auth::user()->isAdmin())
+                                    <th>Vendeur</th>
+                                    @endif
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -62,6 +65,9 @@
                                         </td>
                                         <td>{{ $values->moyen_de_paiement }}</td>
                                         <td>{{ App\Models\Ticket::find($values->ticket_id)->tarif->montant . ' FCFA' }}</td>
+                                        @if(Auth::user()->isAdmin())
+                                        <th>{{ $values->ticket->owner->nom }} {{ $values->ticket->owner->prenom }}</th>
+                                        @endif
                                         <td class="d-flex justify-content-start align-items-center">
                                             <a href="" class="btn btn-primary btn-fixed-width me-1 mb-1"
                                                 data-bs-target="#view{{ $values->slug }}" data-bs-toggle="modal">Voir</a>

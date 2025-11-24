@@ -47,6 +47,9 @@
                                     <th>Montant</th>
                                     <th>Description</th>
                                     <th>Date d'ajout</th>
+                                    @if(Auth::user()->isAdmin())
+                                    <th>Vendeur</th>
+                                    @endif
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -60,6 +63,9 @@
                                         <th>{{ $values->montant." FCFA"}}</th>
                                         <th>{{ $values->description }}</th>
                                         <th>{{ date_format($values->created_at, 'd/m/Y H:i:s') }}</th>
+                                        @if(Auth::user()->isAdmin())
+                                        <th>{{ $values->user->nom }} {{ $values->user->prenom }}</th>
+                                        @endif
                                         <th class="d-flex justify-content-start align-items-center">
                                             <a href="" class="btn btn-primary btn-fixed-width me-1 mb-1" data-bs-target="#view{{$values->slug}}"
                                                 data-bs-toggle="modal">Voir</a>

@@ -34,7 +34,11 @@ class TicketController extends Controller
      */
     public function index()
     {
-        $datas = Auth::user()->tickets()->latest()->paginate(10);
+        if (Auth::user()->isAdmin()) {
+            $datas = Ticket::with('owner')->latest()->paginate(10);
+        } else {
+            $datas = Auth::user()->tickets()->latest()->paginate(10);
+        }
         return view("admin.ticket-liste",compact("datas"));
     }
 
@@ -45,7 +49,11 @@ class TicketController extends Controller
      */
     public function create()
     {
-        $tarifs = Auth::user()->tarifs()->get();
+        if (Auth::user()->isAdmin()) {
+            $tarifs = Tarif::all(); // Admin can see all Tarifs
+        } else {
+            $tarifs = Auth::user()->tarifs()->get();
+        }
         return view("admin.ticket-create", compact('tarifs'));
     }
 
