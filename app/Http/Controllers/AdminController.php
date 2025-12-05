@@ -64,6 +64,7 @@ class AdminController extends Controller
             'phone' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,'.$user->id,
             'role' => 'required|in:admin,user',
+            'password' => 'nullable|string|min:8',
         ]);
 
         $user->nom = $request->nom;
@@ -71,10 +72,17 @@ class AdminController extends Controller
         $user->phone = $request->phone;
         $user->email = $request->email;
         
-        if ($request->role === 'admin') {
-            $user->is_admin = true;
-        } else {
-            $user->is_admin = false;
+        // Prevent self-demotion or self-banning via role change (though role doesn't affect status directly here)
+        if ($user->id !== Auth::id()) {
+            if ($request->role === 'admin') {
+                $user->is_admin = true;
+            } else {
+                $user->is_admin = false;
+            }
+        }
+
+        if ($request->filled('password')) {
+            $user->password = bcrypt($request->password);
         }
 
         $user->save();
@@ -86,6 +94,11 @@ class AdminController extends Controller
     {
         $user = User::findOrFail($id);
         
+        // Prevent blocking self
+        if ($user->id === Auth::id()) {
+            return redirect()->back()->with('error', 'Vous ne pouvez pas modifier votre propre statut.');
+        }
+
         if ($user->status === 'banned') {
             $user->status = 'active';
             $message = 'Utilisateur débloqué avec succès';

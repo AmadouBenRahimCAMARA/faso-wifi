@@ -53,6 +53,16 @@
                             </div>
                         </div>
 
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="password" class="form-label">Nouveau mot de passe <small class="text-muted">(Laisser vide pour ne pas modifier)</small></label>
+                                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password">
+                                @error('password')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
                         <div class="mb-3">
                             <label for="role" class="form-label">Rôle</label>
                             <select class="form-select @error('role') is-invalid @enderror" id="role" name="role" required>
