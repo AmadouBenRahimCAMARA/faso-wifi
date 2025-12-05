@@ -8,6 +8,7 @@ use App\Models\Ticket;
 use App\Models\Paiement;
 use App\Models\Wifi;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -21,7 +22,7 @@ class AdminController extends Controller
         // Global Statistics for Super Admin
         $totalRevenue = Paiement::join('tickets', 'paiements.ticket_id', '=', 'tickets.id')
             ->join('tarifs', 'tickets.tarif_id', '=', 'tarifs.id')
-            ->sum('tarifs.montant');
+            ->sum(DB::raw('CAST(tarifs.montant AS DECIMAL)'));
 
         $totalTicketsSold = Ticket::where('etat_ticket', 'VENDU')->count();
         $totalUsers = User::count();
