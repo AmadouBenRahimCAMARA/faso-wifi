@@ -85,7 +85,7 @@
                                 <div class="info-box mt-4">
                                     <i class="bx bx-envelope"></i>
                                     <h3>Email</h3>
-                                    <p>info@wilinktickets.com</p>
+                                    <p>info@wilink-tickets.com</p>
                                 </div>
                             </div>
                             <div class="col-md-6">
