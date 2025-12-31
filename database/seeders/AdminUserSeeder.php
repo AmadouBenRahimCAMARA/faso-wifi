@@ -19,8 +19,8 @@ class AdminUserSeeder extends Seeder
             'prenom' => 'User',
             'pays' => 'Burkina Faso',
             'phone' => '00000000',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('password'), // You should change this in production
+            'email' => 'admin@wilink-ticket.com',
+            'password' => bcrypt('9yq571nR'), // You should change this in production
             'is_admin' => true,
         ]);
     }
