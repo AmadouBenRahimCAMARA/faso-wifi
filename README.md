@@ -87,5 +87,17 @@ Une fois le `check` (seed) effectué, le compte Super Admin est :
 2.  **Solde** : Toute modification directe en BDD sur la table `soldes` corrompt l'historique financier. Passer uniquement par le code.
 3.  **Slugs** : Toujours utiliser les `slug` pour les URLs publiques pour éviter l'énumération des IDs.
 
+## 🛠️ 6. Dépannage (Troubleshooting)
+
+### Erreur "Vite manifest not found" (500 Internal Server Error)
+Si cette erreur apparaît (ex: page de connexion, mot de passe oublié), cela signifie que les assets frontend n'ont pas été compilés.
+
+**Solution :**
+Exécuter la commande de build sur le serveur :
+```bash
+npm run build
+```
+Cette commande génère le fichier `public/build/manifest.json` requis par Laravel.
+
 ---
 *Document généré automatiquement - Dernière mise à jour : Janvier 2026*
