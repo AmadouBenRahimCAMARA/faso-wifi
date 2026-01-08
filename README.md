@@ -87,5 +87,44 @@ Une fois le `check` (seed) effectué, le compte Super Admin est :
 2.  **Solde** : Toute modification directe en BDD sur la table `soldes` corrompt l'historique financier. Passer uniquement par le code.
 3.  **Slugs** : Toujours utiliser les `slug` pour les URLs publiques pour éviter l'énumération des IDs.
 
+## 🛠️ 6. Dépannage (Troubleshooting)
+
+### Erreur "Vite manifest not found" (500 Internal Server Error)
+Si cette erreur apparaît (ex: page de connexion, mot de passe oublié), cela signifie que les assets frontend n'ont pas été compilés.
+
+**Solution :**
+Exécuter la commande de build sur le serveur :
+```bash
+npm run build
+```
+Cette commande génère le fichier `public/build/manifest.json` requis par Laravel.
+
+### Problème de traduction (Messages en Anglais)
+Si les messages d'erreur restent en anglais malgré la configuration :
+1. Vider le cache de configuration : `php artisan config:clear`
+2. Vider le cache de l'application : `php artisan cache:clear`
+
+### Erreur d'envoi d'email (Connection refused / mailpit)
+Si vous rencontrez une erreur `Connection could not be established with host "mailpit:1025"`, cela signifie que le serveur de mail n'est pas configuré.
+
+**Solution temporaire (Logs) :**
+Modifier le fichier `.env` pour utiliser le driver `log`. Les emails seront écrits dans `storage/logs/laravel.log` au lieu d'être envoyés.
+```env
+MAIL_MAILER=log
+```
+
+**Solution production (SMTP) :**
+Configurer un vrai serveur SMTP (Gmail, Sendgrid, etc.) dans le fichier `.env` :
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.example.com
+MAIL_PORT=587
+MAIL_USERNAME=votre_user
+MAIL_PASSWORD=votre_mdp
+MAIL_ENCRYPTION=tls
+```
+
+Après modification du `.env`, n'oubliez pas de vider le cache : `php artisan config:clear`.
+
 ---
 *Document généré automatiquement - Dernière mise à jour : Janvier 2026*
