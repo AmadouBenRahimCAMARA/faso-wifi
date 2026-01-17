@@ -75,64 +75,7 @@
                                                 data-bs-toggle="modal">Supprimer</button>
 
 
-                                            <div class="modal fade" id="delete{{ $values->slug }}" tabindex="-1"
-                                                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered">
-                                                    <div class="modal-content bg-white text-dark">
-                                                        <div class="modal-header">
-                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Suppression
-                                                                des données
-                                                            </h1>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            Voulez-vous vraiment supprimer les données ?
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary"
-                                                                data-bs-dismiss="modal">Annuler</button>
-                                                            <form class="d-inline-block"
-                                                                action="{{ route('wifi.destroy', $values->slug) }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                <button type="submit" class="btn btn-danger">Continuer
-                                                                </button>
-                                                                @method('delete')
-                                                            </form>
 
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal fade" id="view{{ $values->slug }}" tabindex="-1"
-                                                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered">
-                                                    <div class="modal-content bg-white text-dark">
-                                                        <div class="modal-header">
-                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">
-                                                                Informations
-                                                            </h1>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div>
-                                                                <span>Nom : </span>
-                                                                <span class="fw-bold">{{ $values->nom }}</span>
-                                                            </div>
-                                                            <div>
-                                                                <span>Description : </span>
-                                                                <span class="fw-bold">{{ $values->description }}</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary"
-                                                                data-bs-dismiss="modal">Fermer</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </th>
                                     </tr>
                                 </tbody>
@@ -141,6 +84,55 @@
 
                         </table>
                     </div>
+
+                    <!-- Modals outside table for stability -->
+                    @foreach ($datas as $values)
+                        <div class="modal fade" id="delete{{ $values->slug }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content bg-white text-dark">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5">Suppression des données</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Voulez-vous vraiment supprimer les données ?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Annuler</button>
+                                        <form class="d-inline-block" action="{{ route('wifi.destroy', $values->slug) }}" method="POST">
+                                            @csrf
+                                            @method('delete')
+                                            <button type="submit" class="btn btn-danger">Continuer</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="view{{ $values->slug }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content bg-white text-dark">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5">Informations</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div>
+                                            <span>Nom : </span>
+                                            <span class="fw-bold">{{ $values->nom }}</span>
+                                        </div>
+                                        <div>
+                                            <span>Description : </span>
+                                            <span class="fw-bold">{{ $values->description }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fermer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                     <div class="row">
                         <div class="col-md-6 align-self-center">
                             <!--p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p-->
