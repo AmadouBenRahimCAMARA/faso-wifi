@@ -97,4 +97,34 @@ php artisan key:generate
 php artisan migrate:fresh --seed
 ```
 
-**Admin par défaut** : `admin@wilink-ticket.com` / `9yq571nR`
+### 🔑 Accès Administrateur par Défaut
+Une fois le `check` (seed) effectué, le compte Super Admin est :
+*   **Email** : `admin@wilink-ticket.com`
+*   **Mot de passe** : `9yq571nR`
+
+---
+
+## ⚠️ 5. Points de Vigilance pour le Développeur
+1.  **Session Import** : Ne jamais supprimer la gestion de session dans `TicketController` sans refondre l'import Excel, sinon les tickets perdront leur tarif.
+2.  **Solde** : Toute modification directe en BDD sur la table `soldes` corrompt l'historique financier. Passer uniquement par le code.
+3.  **Slugs** : Toujours utiliser les `slug` pour les URLs publiques pour éviter l'énumération des IDs.
+
+## 🛠️ 6. Dépannage (Troubleshooting)
+
+### Erreur "Vite manifest not found" (500 Internal Server Error)
+Si cette erreur apparaît (ex: page de connexion, mot de passe oublié), cela signifie que les assets frontend n'ont pas été compilés.
+
+**Solution :**
+Exécuter la commande de build sur le serveur :
+```bash
+npm run build
+```
+Cette commande génère le fichier `public/build/manifest.json` requis par Laravel.
+
+### Problème de traduction (Messages en Anglais)
+Si les messages d'erreur restent en anglais malgré la configuration :
+1. Vider le cache de configuration : `php artisan config:clear`
+2. Vider le cache de l'application : `php artisan cache:clear`
+
+---
+*Document généré automatiquement - Dernière mise à jour : Janvier 2026*
