@@ -65,12 +65,12 @@
                                         @endif
                                         <td><button class="btn btn-primary btn-fixed-width" data-bs-toggle="modal" data-bs-target="#modalCopier" onclick="copyCode('{{$values->slug}}')">copier le code</button></td>
                                         <th class="d-flex justify-content-start align-items-center">
-                                            <a href="" class="btn btn-primary btn-fixed-width me-1 mb-1"
-                                                data-bs-target="#view{{ $values->slug }}" data-bs-toggle="modal">Voir</a>
+                                            <button type="button" class="btn btn-primary btn-fixed-width me-1 mb-1"
+                                                data-bs-target="#view{{ $values->slug }}" data-bs-toggle="modal">Voir</button>
                                             <a href="{{ route('wifi.edit', $values->slug) }}"
                                                 class="btn btn-warning btn-fixed-width me-1 mb-1">Editer</a>
 
-                                            <button href="" class="btn btn-danger btn-fixed-width me-1 mb-1"
+                                            <button type="button" class="btn btn-danger btn-fixed-width me-1 mb-1"
                                                 data-bs-target="#delete{{ $values->slug }}"
                                                 data-bs-toggle="modal">Supprimer</button>
 
