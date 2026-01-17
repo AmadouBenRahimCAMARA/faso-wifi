@@ -37,21 +37,78 @@ class Controller extends BaseController
     }
 
     public function apiPaiement(Request $request){
-
         $tarif = Tarif::find($request->tarif_id);
+        
+        $transaction_id = 'FW'.date('Y').date('m').date('d').'.'.date('h').date('m').'.C'.rand(5,100000);
+        $amount = $tarif->montant;
 
-        //dd($tarif);
+        $ticket = Ticket::where([
+          "etat_ticket" => "EN_VENTE",
+          "tarif_id" => $tarif->id
+        ])->first();
 
-        return view('paiement.payin',compact('tarif'));
+        if($ticket){
+           session(['ticket_id' => $ticket->id]);
+        }else{
+           return redirect('/');
+        }
+
+        $redirectPayin = $this->payinWithRedirection($transaction_id, $amount);
+
+        if(isset($redirectPayin->response_code) and $redirectPayin->response_code=="00") {
+            session([
+                'total' => $amount,
+                'tid' => $transaction_id,
+                'invoiceToken' => $redirectPayin->token
+            ]);
+            return redirect($redirectPayin->response_text);
+        } else {
+            return $this->showPaymentError($redirectPayin);
+        }
     }
 
     public function statutPaiement(Request $request){
+        $invoiceToken = session('invoiceToken');
+        
+        if (!$invoiceToken) {
+             return redirect('/');
+        }
+        
+        // $idcompte = session('idForum');
+        // $idparticipant = session('idParticipant');
+        session(['first_time' => 1]);
+        $montant = session('total');
+        $total = session('total');
+        $tid = session('tid');
+        $ticket_id = session('ticket_id');
 
-        //$tarif = Tarif::find($request->tarif_id);
+        $ticket = Ticket::find($ticket_id);
+        $payin = $this->statusPayin($invoiceToken);
 
-        //dd($tarif);
+        if (isset($payin)) {
+            if (trim($payin->status) == 'completed') {
+                $from_data = [
+                    'transaction_id' => $tid,
+                    'ticket_id' => $ticket_id,
+                    'numero' => $payin->customer,
+                    'slug' => Str::random(10),
+                    'moyen_de_paiement' => $payin->operator_name,
+                ];
 
-        return view('paiement.status');
+                session(['paiement' => $from_data]); // Store array directly, detailed serialization removed
+
+                return redirect()->route("recu", $ticket->slug);
+
+            } elseif (trim($payin->status) == 'nocompleted') {
+                return $this->showPaymentError($payin, 'Le client a annulé le paiement');
+            } elseif (trim($payin->status) == 'pending') {
+                return $this->showPaymentError($payin, 'Paiement en attente');
+            } else {
+                return $this->showPaymentError($payin, 'Erreur inconnue');
+            }
+        } else {
+            return redirect('/');
+        }
     }
 
     public function recuperationView(){
@@ -79,12 +136,16 @@ class Controller extends BaseController
             if($data->etat_ticket === "VENDU"){
                 $paiement = Paiement::where("ticket_id",$data->id)->first();
             }else{
-                session_start();
-                $from_data = unserialize($_SESSION['paiement']);
+                $from_data = session('paiement');
+                
+                if (!$from_data) {
+                    return redirect('/'); // Security: No session data
+                }
+                
                 $from_data['user_id'] = $data->user_id;
 
 
-                //dd($_SESSION['first_time']);
+                //dd(session('first_time'));
                 $paiement = Paiement::create($from_data);
                // $ticket = App\Models\Ticket::find($ticket_id);
                 $data->etat_ticket = "VENDU";
@@ -135,5 +196,103 @@ class Controller extends BaseController
         session()->put('view', $number);
 
         return "ok";
+    }
+
+    // Private helpers
+    private function payinWithRedirection($transaction_id, $amount) {
+        $url = url('/');
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://app.ligdicash.com/pay/v01/redirect/checkout-invoice/create",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS =>'{
+                      "commande": {
+                        "invoice": {
+                          "items": [
+                            {
+                              "name": "Achat de Ticket Wifi",
+                              "description": "Ticket Wifi Faso-Wifi",
+                              "quantity": 1,
+                              "unit_price": "'.$amount.'",
+                              "total_price": "'.$amount.'"
+                            }
+                          ],
+                          "total_amount": "'.$amount.'",
+                          "devise": "XOF",
+                          "description": "Achat de connexion Wifi",
+                          "customer": "",
+                          "customer_firstname":"",
+                          "customer_lastname":"",
+                          "customer_email":""
+                        },
+                        "store": {
+                          "name": "Faso-Wifi",
+                          "website_url": "'.$url.'"
+                        },
+                        "actions": {
+                          "cancel_url": "'.$url.'/status",
+                          "return_url": "'.$url.'/status",
+                          "callback_url": "'.$url.'/status"
+                        },
+                        "custom_data": {
+                          "transaction_id": "'.$transaction_id.'"
+                        }
+                      }
+                    }',
+            CURLOPT_HTTPHEADER => array(
+                "Apikey: MAGPMLT3QFJLIPUDN",
+                "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZF9hcHAiOjE0MDUwLCJpZF9hYm9ubmUiOjMzNjI3NSwiZGF0ZWNyZWF0aW9uX2FwcCI6IjIwMjQtMDQtMDggMDg6MzI6MjQifQ.We4hEwsqnFzauZzKQBUE6Lh-Un2rVaoXYkhj_NdKX4E",
+                "Accept: application/json",
+                "Content-Type: application/json"
+            ),
+        ));
+
+        $response = json_decode(curl_exec($curl));
+        curl_close($curl);
+        return $response;
+    }
+
+    private function statusPayin($invoiceToken) {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, [
+            CURLOPT_URL => 'https://app.ligdicash.com/pay/v01/redirect/checkout-invoice/confirm/?invoiceToken=' . $invoiceToken,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => [
+                "Apikey: MAGPMLT3QFJLIPUDN",
+                "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZF9hcHAiOjE0MDUwLCJpZF9hYm9ubmUiOjMzNjI3NSwiZGF0ZWNyZWF0aW9uX2FwcCI6IjIwMjQtMDQtMDggMDg6MzI6MjQifQ.We4hEwsqnFzauZzKQBUE6Lh-Un2rVaoXYkhj_NdKX4E",
+        ]]);
+        $response = json_decode(curl_exec($curl));
+        curl_close($curl);
+
+        return $response;
+    }
+
+    private function showPaymentError($response, $prefix='') {
+         // A simple error view or dd for now to match legacy behavior
+         echo $prefix . '<br><br>';
+         echo 'response_code=' . ($response->response_code ?? 'N/A');
+         echo '<br><br>';
+         echo 'response_text=' . ($response->response_text ?? 'N/A');
+         echo '<br><br>';
+         echo 'description=' . ($response->description ?? 'N/A');
+         exit; // Or return view('paiement.error', compact('response'));
     }
 }

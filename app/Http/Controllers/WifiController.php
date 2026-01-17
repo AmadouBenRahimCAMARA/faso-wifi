@@ -81,7 +81,12 @@ class WifiController extends Controller
      */
     public function edit($slug)
     {
-        $data = Wifi::where("slug", $slug)->get()->first();
+        $query = Wifi::where("slug", $slug);
+        if (!Auth::user()->isAdmin()) {
+            $query->where('user_id', Auth::id());
+        }
+        $data = $query->first();
+
         if($data){
             return view("admin.wifi-edit",compact("data"));
         }else{
@@ -98,7 +103,12 @@ class WifiController extends Controller
      */
     public function update(Request $request, $slug)
     {
-        $data = Wifi::where('slug', $slug)->first();
+        if (Auth::user()->isAdmin()) {
+             $data = Wifi::where('slug', $slug)->first();
+        } else {
+             $data = Auth::user()->wifis()->where('slug', $slug)->first();
+        }
+
         if(!$data){
             return view("admin.404");
         }
@@ -118,7 +128,12 @@ class WifiController extends Controller
      */
     public function destroy($slug)
     {
-        $data = Wifi::where("slug", $slug)->first();
+        if (Auth::user()->isAdmin()) {
+             $data = Wifi::where('slug', $slug)->first();
+        } else {
+             $data = Auth::user()->wifis()->where('slug', $slug)->first();
+        }
+
         if($data){
             $data->delete();
             return redirect("wifi");

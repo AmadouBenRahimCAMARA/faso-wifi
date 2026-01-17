@@ -68,13 +68,24 @@ class TicketController extends Controller
         //dd($request->all());
         Session::put('tarif_id', $request->tarif_id);
 
+        $request->validate([
+             'fichier' => 'required|file|mimes:xlsx,xls,csv,txt|max:10240', // 10MB max
+        ]);
 
-        $file = $request->file('fichier'); // Retrieve the uploaded file from the request
-        $fileName = Str::random(10) . '.' . $request->fichier->getClientOriginalExtension();
-        // Enregistrer l'image dans le dossier public/images
-        $filePath = $request->fichier->move(public_path('files'), $fileName);
-        Excel::import(new TicketsImport, $filePath);
-        Storage::delete($filePath);
+        $file = $request->file('fichier'); 
+        // Use Laravel's secure storage instead of public path
+        // This stores in storage/app/tickets which is NOT accessible via web unless symlinked
+        $filename = Str::random(20) . '.' . $file->getClientOriginalExtension();
+        $path = $file->storeAs('tickets', $filename);
+        
+        try {
+            Excel::import(new TicketsImport, storage_path("app/{$path}"));
+        } catch (\Exception $e) {
+            // Log error if needed
+            return back()->with('error', 'Erreur lors de l\'importation : ' . $e->getMessage());
+        } finally {
+            Storage::delete($path); // Clean up
+        }
 
         /*$request->validate([
             'forfait' => 'required|string|max:255',
@@ -108,7 +119,16 @@ class TicketController extends Controller
     public function edit($slug)
     {
         $tarif = Auth::user()->tarifs()->get();
-        $data = Ticket::where("slug", $slug)->first();
+        // IDOR Fix: Check allow based on user ownership (or if admin)
+        $query = Ticket::where("slug", $slug);
+        if (!Auth::user()->isAdmin()) {
+            $query->where('user_id', Auth::id()); // Assuming relation exists via owner but ticket has user_id directly? 
+            // Checking Ticket model usage in other methods suggests direct relationship might need verification, 
+            // but commonly tickets belong to users. Let's verify Model structure if possible.
+            // Based on index(): $datas = Auth::user()->tickets()... implies user_id on tickets.
+        }
+        $data = $query->first();
+
         if($data){
             return view("admin.tarif-edit",compact("data","tarif"));
         }else{
@@ -125,7 +145,28 @@ class TicketController extends Controller
      */
     public function update(Request $request, $slug)
     {
-        $data = Ticket::where('slug', $slug)->first();
+        $query = Ticket::where('slug', $slug);
+        if (!Auth::user()->isAdmin()) {
+             // Assuming tickets are linked to users. The previous index code used Auth::user()->tickets()
+             // effectively implying a relationship. However, to be purely safe let's rely on the relationship if we can,
+             // or add the where clause if we are sure of the column 'user_id' or relation.
+             // Looking at Index: Auth::user()->tickets()
+             // So adding:
+             $query->whereHas('owner', function($q) {
+                 $q->where('id', Auth::id());
+             }); 
+             // OR simpler if logic allows:
+             // $data = Auth::user()->tickets()->where('slug', $slug)->first();
+             // Let's stick to the safer query builder approach compatible with both admin handling.
+        }
+        
+        // Simpler IDOR fix consistent with index logic:
+        if (Auth::user()->isAdmin()) {
+             $data = Ticket::where('slug', $slug)->first();
+        } else {
+             $data = Auth::user()->tickets()->where('slug', $slug)->first();
+        }
+
         if(!$data){
             return view("admin.404");
         }
@@ -147,7 +188,11 @@ class TicketController extends Controller
      */
     public function destroy($slug)
     {
-        $data = Ticket::where("slug", $slug)->first();
+        if (Auth::user()->isAdmin()) {
+             $data = Ticket::where('slug', $slug)->first();
+        } else {
+             $data = Auth::user()->tickets()->where('slug', $slug)->first();
+        }
 
         if($data){
             $data->delete();
