@@ -249,8 +249,8 @@ class Controller extends BaseController
                       }
                     }',
             CURLOPT_HTTPHEADER => array(
-                "Apikey: MAGPMLT3QFJLIPUDN",
-                "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZF9hcHAiOjE0MDUwLCJpZF9hYm9ubmUiOjMzNjI3NSwiZGF0ZWNyZWF0aW9uX2FwcCI6IjIwMjQtMDQtMDggMDg6MzI6MjQifQ.We4hEwsqnFzauZzKQBUE6Lh-Un2rVaoXYkhj_NdKX4E",
+                "Apikey: " . config('services.ligdicash.api_key'),
+                "Authorization: Bearer " . config('services.ligdicash.token'),
                 "Accept: application/json",
                 "Content-Type: application/json"
             ),
@@ -276,8 +276,8 @@ class Controller extends BaseController
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'GET',
             CURLOPT_HTTPHEADER => [
-                "Apikey: MAGPMLT3QFJLIPUDN",
-                "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZF9hcHAiOjE0MDUwLCJpZF9hYm9ubmUiOjMzNjI3NSwiZGF0ZWNyZWF0aW9uX2FwcCI6IjIwMjQtMDQtMDggMDg6MzI6MjQifQ.We4hEwsqnFzauZzKQBUE6Lh-Un2rVaoXYkhj_NdKX4E",
+                "Apikey: " . config('services.ligdicash.api_key'),
+                "Authorization: Bearer " . config('services.ligdicash.token'),
         ]]);
         $response = json_decode(curl_exec($curl));
         curl_close($curl);

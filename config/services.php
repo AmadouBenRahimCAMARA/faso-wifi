@@ -31,4 +31,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'ligdicash' => [
+        'api_key' => env('LIGDICASH_API_KEY'),
+        'token' => env('LIGDICASH_TOKEN'),
+    ],
+
 ];
