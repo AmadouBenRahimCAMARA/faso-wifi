@@ -7,7 +7,7 @@
 **Faso-Wifi** est une plateforme SaaS qui permet aux propriétaires de routeurs WiFi (Vendeurs) de monétiser leur connexion internet.
 Le système automatise la vente de tickets d'accès (User/Pass stockés dans un fichier Excel) via des paiements mobiles (Ligdicash).
 
-*   **Problème B2B** : Automatiser la distribution des tickets WiFi pour les gérants de wIFI ZONE.
+*   **Problème B2B** : Automatiser la distribution des tickets WiFi pour les gérants de Wifi Zone.
 *   **Modèle Économique** : Commission de **25%** sur le chiffre d'affaires, prélevée lors du retrait des gains.
 *   **Flux de Valeur** : Import Tickets (Stock) → Vente (Ligdicash) → Solde Virtuel (Ledger) → Retrait (Mobile Money).
 
