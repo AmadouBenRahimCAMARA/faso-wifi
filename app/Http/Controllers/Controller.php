@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 
 
@@ -47,68 +48,106 @@ class Controller extends BaseController
           "tarif_id" => $tarif->id
         ])->first();
 
-        if($ticket){
-           session(['ticket_id' => $ticket->id]);
-        }else{
-           return redirect('/');
+        if(!$ticket){
+           return redirect('/')->with('error', 'Aucun ticket disponible.');
         }
+
+        // Create Paiement immediately with PENDING status
+        $paiement = Paiement::create([
+            'transaction_id' => $transaction_id,
+            'ticket_id' => $ticket->id,
+            'user_id' => $ticket->user_id, // Owner of the ticket (Vendor)
+            'slug' => Str::random(10),
+            'moyen_de_paiement' => 'Mobile Money', 
+            'status' => 'pending',
+            'numero' => '' // Will be filled on confirmation
+        ]);
+
+        session([
+            'transaction_id' => $transaction_id,
+            'ticket_id' => $ticket->id
+        ]);
 
         $redirectPayin = $this->payinWithRedirection($transaction_id, $amount);
 
         if(isset($redirectPayin->response_code) and $redirectPayin->response_code=="00") {
             session([
-                'total' => $amount,
-                'tid' => $transaction_id,
                 'invoiceToken' => $redirectPayin->token
             ]);
             return redirect($redirectPayin->response_text);
         } else {
+            // Failed to initiate: mark as failed
+            $paiement->status = 'failed';
+            $paiement->save();
             return $this->showPaymentError($redirectPayin);
         }
     }
 
     public function statutPaiement(Request $request){
-        $invoiceToken = session('invoiceToken');
+        $transaction_id = session('transaction_id');
         
-        if (!$invoiceToken) {
+        if (!$transaction_id) {
              return redirect('/');
         }
         
-        // $idcompte = session('idForum');
-        // $idparticipant = session('idParticipant');
-        session(['first_time' => 1]);
-        $montant = session('total');
-        $total = session('total');
-        $tid = session('tid');
-        $ticket_id = session('ticket_id');
-
-        $ticket = Ticket::find($ticket_id);
-        $payin = $this->statusPayin($invoiceToken);
-
-        if (isset($payin)) {
-            if (trim($payin->status) == 'completed') {
-                $from_data = [
-                    'transaction_id' => $tid,
-                    'ticket_id' => $ticket_id,
-                    'numero' => $payin->customer,
-                    'slug' => Str::random(10),
-                    'moyen_de_paiement' => $payin->operator_name,
-                ];
-
-                session(['paiement' => $from_data]); // Store array directly, detailed serialization removed
-
-                return redirect()->route("recu", $ticket->slug);
-
-            } elseif (trim($payin->status) == 'nocompleted') {
-                return $this->showPaymentError($payin, 'Le client a annulé le paiement');
-            } elseif (trim($payin->status) == 'pending') {
-                return $this->showPaymentError($payin, 'Paiement en attente');
-            } else {
-                return $this->showPaymentError($payin, 'Erreur inconnue');
-            }
-        } else {
-            return redirect('/');
+        $paiement = Paiement::where('transaction_id', $transaction_id)->first();
+        if (!$paiement) {
+             return redirect('/');
         }
+
+        // 1. Check DB Status first (Webhook might have already processed it)
+        if ($paiement->status == 'completed') {
+             return redirect()->route("recu", $paiement->ticket->slug);
+        }
+
+        // 2. If not completed, check with Ligdicash manually (Fallback)
+        $invoiceToken = session('invoiceToken');
+        if($invoiceToken) {
+            $payin = $this->statusPayin($invoiceToken);
+
+            if (isset($payin) && trim($payin->status) == 'completed') {
+                // Process completion (Duplicate logic from Webhook to ensure consistency)
+                // Use transaction to avoid race condition with Webhook
+                DB::transaction(function () use ($paiement, $payin) {
+                    $paiement->refresh(); // Reload to be sure
+                    if ($paiement->status != 'completed') {
+                        $paiement->status = 'completed';
+                        $paiement->moyen_de_paiement = $payin->operator_name ?? 'Ligdicash';
+                        $paiement->numero = $payin->customer ?? '';
+                        $paiement->save();
+
+                        $ticket = $paiement->ticket;
+                        if ($ticket && $ticket->etat_ticket != 'VENDU') {
+                            $ticket->etat_ticket = 'VENDU';
+                            $ticket->save();
+
+                            $lastSolde = Solde::where('user_id', $paiement->user_id)
+                                ->orderBy('id', 'desc')
+                                ->lockForUpdate()
+                                ->first();
+                            
+                            $montantCompte = $lastSolde ? $lastSolde->solde : 0;
+                            
+                            Solde::create([
+                                "solde" => $montantCompte + $ticket->tarif->montant,
+                                "type" => "PAIEMENT",
+                                "slug" => Str::slug(Str::random(10)),
+                                "user_id" => $paiement->user_id,
+                                "paiement_id" => $paiement->id
+                            ]);
+                        }
+                    }
+                });
+
+                return redirect()->route("recu", $paiement->ticket->slug);
+            } elseif (isset($payin) && trim($payin->status) == 'nocompleted') {
+                 $paiement->status = 'failed';
+                 $paiement->save();
+                 return $this->showPaymentError($payin, 'Le client a annulé le paiement');
+            }
+        }
+
+        return view('paiement.payin_pending'); // Need a view for "Waiting..." or just error
     }
 
     public function recuperationView(){
@@ -127,51 +166,16 @@ class Controller extends BaseController
 
     public function recu($slug)
     {
-        //dd(Paiement::all());
-        $paiement = [];
         $datas = [];
-        $data = Ticket::where("slug", $slug)->first();
+        $data = Ticket::where("slug", $slug)->first(); // Ticket
 
-        if($data){
-            if($data->etat_ticket === "VENDU"){
-                $paiement = Paiement::where("ticket_id",$data->id)->first();
-            }else{
-                $from_data = session('paiement');
-                
-                if (!$from_data) {
-                    return redirect('/'); // Security: No session data
-                }
-                
-                $from_data['user_id'] = $data->user_id;
-
-
-                //dd(session('first_time'));
-                $paiement = Paiement::create($from_data);
-               // $ticket = App\Models\Ticket::find($ticket_id);
-                $data->etat_ticket = "VENDU";
-                //$ticket->vente_date = lluminate\Support\Carbon::now();
-                $data->save();
-
-                $solde = Solde::where('user_id', $paiement->user_id)->orderBy('id', 'desc')->first();
-                $montantCompte = 0;
-                if($solde){
-                    $montantCompte = $solde->solde;
-                }
-
-                Solde::create([
-                    "solde" => $montantCompte + $data->tarif->montant,
-                    "type" => "PAIEMENT",
-                    "slug" => Str::slug(Str::random(10)),
-                    "user_id" => $data->user_id,
-                    "paiement_id" => $paiement->id
-                ]);
-            }
-
-
-            //$paiement = Paiement::where("ticket_id",$data->id)->first();
-            //dd($paiement);
+        if(!$data || $data->etat_ticket !== 'VENDU'){
+            // Ticket not sold yet? Redirect to home
+             return redirect('/')->with('error', 'Ce ticket n\'est pas disponible.');
         }
 
+        $paiement = Paiement::where("ticket_id",$data->id)->first();
+        
         return view("paiement.recu",compact("datas","data","paiement"));
     }
 
