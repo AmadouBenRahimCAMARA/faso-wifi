@@ -157,9 +157,9 @@
                 </div>
                 <div class="column postion-relative">
                     <p class="text-center text-uppercase postion-absolute-top1 pt-2 w-100">
-                        <img width="120px" src="./Logo.png" alt="LOGO WiLink Tickets" /> <br />
+                        <img width="120px" src="public/assets/img/logo.png" alt="LOGO WiLink Tickets" /> <br />
                         WiLink Tickets<br />
-                        <span class="text-uppercase">+226 54 78 19 78 /  </span><br />
+                        <span class="text-uppercase">+226 54 78 19 78 / +226 56 36 80 34 / +226 65 86 33 36 </span><br />
                         <span class="text-uppercase">info@wilinktickets.com </span><br />
                         <span class="text-uppercase">Bobo-Dioulasso, Burkina Faso </span><br />
                     </p>
