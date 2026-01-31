@@ -28,7 +28,7 @@ class AdminController extends Controller
         $totalUsers = User::count();
         $totalWifis = Wifi::count();
 
-        $recentPayments = Paiement::with(['ticket.tarif', 'ticket.user'])
+        $recentPayments = Paiement::with(['ticket.tarif', 'ticket.owner'])
             ->latest()
             ->take(10)
             ->get();

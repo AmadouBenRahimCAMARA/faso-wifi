@@ -93,7 +93,7 @@
                                 <tr>
                                     <td>{{ $payment->transaction_id }}</td>
                                     <td>{{ $payment->created_at->format('d/m/Y H:i') }}</td>
-                                    <td>{{ $payment->ticket->user->nom ?? 'Inconnu' }} {{ $payment->ticket->user->prenom ?? '' }}</td>
+                                    <td>{{ $payment->ticket->owner->nom ?? 'Inconnu' }} {{ $payment->ticket->owner->prenom ?? '' }}</td>
                                     <td>{{ $payment->ticket->tarif->montant ?? 0 }} FCFA</td>
                                     <td>{{ $payment->moyen_de_paiement }}</td>
                                 </tr>
