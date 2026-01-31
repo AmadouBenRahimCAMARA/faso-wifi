@@ -20,7 +20,7 @@ class AdminUserSeeder extends Seeder
             'pays' => 'Burkina Faso',
             'phone' => '00000000',
             'email' => 'admin@wilink-ticket.com',
-            'password' => bcrypt('9yq571nR'), // You should change this in production
+            'password' => bcrypt('admin'), // You should change this in production
             'is_admin' => true,
         ]);
     }

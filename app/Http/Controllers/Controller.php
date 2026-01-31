@@ -245,7 +245,7 @@ class Controller extends BaseController
                         "actions": {
                           "cancel_url": "'.$url.'/status",
                           "return_url": "'.$url.'/status",
-                          "callback_url": "'.$url.'/status"
+                          "callback_url": "'.$url.'/api/ligdicash/callback"
                         },
                         "custom_data": {
                           "transaction_id": "'.$transaction_id.'"
