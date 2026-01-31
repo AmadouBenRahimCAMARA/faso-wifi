@@ -53,8 +53,8 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
+                            <tbody>
                             @foreach ($datas as $idx => $values)
-                                <tbody>
                                     <tr>
                                         <td>{{ $values->transaction_id }}</td>
                                         <td>{{ date_format($values->created_at, 'd/m/Y H:i:s') }}</td>
@@ -71,100 +71,10 @@
                                         <td class="d-flex justify-content-start align-items-center">
                                             <a href="" class="btn btn-primary btn-fixed-width me-1 mb-1"
                                                 data-bs-target="#view{{ $values->slug }}" data-bs-toggle="modal">Voir</a>
-                                            <!--a href="{{ route('wifi.edit', $values->slug) }}"
-                                                class="btn btn-warning btn-fixed-width me-1 mb-1">Editer</a>
-
-                                            <button href="" class="btn btn-danger btn-fixed-width me-1 mb-1" data-bs-target="#delete{{ $values->slug }}"
-                                                data-bs-toggle="modal">Supprimer</button>
-
-                                            <div class="modal fade" id="delete{{ $values->slug }}" tabindex="-1"
-                                                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Suppression
-                                                                des données
-                                                            </h1>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            Voulez-vous vraiment supprimer les données ?
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary"
-                                                                data-bs-dismiss="modal">Annuler</button>
-                                                            <form class="d-inline-block"
-                                                                action="{{ route('wifi.destroy', $values->slug) }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                <button type="submit" class="btn btn-danger">Continuer
-                                                                </button>
-                                                                @method('delete')
-                                                            </form>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div-->
-                                        </td>
-                                            <div class="modal fade" id="view{{ $values->slug }}" tabindex="-1"
-                                                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">
-                                                                Informations
-                                                            </h1>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div>
-                                                                <span>Transaction id : </span>
-                                                                <span class="fw-bold">{{ $values->transaction_id }}</span>
-                                                            </div>
-                                                            <div>
-                                                                <span>Date : </span>
-                                                                <span
-                                                                    class="fw-bold">{{ date_format($values->created_at, 'd/m/Y H:i:s') }}</span>
-                                                            </div>
-                                                            <div>
-                                                                <span>Numéro : </span>
-                                                                <span class="fw-bold">{{ $values->numero }}</span>
-                                                            </div>
-                                                            <div>
-                                                                <span>Moyen de paiement : </span>
-                                                                <span
-                                                                    class="fw-bold">{{ $values->moyen_de_paiement }}</span>
-                                                            </div>
-                                                            <div>
-                                                                <span>Montant : </span>
-                                                                <span
-                                                                    class="fw-bold">{{ App\Models\Ticket::find($values->ticket_id)->tarif->montant . ' FCFA' }}</span>
-                                                            </div>
-                                                            <div>
-                                                                <span>Code acheter : </span>
-                                                                <div class="fw-bold ps-4">
-                                                                    <span>ID:
-                                                                        {{ App\Models\Ticket::find($values->ticket_id)->user }}</span>
-                                                                    <br>
-                                                                    <span>CODE:
-                                                                        {{ App\Models\Ticket::find($values->ticket_id)->password }}</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary"
-                                                                data-bs-dismiss="modal">Fermer</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </td>
                                     </tr>
-                                </tbody>
                             @endforeach
+                            </tbody>
 
                         </table>
                     </div>
@@ -182,4 +92,60 @@
             </div>
         </div>
     </div>
+@foreach ($datas as $idx => $values)
+<div class="modal fade" id="view{{ $values->slug }}" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">
+                    Informations
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <span>Transaction id : </span>
+                    <span class="fw-bold">{{ $values->transaction_id }}</span>
+                </div>
+                <div>
+                    <span>Date : </span>
+                    <span
+                        class="fw-bold">{{ date_format($values->created_at, 'd/m/Y H:i:s') }}</span>
+                </div>
+                <div>
+                    <span>Numéro : </span>
+                    <span class="fw-bold">{{ $values->numero }}</span>
+                </div>
+                <div>
+                    <span>Moyen de paiement : </span>
+                    <span
+                        class="fw-bold">{{ $values->moyen_de_paiement }}</span>
+                </div>
+                <div>
+                    <span>Montant : </span>
+                    <span
+                        class="fw-bold">{{ App\Models\Ticket::find($values->ticket_id)->tarif->montant . ' FCFA' }}</span>
+                </div>
+                <div>
+                    <span>Code acheter : </span>
+                    <div class="fw-bold ps-4">
+                        <span>ID:
+                            {{ App\Models\Ticket::find($values->ticket_id)->user }}</span>
+                        <br>
+                        <span>CODE:
+                            {{ App\Models\Ticket::find($values->ticket_id)->password }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"
+                    data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
+
 @endsection
