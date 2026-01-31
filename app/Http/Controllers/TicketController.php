@@ -202,4 +202,28 @@ class TicketController extends Controller
         }
     }
 
+    /**
+     * Remove multiple resources from storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function bulkDestroy(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:tickets,slug',
+        ]);
+
+        $ids = $request->ids;
+
+        if (Auth::user()->isAdmin()) {
+            Ticket::whereIn('slug', $ids)->delete();
+        } else {
+             Auth::user()->tickets()->whereIn('slug', $ids)->delete();
+        }
+
+        return redirect()->back()->with('success', 'Tickets sélectionnés supprimés avec succès.');
+    }
+
 }

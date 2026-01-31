@@ -18,6 +18,10 @@
                 <div class="card-header py-3">
                     <div class="d-flex">
                         <p class="text-primary m-0 fw-bold me-auto">Liste des tickets</p>
+                         <button type="button" class="btn btn-danger me-2 d-none" id="bulk-delete-btn" data-bs-toggle="modal"
+                                data-bs-target="#bulkDeleteModal">
+                                Supprimer la sélection
+                        </button>
                         <a href="{{ route('ticket.create') }}" class="btn btn-primary">Ajouter</a>
                     </div>
                 </div>
@@ -41,6 +45,9 @@
                         <table class="table my-0" id="dataTable">
                             <thead>
                                 <tr>
+                                    <th>
+                                        <input type="checkbox" id="check-all" class="form-check-input">
+                                    </th>
                                     <th>#</th>
                                     <th>Wifi</th>
                                     <th>Forfait</th>
@@ -59,6 +66,10 @@
                             @foreach ($datas as $idx => $values)
                                 <tbody>
                                     <tr>
+                                        <td>
+                                            <input type="checkbox" class="form-check-input ticket-checkbox" name="ids[]"
+                                                value="{{ $values->slug }}">
+                                        </td>
                                         <th>{{ $idx + 1 }}</th>
                                         <th>{{ App\Models\Tarif::find($values->tarif_id)->wifi()->first()->nom }}</th>
                                         <th>{{ App\Models\Tarif::find($values->tarif_id)->forfait }}</th>
@@ -177,4 +188,76 @@
             </div>
         </div>
     </div>
+    </div>
+
+    <!-- Bulk Delete Confirmation Modal -->
+    <div class="modal fade" id="bulkDeleteModal" tabindex="-1" aria-labelledby="bulkDeleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="bulkDeleteModalLabel">Suppression groupée</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Voulez-vous vraiment supprimer les tickets sélectionnés ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <form id="bulk-delete-form" action="{{ route('ticket.bulkDestroy') }}" method="POST">
+                        @csrf
+                        <div id="bulk-delete-inputs"></div>
+                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkAll = document.getElementById('check-all');
+            const checkboxes = document.querySelectorAll('.ticket-checkbox');
+            const bulkDeleteBtn = document.getElementById('bulk-delete-btn');
+            const bulkDeleteFormInputs = document.getElementById('bulk-delete-inputs');
+
+            function updateBulkDeleteBtn() {
+                const checkedCount = document.querySelectorAll('.ticket-checkbox:checked').length;
+                if (checkedCount > 0) {
+                    bulkDeleteBtn.classList.remove('d-none');
+                } else {
+                    bulkDeleteBtn.classList.add('d-none');
+                }
+            }
+
+            checkAll.addEventListener('change', function() {
+                checkboxes.forEach(cb => cb.checked = checkAll.checked);
+                updateBulkDeleteBtn();
+            });
+
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', function() {
+                    updateBulkDeleteBtn();
+                    // If one is unchecked, uncheck "Select All"
+                    if (!this.checked) {
+                        checkAll.checked = false;
+                    }
+                });
+            });
+
+            // Populate form on modal open
+            const bulkDeleteModal = document.getElementById('bulkDeleteModal');
+            bulkDeleteModal.addEventListener('show.bs.modal', function() {
+                bulkDeleteFormInputs.innerHTML = ''; // Clear previous
+                checkboxes.forEach(cb => {
+                    if (cb.checked) {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = 'ids[]';
+                        input.value = cb.value;
+                        bulkDeleteFormInputs.appendChild(input);
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

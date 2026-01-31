@@ -54,6 +54,7 @@ Route::middleware(['auth'])->group(function () {
     
     Route::get('/paiement/retrait', [PaiementController::class, 'retrait'])->name('paiement.retrait');
     Route::resource('wifi', WifiController::class);
+    Route::post('/ticket/bulk-delete', [TicketController::class, 'bulkDestroy'])->name('ticket.bulkDestroy');
     Route::resource('ticket', TicketController::class);
     Route::resource('tarifs', TarifController::class);
     Route::resource('paiement', PaiementController::class);
