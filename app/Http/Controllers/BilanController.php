@@ -81,6 +81,7 @@ class BilanController extends Controller
         $retraits = Retrait::where('user_id', $user->id)
                            ->where('statut', 'PAYE')
                            ->whereBetween('updated_at', [$start, $end]) // Date de validation
+                           ->get()
                            ->sum('montant');
 
         // 5. Solde Actuel (Indépendant de la période, c'est l'état à l'instant T)
