@@ -176,7 +176,7 @@
             </p>
             <div class="table">
                 <p class="text-14 ps-4">
-                    <span class="ms-3 d-inline-block">Ce reçu est la preuve de la facture de votre paiement de ticket wifi, il est à usage unique et non transférable et ne devra en aucun être partagé à qui que ce soit.
+                    <span class="ms-3 d-inline-block">Ce reçu est la preuve de la facture de votre paiement de ticket wifi, il est à usage unique et non transférable et ne devra en aucun cas être partagé à qui que ce soit.
                     </span>
                     <br />
                 </p>
