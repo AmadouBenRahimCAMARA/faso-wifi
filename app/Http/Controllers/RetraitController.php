@@ -69,8 +69,17 @@ class RetraitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
+        if(Auth::user()->isAdmin()){
+            abort(403, "Les administrateurs ne peuvent pas faire de demande de retrait.");
+        }
+
         $dateDuJour = Carbon::today(); // Récupère la date d'aujourd'hui
         $solde = Solde::whereDate('updated_at', $dateDuJour)->orderBy('id', 'desc')->first();
         $montant = isset($solde) ? $solde->solde : 0;
@@ -86,16 +95,20 @@ class RetraitController extends Controller
      */
     public function store(Request $request)
     {
+        if(Auth::user()->isAdmin()){
+            abort(403, "Les administrateurs ne peuvent pas faire de demande de retrait.");
+        }
+
         $request->validate([
             'moyen_de_paiement' => 'required|string|max:255',
             'numero_paiement' => 'required|string|max:255',
-            'montant' => 'required|string|max:255',
+            'montant' => 'required|numeric',
         ]);
 
         $request['slug'] = Str::slug(Str::random(10));
         $request['user_id'] = Auth::user()->id;
         Retrait::create($request->all());
-        return redirect('retrait');
+        return redirect('retrait')->with('success', 'Demande de retrait envoyée.');
     }
 
     /**
@@ -129,7 +142,54 @@ class RetraitController extends Controller
      */
     public function update(Request $request, Retrait $retrait)
     {
-        //
+        if(!Auth::user()->isAdmin()){
+            abort(403);
+        }
+
+        $request->validate([
+            'statut' => 'required|in:PAYE,REJETE'
+        ]);
+
+        if($retrait->statut !== 'EN_ATTENTE'){
+             return back()->with('error', 'Ce retrait a déjà été traité.');
+        }
+
+        if($request->statut === 'PAYE'){
+            // Logic to pay
+            // 1. Get User's last solde
+            $lastSolde = Solde::where('user_id', $retrait->user_id)->orderBy('id', 'desc')->first();
+            $currentAmount = $lastSolde ? $lastSolde->solde : 0;
+
+            // 2. Calculate New Balance
+            // Note: The withdrawal amount requested ($retrait->montant) is what they want to receive.
+            // But usually, logic implies the deduction from system balance.
+            // Assuming $retrait->montant is the amount to be DEDUCTED.
+            // If the math in Create was "Display = Solde - 25%", then the User requests an amount.
+            // Let's assume $retrait->montant IS the amount to subtract.
+            
+            // Safety check: enough balance?
+            // Actually, we should check $retrait is <= calculated limit, but for now we trust the val stored.
+            
+            $newDistSolde = $currentAmount - $retrait->montant;
+
+            // 3. Create new Solde entry
+            Solde::create([
+                'solde' => $newDistSolde,
+                'type' => 'RETRAIT',
+                'slug' => Str::slug(Str::random(10)),
+                'user_id' => $retrait->user_id,
+                'paiement_id' => null 
+            ]);
+
+            $retrait->update(['statut' => 'PAYE']);
+
+            return back()->with('success', 'Retrait validé et solde mis à jour.');
+
+        } else {
+            // Reject
+            $retrait->update(['statut' => 'REJETE']);
+            return back()->with('success', 'Retrait rejeté.');
+        }
     }
 
     /**

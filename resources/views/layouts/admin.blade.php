@@ -54,7 +54,11 @@
                                 class="fas fa-credit-card"></i><span>Paiements</span></a></li>
                     <li class="nav-item"><a class="nav-link @if (Route::currentRouteName() == 'retrait.index') active @endif"
                             href="{{ route('retrait.index') }}"><i
-                                class="fas fa-money-bill-wave"></i><span>Retraits</span></a></li>
+                                class="fas fa-money-bill-wave"></i><span>Retraits</span>
+                                @if(isset($pendingRetraitsCount) && $pendingRetraitsCount > 0 && Auth::user()->isAdmin())
+                                    <span class="badge bg-danger ms-2">{{ $pendingRetraitsCount }}</span>
+                                @endif
+                                </a></li>
                     <li class="nav-item"><a class="nav-link @if (Route::currentRouteName() == 'retrait.index') active @endif"
                             href="{{ route('logout') }}" onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();"><i

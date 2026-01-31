@@ -93,7 +93,9 @@
                 <div class="card-header py-3">
                     <div class="d-flex">
                         <p class="text-primary m-0 fw-bold me-auto">Liste des retraits</p>
+                        @if(!Auth::user()->isAdmin())
                         <a href="{{ route('retrait.create') }}" class="btn btn-primary">Demander un retrait</a>
+                        @endif
                     </div>
                 </div>
 
@@ -143,44 +145,31 @@
                                         <th>{{ $values->user->nom }} {{ $values->user->prenom }}</th>
                                         @endif
                                         <td class="d-flex justify-content-start align-items-center">
-                                            <a href="" class="btn btn-primary btn-fixed-width me-1 mb-1"
-                                                data-bs-target="#view{{ $values->slug }}" data-bs-toggle="modal">Voir</a>
-                                            <!--a href="{{ route('wifi.edit', $values->slug) }}"
-                                                class="btn btn-warning btn-fixed-width me-1 mb-1">Editer</a>
+                                            <!--a href="" class="btn btn-primary btn-fixed-width me-1 mb-1"
+                                                data-bs-target="#view{{ $values->slug }}" data-bs-toggle="modal">Voir</a-->
 
-                                            <button href="" class="btn btn-danger btn-fixed-width me-1 mb-1" data-bs-target="#delete{{ $values->slug }}"
-                                                data-bs-toggle="modal">Supprimer</button>
-
-                                            <div class="modal fade" id="delete{{ $values->slug }}" tabindex="-1"
-                                                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Suppression
-                                                                des données
-                                                            </h1>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            Voulez-vous vraiment supprimer les données ?
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary"
-                                                                data-bs-dismiss="modal">Annuler</button>
-                                                            <form class="d-inline-block"
-                                                                action="{{ route('wifi.destroy', $values->slug) }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                <button type="submit" class="btn btn-danger">Continuer
-                                                                </button>
-                                                                @method('delete')
-                                                            </form>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div-->
+                                            @if(Auth::user()->isAdmin() && $values->statut == 'EN_ATTENTE')
+                                                <!-- Validation Forms -->
+                                                <form action="{{ route('retrait.update', $values->id) }}" method="POST" class="me-1">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <input type="hidden" name="statut" value="PAYE">
+                                                    <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Confirmez-vous le paiement de ce retrait ? Cela déduira le montant du solde du vendeur.')">Valider</button>
+                                                </form>
+                                                
+                                                <form action="{{ route('retrait.update', $values->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <input type="hidden" name="statut" value="REJETE">
+                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Voulez-vous rejeter ce retrait ?')">Rejeter</button>
+                                                </form>
+                                            @elseif(!Auth::user()->isAdmin() && $values->statut == 'EN_ATTENTE')
+                                                 <span class="badge bg-warning text-dark">En attente</span>
+                                            @elseif($values->statut == 'PAYE')
+                                                 <span class="badge bg-success">Payé</span>
+                                            @elseif($values->statut == 'REJETE')
+                                                 <span class="badge bg-danger">Rejeté</span>
+                                            @endif
                                         </td>
                                             <div class="modal fade" id="view{{ $values->slug }}" tabindex="-1"
                                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
