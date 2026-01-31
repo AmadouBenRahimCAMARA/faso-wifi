@@ -88,31 +88,15 @@ class BilanController extends Controller
         $lastSolde = Solde::where('user_id', $user->id)->orderBy('id', 'desc')->first();
         $soldeActuel = $lastSolde ? $lastSolde->solde : 0;
         
-        // Ensure soldeActuel is what is withdrawable (Net)?? 
-        // Based on RetraitController logic: `retrait = montant - (montant * 0.10)` was OLD logic?
-        // Wait, store logic implies Solde in database tracks the GROSS or NET?
-        // Analyzing RetraitController logic:
-        // Update: `$newDistSolde = $currentAmount - $retrait->montant;`
-        // Creates Solde record.
-        // If Solde tracks actual money available, then $soldeActuel IS the withdrawable amount.
-        // The commission is deducted when? 
-        // Actually, the previous dev's logic in Create was confusing: `$retrait = $montant - (25 * $montant)/100;`
-        // This implies the `soldes` table stores the GROSS amount, and we only let them withdraw 75% of it.
-        // BUT, if we want to change commission to 10%, we should change that display logic.
-        // So `soldeActuel` (Gross) * 0.90 = Withdrawable.
-        
-        // HOWEVER, "Solde disponible doit etre directement le montant possible à retirer".
-        // This means the `solde` shown to user should be NET.
-        // If DB stores Gross, we calculate Net here.
-        
-        $soldeNetDisponible = $soldeActuel - ($soldeActuel * 0.10); // Applying the 10% on the remaining balance.
+        // Since we now credit the NET amount in DB, the Solde IS the Net Available.
+        $soldeNetDisponible = $soldeActuel;
 
         return [
             'chiffre_affaires' => $chiffreAffaires,
             'commission' => $commission,
             'net_percu' => $netPercu,
             'total_retraits' => $retraits,
-            'solde_actuel_brut' => $soldeActuel,
+            'solde_actuel_brut' => $soldeActuel, // Variable name kept for compat but it is Net
             'solde_net_disponible' => $soldeNetDisponible
         ];
     }

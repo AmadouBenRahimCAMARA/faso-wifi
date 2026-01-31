@@ -128,8 +128,11 @@ class Controller extends BaseController
                             
                             $montantCompte = $lastSolde ? $lastSolde->solde : 0;
                             
+                            // Apply 10% Commission at the source
+                            $netAmount = $ticket->tarif->montant * 0.90;
+
                             Solde::create([
-                                "solde" => $montantCompte + $ticket->tarif->montant,
+                                "solde" => $montantCompte + $netAmount,
                                 "type" => "PAIEMENT",
                                 "slug" => Str::slug(Str::random(10)),
                                 "user_id" => $paiement->user_id,

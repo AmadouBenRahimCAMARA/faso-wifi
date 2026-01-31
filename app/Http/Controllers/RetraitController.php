@@ -81,10 +81,12 @@ class RetraitController extends Controller
         }
 
         $dateDuJour = Carbon::today(); // Récupère la date d'aujourd'hui
+        $dateDuJour = Carbon::today(); // Récupère la date d'aujourd'hui
         $solde = Solde::whereDate('updated_at', $dateDuJour)->orderBy('id', 'desc')->first();
         $montant = isset($solde) ? $solde->solde : 0;
-        // Commission passed to 10%
-        $retrait = $montant - ($montant * 0.10); 
+        
+        // Solde is now stored as Net (Commission already deducted at sale)
+        $retrait = $montant;
         return view("admin.retrait-create", compact('retrait'));
     }
 
