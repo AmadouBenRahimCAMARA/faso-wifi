@@ -9,6 +9,15 @@
             </div>
         </nav>
         <div class="container-fluid">
+            @if(isset($pendingRetraitsCount) && $pendingRetraitsCount > 0)
+            <div class="alert alert-danger d-flex align-items-center justify-content-between" role="alert">
+                <div>
+                   <i class="fas fa-exclamation-circle me-2"></i>
+                   <strong>Action requise :</strong> Vous avez {{ $pendingRetraitsCount }} demande(s) de retrait en attente.
+                </div>
+                <a href="{{ route('retrait.index') }}" class="btn btn-outline-danger btn-sm fw-bold">Voir les demandes</a>
+            </div>
+            @endif
             <div class="row">
                 <!-- Total Revenue -->
                 <div class="col-md-6 col-xl-3 mb-4">
