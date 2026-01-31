@@ -149,9 +149,9 @@
                 </div>
                 <div class="column postion-relative">
                     <p class="text-center text-uppercase postion-absolute-top1 pt-2 w-100">
-                        <img width="120px" src="./Logo.png" alt="LOGO WiLink Tickets" /> <br />
+                        <img width="120px" src="{{ public_path('assets/img/logo.png') }}" alt="LOGO WiLink Tickets" /> <br />
                         <span class="text-uppercase">WiLink Tickets</span><br />
-                        <span class="text-uppercase">+226 xx xx xx xx </span><br />
+                        <span class="text-uppercase">+226 54 78 19 78 / +226 56 36 80 34 / +226 65 86 33 36 </span><br />
                         <span class="text-uppercase">info@wilinktickets.com </span><br />
                         <span class="text-uppercase">Bobo-Dioulasso, Burkina Faso </span><br />
                     </p>
@@ -168,9 +168,7 @@
             </p>
             <div class="table">
                 <p class="text-14 ps-4">
-                    <span class="ms-3 d-inline-block">Lorem, ipsum dolor sit amet consectetur adipisicing Lorem, ipsum
-                        dolor sit amet consectetur adipisicing Lorem consectetur
-                        adipisi
+                    <span class="ms-3 d-inline-block">Ce reçu est la preuve de la facture de votre paiement de ticket wifi, il est à usage unique et non transférable et ne devra en aucun être partagé à qui que ce soit.
                     </span>
                     <br />
                 </p>
@@ -232,8 +230,7 @@
         </div>
         <div class="table">
             <p class="text-14 ps-4">
-                <span class="ms-3 d-inline-block">Lorem, ipsum dolor sit amet consectetur adipisicing Lorem, ipsum
-                    dolor sit amet consectetur adipisicing Lorem consectetur
+                <span class="ms-3 d-inline-block">Tous droits réservés à WiLink Tickets!
                 </span>
                 <br />
             </p>
@@ -248,20 +245,6 @@
         </p>
       </div-->
     </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Code to be executed when the DOM is ready
-            ///acheter-mon-ticket/{slug}/telecharger-mon-recu
-            const xhttp = new XMLHttpRequest();
-            xhttp.onload = function() {
-                console.log(xhttp.responseText)
-            }
-            xhttp.open("GET", "{{App::make('url')->to('/')}}/telecharger-mon-recu/{{ $data->slug }}",true);
-            xhttp.send();
-            //document.getElementById("demo").innerHTML = xhttp.responseText;
-        });
-    </script>
 </body>
 
 </html>

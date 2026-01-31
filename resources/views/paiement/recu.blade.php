@@ -241,7 +241,7 @@
                 <span class="ms-3 d-inline-block">Tous droits réservés à WiLink Tickets!
                 </span>
                 <br />
-                <p class="text-uppercase text-center fw-bold my-3 text-primary cursor" onclick="reload()">Télécharger le reçu</p>
+                <a href="{{ url('/telecharger-mon-recu/'.$data->slug) }}" class="text-uppercase text-center fw-bold my-3 text-primary cursor d-block" style="text-decoration:none;">Télécharger le reçu</a>
             </p>
         </div>
         <!--div class="footer text-14">
