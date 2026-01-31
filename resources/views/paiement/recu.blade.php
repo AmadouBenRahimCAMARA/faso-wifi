@@ -159,7 +159,7 @@
                     <p class="text-center text-uppercase postion-absolute-top1 pt-2 w-100">
                         <img width="120px" src="./Logo.png" alt="LOGO WiLink Tickets" /> <br />
                         WiLink Tickets<br />
-                        <span class="text-uppercase">+226 xx xx xx xx </span><br />
+                        <span class="text-uppercase">+226 54 78 19 78 /  </span><br />
                         <span class="text-uppercase">info@wilinktickets.com </span><br />
                         <span class="text-uppercase">Bobo-Dioulasso, Burkina Faso </span><br />
                     </p>
@@ -176,9 +176,7 @@
             </p>
             <div class="table">
                 <p class="text-14 ps-4">
-                    <span class="ms-3 d-inline-block">Lorem, ipsum dolor sit amet consectetur adipisicing Lorem, ipsum
-                        dolor sit amet consectetur adipisicing Lorem consectetur
-                        adipisi
+                    <span class="ms-3 d-inline-block">Ce reçu est la preuve de la facture de votre paiement de ticket wifi, il est à usage unique et non transférable et ne devra en aucun être partagé à qui que ce soit.
                     </span>
                     <br />
                 </p>
@@ -240,8 +238,7 @@
         </div>
         <div class="table">
             <p class="text-14 ps-4">
-                <span class="ms-3 d-inline-block">Lorem, ipsum dolor sit amet consectetur adipisicing Lorem, ipsum
-                    dolor sit amet consectetur adipisicing Lorem consectetur
+                <span class="ms-3 d-inline-block">Tous droits réservés à WiLink Tickets!
                 </span>
                 <br />
                 <p class="text-uppercase text-center fw-bold my-3 text-primary cursor" onclick="reload()">Télécharger le reçu</p>
