@@ -32,8 +32,14 @@ class AdminController extends Controller
             ->latest()
             ->take(10)
             ->get();
+        
+        // Count pending withdrawals
+        $pendingRetraitsCount = 0;
+        try {
+            $pendingRetraitsCount = \App\Models\Retrait::where('statut', 'EN_ATTENTE')->count();
+        } catch (\Exception $e) {}
 
-        return view('admin.super_dashboard', compact('totalRevenue', 'totalTicketsSold', 'totalUsers', 'totalWifis', 'recentPayments'));
+        return view('admin.super_dashboard', compact('totalRevenue', 'totalTicketsSold', 'totalUsers', 'totalWifis', 'recentPayments', 'pendingRetraitsCount'));
     }
 
     public function users()
