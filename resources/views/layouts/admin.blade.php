@@ -59,6 +59,13 @@
                                     <span class="badge bg-danger ms-2">{{ $pendingRetraitsCount }}</span>
                                 @endif
                                 </a></li>
+
+                    @if(!Auth::user()->isAdmin())
+                    <li class="nav-item"><a class="nav-link @if (Route::currentRouteName() == 'bilan.index') active @endif"
+                            href="{{ route('bilan.index') }}"><i class="fas fa-file-invoice-dollar"></i><span>Mon Bilan</span></a>
+                    </li>
+                    @endif
+
                     <li class="nav-item"><a class="nav-link @if (Route::currentRouteName() == 'retrait.index') active @endif"
                             href="{{ route('logout') }}" onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();"><i

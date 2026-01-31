@@ -59,6 +59,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('tarifs', TarifController::class);
     Route::resource('paiement', PaiementController::class);
     Route::resource('retrait', RetraitController::class);
+    
+    // Bilan
+    Route::get('/bilan', [App\Http\Controllers\BilanController::class, 'index'])->name('bilan.index');
+    Route::get('/bilan/download', [App\Http\Controllers\BilanController::class, 'downloadPdf'])->name('bilan.download');
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {

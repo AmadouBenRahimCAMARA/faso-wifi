@@ -83,7 +83,8 @@ class RetraitController extends Controller
         $dateDuJour = Carbon::today(); // Récupère la date d'aujourd'hui
         $solde = Solde::whereDate('updated_at', $dateDuJour)->orderBy('id', 'desc')->first();
         $montant = isset($solde) ? $solde->solde : 0;
-        $retrait = $montant - (25 * $montant)/100;
+        // Commission passed to 10%
+        $retrait = $montant - ($montant * 0.10); 
         return view("admin.retrait-create", compact('retrait'));
     }
 
@@ -102,7 +103,7 @@ class RetraitController extends Controller
         $request->validate([
             'moyen_de_paiement' => 'required|string|max:255',
             'numero_paiement' => 'required|string|max:255',
-            'montant' => 'required|numeric',
+            'montant' => 'required|numeric|min:1000',
         ]);
 
         $request['slug'] = Str::slug(Str::random(10));
