@@ -50,9 +50,10 @@ Route::get('/inscription', function () {
 Auth::routes();
 
 // Email Verification Routes (OTP)
-Route::get('/email/verify', [App\Http\Controllers\Auth\VerificationController::class, 'show'])->name('verification.notice');
-Route::post('/email/verify', [App\Http\Controllers\Auth\VerificationController::class, 'verify'])->name('verification.verify.post');
-Route::get('/email/resend', [App\Http\Controllers\Auth\VerificationController::class, 'resend'])->name('verification.resend');
+// Email Verification Routes (OTP) - DISABLED
+// Route::get('/email/verify', [App\Http\Controllers\Auth\VerificationController::class, 'show'])->name('verification.notice');
+// Route::post('/email/verify', [App\Http\Controllers\Auth\VerificationController::class, 'verify'])->name('verification.verify.post');
+// Route::get('/email/resend', [App\Http\Controllers\Auth\VerificationController::class, 'resend'])->name('verification.resend');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

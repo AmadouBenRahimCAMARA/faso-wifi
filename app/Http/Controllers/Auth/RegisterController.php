@@ -75,38 +75,6 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
     }
-    /**
-     * Handle a registration request for the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
-     */
-    public function register(\Illuminate\Http\Request $request)
-    {
-        $this->validator($request->all())->validate();
 
-        $user = $this->create($request->all());
-
-        // Generate OTP
-        $code = rand(100000, 999999);
-        $user->verification_code = $code;
-        $user->verification_expires_at = \Illuminate\Support\Carbon::now()->addMinutes(15);
-        $user->save();
-
-        // Send Email
-        try {
-            \Illuminate\Support\Facades\Mail::raw("Votre code de vérification est : $code", function ($message) use ($user) {
-                $message->to($user->email)
-                        ->subject('Code de vérification - Faso Wifi');
-            });
-        } catch (\Exception $e) {
-            // Log error but continue
-            \Illuminate\Support\Facades\Log::error("Mail error: " . $e->getMessage());
-        }
-
-        // Store user ID in session for verification
-        session(['user_id_to_verify' => $user->id]);
-
-        return redirect()->route('verification.notice');
     }
 }
