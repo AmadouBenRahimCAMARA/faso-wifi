@@ -64,7 +64,7 @@ class BilanController extends Controller
         $paiements = Paiement::whereHas('ticket', function($q) use ($user){
             $q->where('user_id', $user->id);
         })->whereBetween('created_at', [$start, $end])
-          ->where('status', 'COMPLETED')
+          ->where('status', 'completed')
           ->get();
 
         $chiffreAffaires = 0;

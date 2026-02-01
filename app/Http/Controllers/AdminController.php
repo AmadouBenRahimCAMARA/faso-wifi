@@ -22,7 +22,7 @@ class AdminController extends Controller
         // Global Statistics for Super Admin
         $totalRevenue = Paiement::join('tickets', 'paiements.ticket_id', '=', 'tickets.id')
             ->join('tarifs', 'tickets.tarif_id', '=', 'tarifs.id')
-            ->where('paiements.status', 'COMPLETED')
+            ->where('paiements.status', 'completed')
             ->sum(DB::raw('CAST(tarifs.montant AS DECIMAL)'));
 
         $totalTicketsSold = Ticket::where('etat_ticket', 'VENDU')->count();
