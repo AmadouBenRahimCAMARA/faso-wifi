@@ -38,6 +38,7 @@ class HomeController extends Controller
         } else {
             $paiements = Paiement::whereDate('updated_at', $dateDuJour)
                         ->where('user_id', Auth::user()->id)
+                        ->where('status', 'COMPLETED')
                         ->latest()->paginate(10);
 
             $ticketsDuJour = Ticket::whereDate('updated_at', $dateDuJour)
