@@ -117,4 +117,33 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', $message);
     }
+
+    public function impersonate($id)
+    {
+        $user = User::findOrFail($id);
+        
+        // Prevent impersonating self or other admins (optional)
+        if ($user->id === Auth::id()) {
+            return redirect()->back()->with('error', 'Vous ne pouvez pas vous usurper vous-même.');
+        }
+
+        // Store original admin id
+        session()->put('impersonator_id', Auth::id());
+        
+        // Log in as the user
+        Auth::loginUsingId($id);
+
+        return redirect()->route('home')->with('success', "Vous êtes connecté en tant que " . $user->nom);
+    }
+
+    public function stopImpersonate()
+    {
+        if (session()->has('impersonator_id')) {
+            // Log back in as admin
+            Auth::loginUsingId(session('impersonator_id'));
+            session()->forget('impersonator_id');
+            return redirect()->route('admin.users')->with('success', 'Restauration de la session administrateur.');
+        }
+        return redirect()->route('home');
+    }
 }

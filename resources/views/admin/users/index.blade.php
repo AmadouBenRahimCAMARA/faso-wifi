@@ -61,8 +61,16 @@
                                             <button type="submit" class="btn btn-sm {{ $user->status == 'active' ? 'btn-danger' : 'btn-success' }}">
                                                 <i class="fas {{ $user->status == 'active' ? 'fa-ban' : 'fa-check' }}"></i>
                                             </button>
+                                            <button type="submit" class="btn btn-sm {{ $user->status == 'active' ? 'btn-danger' : 'btn-success' }}">
+                                                <i class="fas {{ $user->status == 'active' ? 'fa-ban' : 'fa-check' }}"></i>
+                                            </button>
                                         </form>
-                                    </td>
+
+                                        @if(Auth::id() !== $user->id && !$user->isAdmin())
+                                        <a href="{{ route('admin.users.impersonate', $user->id) }}" class="btn btn-sm btn-dark" title="Se connecter en tant que ce vendeur">
+                                            <i class="fas fa-key"></i>
+                                        </a>
+                                        @endif
                                 </tr>
                                 @endforeach
                             </tbody>

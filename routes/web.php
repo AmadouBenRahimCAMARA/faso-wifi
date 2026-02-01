@@ -72,5 +72,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/users/{id}', [App\Http\Controllers\AdminController::class, 'show'])->name('admin.users.show');
     Route::get('/admin/users/{id}/edit', [App\Http\Controllers\AdminController::class, 'edit'])->name('admin.users.edit');
     Route::put('/admin/users/{id}', [App\Http\Controllers\AdminController::class, 'update'])->name('admin.users.update');
+    Route::get('/admin/users/{id}/impersonate', [App\Http\Controllers\AdminController::class, 'impersonate'])->name('admin.users.impersonate');
     Route::post('/admin/users/{id}/toggle-status', [App\Http\Controllers\AdminController::class, 'toggleUserStatus'])->name('admin.users.toggleStatus');
+});
+
+// Impersonation Stop Route (Must be accessible by authenticated users, not just admins, because admin becomes user)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/stop-impersonation', [App\Http\Controllers\AdminController::class, 'stopImpersonate'])->name('stop.impersonation');
 });

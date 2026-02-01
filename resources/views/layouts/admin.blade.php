@@ -14,6 +14,12 @@
 </head>
 
 <body id="page-top">
+    @if(session()->has('impersonator_id'))
+        <div class="alert alert-danger text-center mb-0 fw-bold rounded-0" role="alert" style="z-index: 9999; position: relative;">
+            MODE USURPATION : Vous êtes connecté en tant que {{ Auth::user()->nom }} {{ Auth::user()->prenom }}
+            <a href="{{ route('stop.impersonation') }}" class="btn btn-sm btn-outline-danger ms-3 bg-white text-danger">Arrêter l'usurpation</a>
+        </div>
+    @endif
     <div id="wrapper">
         <nav class="navbar align-items-start sidebar sidebar-dark accordion p-0 navbar-dark" style="background-color: #2196F3 !important;">
             <div class="container-fluid d-flex flex-column p-0"><a
