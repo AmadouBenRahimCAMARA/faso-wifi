@@ -43,10 +43,34 @@ class Controller extends BaseController
         $transaction_id = 'FW'.date('Y').date('m').date('d').'.'.date('h').date('m').'.C'.rand(5,100000);
         $amount = $tarif->montant;
 
-        $ticket = Ticket::where([
-          "etat_ticket" => "EN_VENTE",
-          "tarif_id" => $tarif->id
-        ])->first();
+        DB::beginTransaction();
+        try {
+            // Select available ticket OR one reserved > 15min ago (expired reservation)
+            $ticket = Ticket::where('tarif_id', $tarif->id)
+                ->where(function($query) {
+                    $query->where('etat_ticket', 'EN_VENTE')
+                          ->orWhere(function($q) {
+                              $q->where('etat_ticket', 'EN_COURS')
+                                ->where('updated_at', '<', now()->subMinutes(15));
+                          });
+                })
+                ->lockForUpdate() // Lock row to prevent double selection
+                ->first();
+
+            if(!$ticket){
+               DB::rollBack();
+               return redirect('/')->with('error', 'Aucun ticket disponible.');
+            }
+
+            // Reserve the ticket
+            $ticket->etat_ticket = 'EN_COURS';
+            $ticket->update(); // Explicit update to touch updated_at
+            
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect('/')->with('error', 'Erreur lors de la réservation du ticket.');
+        }
 
         if(!$ticket){
            return redirect('/')->with('error', 'Aucun ticket disponible.');
