@@ -61,9 +61,6 @@
                                             <button type="submit" class="btn btn-sm {{ $user->status == 'active' ? 'btn-danger' : 'btn-success' }}">
                                                 <i class="fas {{ $user->status == 'active' ? 'fa-ban' : 'fa-check' }}"></i>
                                             </button>
-                                            <button type="submit" class="btn btn-sm {{ $user->status == 'active' ? 'btn-danger' : 'btn-success' }}">
-                                                <i class="fas {{ $user->status == 'active' ? 'fa-ban' : 'fa-check' }}"></i>
-                                            </button>
                                         </form>
 
                                         @if(Auth::id() !== $user->id && !$user->isAdmin())

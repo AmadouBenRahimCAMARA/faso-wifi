@@ -124,7 +124,7 @@ class AdminController extends Controller
         
         // Prevent impersonating self or other admins (optional)
         if ($user->id === Auth::id()) {
-            return redirect()->back()->with('error', 'Vous ne pouvez pas vous usurper vous-même.');
+            return redirect()->back()->with('error', 'Action impossible sur votre propre compte.');
         }
 
         // Store original admin id

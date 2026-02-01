@@ -16,8 +16,8 @@
 <body id="page-top">
     @if(session()->has('impersonator_id'))
         <div class="alert alert-danger text-center mb-0 fw-bold rounded-0" role="alert" style="z-index: 9999; position: relative;">
-            MODE USURPATION : Vous êtes connecté en tant que {{ Auth::user()->nom }} {{ Auth::user()->prenom }}
-            <a href="{{ route('stop.impersonation') }}" class="btn btn-sm btn-outline-danger ms-3 bg-white text-danger">Arrêter l'usurpation</a>
+            MODE ADMIN : Vous consultez le compte de {{ Auth::user()->nom }} {{ Auth::user()->prenom }}
+            <a href="{{ route('stop.impersonation') }}" class="btn btn-sm btn-outline-danger ms-3 bg-white text-danger">Retour à mon compte</a>
         </div>
     @endif
     <div id="wrapper">
