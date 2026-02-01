@@ -136,14 +136,5 @@ class AdminController extends Controller
         return redirect()->route('home')->with('success', "Vous êtes connecté en tant que " . $user->nom);
     }
 
-    public function stopImpersonate()
-    {
-        if (session()->has('impersonator_id')) {
-            // Log back in as admin
-            Auth::loginUsingId(session('impersonator_id'));
-            session()->forget('impersonator_id');
-            return redirect()->route('admin.users')->with('success', 'Restauration de la session administrateur.');
-        }
-        return redirect()->route('home');
-    }
+
 }

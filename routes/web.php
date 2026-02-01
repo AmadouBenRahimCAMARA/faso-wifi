@@ -78,5 +78,5 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 // Impersonation Stop Route (Must be accessible by authenticated users, not just admins, because admin becomes user)
 Route::middleware(['auth'])->group(function () {
-    Route::get('/stop-impersonation', [App\Http\Controllers\AdminController::class, 'stopImpersonate'])->name('stop.impersonation');
+    Route::get('/stop-impersonation', [App\Http\Controllers\HomeController::class, 'stopImpersonate'])->name('stop.impersonation');
 });
