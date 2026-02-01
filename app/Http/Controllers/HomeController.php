@@ -64,7 +64,7 @@ class HomeController extends Controller
         $montant = isset($solde) ? $solde->solde : 0;
         $datas = [
             "solde_total" => $montant,
-            "retrait_total" => $montant - (25 * $montant)/100,
+            "retrait_total" => $montant,
             "solde_du_jour" => $soldesDuJour,
             "ticket_du_jour_vendu" => count($ticketsDuJour),
             "ticket_total_vendu" => count($ticketsTotalVendu),

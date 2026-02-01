@@ -63,7 +63,10 @@ class WebhookController extends Controller
         $verifiedStatus = trim($verifiedPayin->status);
 
         // 5. Update Database
-        if ($verifiedStatus == 'completed' && $paiement->status != 'completed') {
+        // Strict check: Transaction is valid ONLY if phone and operator are present
+        $hasValidInfo = !empty($verifiedPayin->customer) && !empty($verifiedPayin->operator_name);
+
+        if ($verifiedStatus == 'completed' && $paiement->status != 'completed' && $hasValidInfo) {
             
             DB::beginTransaction();
             try {
@@ -88,8 +91,10 @@ class WebhookController extends Controller
                     
                     $montantCompte = $lastSolde ? $lastSolde->solde : 0;
                     
-                    // Apply 10% Commission at the source
-                    $netAmount = $ticket->tarif->montant * 0.90;
+                    // Apply 10% Commission (Exempt if Admin)
+                    $owner = $ticket->owner; // relationship must exist
+                    $is_admin = $owner && $owner->isAdmin();
+                    $netAmount = $is_admin ? $ticket->tarif->montant : ($ticket->tarif->montant * 0.90);
 
                     Solde::create([
                         "solde" => $montantCompte + $netAmount,

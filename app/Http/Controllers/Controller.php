@@ -110,7 +110,11 @@ class Controller extends BaseController
                 // Use transaction to avoid race condition with Webhook
                 DB::transaction(function () use ($paiement, $payin) {
                     $paiement->refresh(); // Reload to be sure
-                    if ($paiement->status != 'completed') {
+                    
+                    // Strict check: Transaction is valid ONLY if phone and operator are present
+                    $hasValidInfo = !empty($payin->customer) && !empty($payin->operator_name);
+
+                    if ($paiement->status != 'completed' && $hasValidInfo) {
                         $paiement->status = 'completed';
                         $paiement->moyen_de_paiement = $payin->operator_name ?? 'Ligdicash';
                         $paiement->numero = $payin->customer ?? '';
@@ -128,8 +132,10 @@ class Controller extends BaseController
                             
                             $montantCompte = $lastSolde ? $lastSolde->solde : 0;
                             
-                            // Apply 10% Commission at the source
-                            $netAmount = $ticket->tarif->montant * 0.90;
+                            // Apply 10% Commission at the source (Exempt if Admin)
+                            $owner = $ticket->owner;
+                            $is_admin = $owner && $owner->isAdmin();
+                            $netAmount = $is_admin ? $ticket->tarif->montant : ($ticket->tarif->montant * 0.90);
 
                             Solde::create([
                                 "solde" => $montantCompte + $netAmount,
