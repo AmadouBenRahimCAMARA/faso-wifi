@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ticket;
 use App\Models\Tarif;
+use App\Models\Wifi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Imports\TicketsImport;
@@ -42,19 +43,17 @@ class TicketController extends Controller
         return view("admin.ticket-liste",compact("datas"));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        if (Auth::user()->isAdmin()) {
-            $tarifs = Tarif::all(); // Admin can see all Tarifs
+        $user = Auth::user();
+        if ($user->isAdmin()) {
+            $wifis = Wifi::all();
+            $tarifs = Tarif::all();
         } else {
-            $tarifs = Auth::user()->tarifs()->get();
+            $wifis = $user->wifis()->get();
+            $tarifs = $user->tarifs()->get();
         }
-        return view("admin.ticket-create", compact('tarifs'));
+        return view("admin.ticket-create", compact('wifis', 'tarifs'));
     }
 
     /**
