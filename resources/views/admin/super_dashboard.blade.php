@@ -94,6 +94,7 @@
                                     <th>Date</th>
                                     <th>Vendeur</th>
                                     <th>Montant</th>
+                                    <th>Statut</th>
                                     <th>Moyen de Paiement</th>
                                 </tr>
                             </thead>
@@ -104,6 +105,15 @@
                                     <td>{{ $payment->created_at->format('d/m/Y H:i') }}</td>
                                     <td>{{ $payment->ticket->owner->nom ?? 'Inconnu' }} {{ $payment->ticket->owner->prenom ?? '' }}</td>
                                     <td>{{ $payment->ticket->tarif->montant ?? 0 }} FCFA</td>
+                                    <td>
+                                        @if($payment->status == 'completed')
+                                            <span class="badge bg-success">Payé</span>
+                                        @elseif($payment->status == 'failed')
+                                            <span class="badge bg-danger">Échoué</span>
+                                        @else
+                                            <span class="badge bg-warning text-dark">En attente</span>
+                                        @endif
+                                    </td>
                                     <td>{{ $payment->moyen_de_paiement }}</td>
                                 </tr>
                                 @endforeach

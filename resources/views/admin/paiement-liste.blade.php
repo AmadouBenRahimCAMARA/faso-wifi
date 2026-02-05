@@ -47,6 +47,7 @@
                                     <th>Code acheter</th>
                                     <th>Moyen de paiement</th>
                                     <th>Montant</th>
+                                    <th>Statut</th>
                                     @if(Auth::user()->isAdmin())
                                     <th>Vendeur</th>
                                     @endif
@@ -65,6 +66,15 @@
                                         </td>
                                         <td>{{ $values->moyen_de_paiement }}</td>
                                         <td>{{ App\Models\Ticket::find($values->ticket_id)->tarif->montant . ' FCFA' }}</td>
+                                        <td>
+                                            @if($values->status == 'completed')
+                                                <span class="badge bg-success">Payé</span>
+                                            @elseif($values->status == 'failed')
+                                                <span class="badge bg-danger">Échoué</span>
+                                            @else
+                                                <span class="badge bg-warning text-dark">En attente</span>
+                                            @endif
+                                        </td>
                                         @if(Auth::user()->isAdmin())
                                         <th>{{ $values->ticket->owner->nom }} {{ $values->ticket->owner->prenom }}</th>
                                         @endif
