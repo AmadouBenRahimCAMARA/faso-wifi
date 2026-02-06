@@ -137,5 +137,28 @@ class AdminController extends Controller
         return redirect()->route('home')->with('success', "Vous êtes connecté en tant que " . $user->nom);
     }
 
+    /**
+     * List all contact messages.
+     */
+    public function messages()
+    {
+        $messages = \App\Models\ContactMessage::orderBy('created_at', 'desc')->paginate(15);
+        return view('admin.messages.index', compact('messages'));
+    }
+
+    /**
+     * Show a specific contact message and mark it as read.
+     */
+    public function showMessage($id)
+    {
+        $message = \App\Models\ContactMessage::findOrFail($id);
+        
+        if (!$message->is_read) {
+            $message->is_read = true;
+            $message->save();
+        }
+
+        return view('admin.messages.show', compact('message'));
+    }
 
 }

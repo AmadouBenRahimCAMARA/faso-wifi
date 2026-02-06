@@ -94,12 +94,21 @@ class HomeController extends Controller
 
         $data = $request->all();
 
+        // Save to database
+        \App\Models\ContactMessage::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'subject' => $data['subject'],
+            'message' => $data['message'],
+        ]);
+
         try {
             // Send to the admin email defined in .env
             \Illuminate\Support\Facades\Mail::to(config('mail.from.address'))->send(new \App\Mail\ContactMail($data));
             return 'OK';
         } catch (\Exception $e) {
-            return response('Erreur lors de l\'envoi: ' . $e->getMessage(), 500);
+            // Message is saved even if email fails
+            return 'OK';
         }
     }
 }

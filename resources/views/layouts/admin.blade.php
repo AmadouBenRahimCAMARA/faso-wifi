@@ -43,6 +43,14 @@
                     <li class="nav-item"><a class="nav-link @if (Route::currentRouteName() == 'admin.users') active @endif"
                             href="{{ route('admin.users') }}"><i class="fas fa-users"></i><span>Utilisateurs</span></a>
                     </li>
+                    <li class="nav-item"><a class="nav-link @if (Str::startsWith(Route::currentRouteName(), 'admin.messages')) active @endif"
+                            href="{{ route('admin.messages') }}"><i class="fas fa-envelope"></i><span>Messagerie</span>
+                            @php $unreadCount = \App\Models\ContactMessage::where('is_read', false)->count(); @endphp
+                            @if($unreadCount > 0)
+                                <span class="badge bg-danger ms-2">{{ $unreadCount }}</span>
+                            @endif
+                            </a>
+                    </li>
                     <hr class="sidebar-divider">
                     @endif
 
