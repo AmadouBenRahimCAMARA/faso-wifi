@@ -50,7 +50,7 @@ Route::get('/inscription', function () {
 Auth::routes();
 
 // Email Verification Routes (OTP)
-// Email Verification Routes (OTP)
+// Email Verification Routes (OTP) - Accessible by guests/session
 Route::get('/email/verify', [App\Http\Controllers\Auth\OtpVerificationController::class, 'show'])->name('verification.notice');
 Route::post('/email/verify', [App\Http\Controllers\Auth\OtpVerificationController::class, 'verify'])->name('verification.verify.post');
 Route::get('/email/resend', [App\Http\Controllers\Auth\OtpVerificationController::class, 'resend'])->name('verification.resend');

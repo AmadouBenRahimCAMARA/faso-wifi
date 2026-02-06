@@ -13,17 +13,14 @@ class OtpVerificationController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
-        // We don't want already verified users accessing this, but we need them to be logged in (auth)
-        // Check verification in index method
+        // No auth middleware, we verify checking the session
+        $this->middleware('guest');
     }
 
     public function show()
     {
-        $user = Auth::user();
-
-        if ($user->hasVerifiedEmail()) {
-            return redirect()->route('home');
+        if (!session()->has('pending_registration')) {
+            return redirect()->route('register');
         }
 
         return view('auth.verify-otp');
@@ -35,21 +32,39 @@ class OtpVerificationController extends Controller
             'verification_code' => 'required|string',
         ]);
 
-        $user = Auth::user();
+        $data = session()->get('pending_registration');
 
-        if ($user->verification_code === $request->verification_code) {
+        if (!$data) {
+            return redirect()->route('register')->with('error', 'Session expirée, veuillez recommencer.');
+        }
+
+        if ($data['otp'] == $request->verification_code) {
             
             // Check expiry
-            if ($user->verification_expires_at && now()->gt($user->verification_expires_at)) {
-                return back()->with('error', 'Le code a expiré. Veuillez en demander un nouveau.');
+            if (isset($data['otp_expires_at']) && now()->gt($data['otp_expires_at'])) {
+                 return back()->with('error', 'Le code a expiré. Veuillez en demander un nouveau.');
             }
 
-            $user->markEmailAsVerified();
-            $user->verification_code = null;
-            $user->verification_expires_at = null;
-            $user->save();
+            // Create User NOW
+            // We use the password hash already stored in session
+            $user = User::create([
+                'nom' => $data['nom'],
+                'prenom' => $data['prenom'],
+                'pays' => $data['pays'],
+                'phone' => $data['phone'],
+                'email' => $data['email'],
+                'password' => $data['password'],
+                'email_verified_at' => now(), // Mark as verified immediately
+                // verification_code columns are simpler to leave null or used for logs? we leave null
+            ]);
 
-            return redirect()->route('home')->with('success', 'Compte vérifié avec succès !');
+            // Clear session
+            session()->forget('pending_registration');
+
+            // Login
+            Auth::login($user);
+
+            return redirect()->route('home')->with('success', 'Compte créé et vérifié avec succès !');
         }
 
         return back()->with('error', 'Code invalide.');
@@ -57,19 +72,20 @@ class OtpVerificationController extends Controller
 
     public function resend()
     {
-        $user = Auth::user();
+        $data = session()->get('pending_registration');
 
-        if ($user->hasVerifiedEmail()) {
-            return redirect()->route('home');
+        if (!$data) {
+            return redirect()->route('register');
         }
 
         $code = rand(100000, 999999);
-        $user->verification_code = $code;
-        $user->verification_expires_at = now()->addMinutes(10);
-        $user->save();
+        $data['otp'] = $code;
+        $data['otp_expires_at'] = now()->addMinutes(10);
+        
+        session()->put('pending_registration', $data);
 
         try {
-            Mail::to($user->email)->send(new VerificationCodeMail($code));
+            Mail::to($data['email'])->send(new VerificationCodeMail($code));
         } catch (\Exception $e) {
             return back()->with('error', "Erreur lors de l'envoi du mail.");
         }

@@ -41,11 +41,41 @@ class RegisterController extends Controller
     }
 
     /**
-     * Get a validator for an incoming registration request.
+     * Handle a registration request for the application.
      *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
      */
+    public function register(\Illuminate\Http\Request $request)
+    {
+        // Standard validation (checks unique:users in DB)
+        $this->validator($request->all())->validate();
+
+        // Generate 6-digit code
+        $code = rand(100000, 999999);
+        
+        // Store everything in Session (expires in 10 mins approx via session lifetime or manual check)
+        $data = $request->all();
+        $data['password'] = Hash::make($data['password']); // Hash now
+        $data['otp'] = $code;
+        $data['otp_expires_at'] = now()->addMinutes(10);
+
+        // We use the email as a key or just a single 'pending_registration' key
+        // Assuming one pending registration per session is enough
+        session()->put('pending_registration', $data);
+
+        // Send Email
+        try {
+            \Illuminate\Support\Facades\Mail::to($data['email'])->send(new \App\Mail\VerificationCodeMail($code));
+        } catch (\Exception $e) {
+            // Log error
+        }
+
+        // Redirect to verification page
+        return redirect()->route('verification.notice');
+    }
+    
+    // Original methods preserved but unused by our override
     protected function validator(array $data)
     {
         return Validator::make($data, [
@@ -58,14 +88,9 @@ class RegisterController extends Controller
         ]);
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\Models\User
-     */
     protected function create(array $data)
     {
+        // Unused in new flow
         return User::create([
             'nom' => $data['nom'],
             'prenom' => $data['prenom'],
@@ -74,32 +99,5 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
-    }
-
-    /**
-     * The user has been registered.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  mixed  $user
-     * @return mixed
-     */
-    protected function registered(\Illuminate\Http\Request $request, $user)
-    {
-        // Generate 6-digit code
-        $code = rand(100000, 999999);
-        
-        $user->verification_code = $code;
-        $user->verification_expires_at = now()->addMinutes(10);
-        $user->save();
-
-        // Send Email
-        try {
-            \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\VerificationCodeMail($code));
-        } catch (\Exception $e) {
-            // Log error but continue
-        }
-
-        // Redirect to verification page
-        return redirect()->route('verification.notice');
     }
 }
