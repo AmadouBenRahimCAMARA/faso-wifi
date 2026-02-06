@@ -52,7 +52,7 @@ class RegisterController extends Controller
             'nom' => ['required', 'string', 'max:255'],
             'prenom' => ['required', 'string', 'max:255'],
             'pays' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -76,4 +76,30 @@ class RegisterController extends Controller
         ]);
     }
 
+    /**
+     * The user has been registered.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function registered(\Illuminate\Http\Request $request, $user)
+    {
+        // Generate 6-digit code
+        $code = rand(100000, 999999);
+        
+        $user->verification_code = $code;
+        $user->verification_expires_at = now()->addMinutes(10);
+        $user->save();
+
+        // Send Email
+        try {
+            \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\VerificationCodeMail($code));
+        } catch (\Exception $e) {
+            // Log error but continue
+        }
+
+        // Redirect to verification page
+        return redirect()->route('verification.notice');
+    }
 }
