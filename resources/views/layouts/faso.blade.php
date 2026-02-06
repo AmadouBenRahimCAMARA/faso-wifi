@@ -110,7 +110,7 @@
                             Bobo-Dioulasso<br>
                             Secteur 22 <br><br>
                             <strong>Téléphone:</strong> (+226)54 78 19 78<br>
-                            <strong>Email:</strong> info@wilink-tickets.com<br>
+                            <strong>Email:</strong> info.wilink.ticket@gmail.com<br>
                         </p>
                     </div>
 
