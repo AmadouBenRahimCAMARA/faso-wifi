@@ -33,7 +33,7 @@ class VerificationCodeMail extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Votre Code de Vérification - Faso-Wifi',
+            subject: 'Votre Code de Vérification - WILINK-TICKET',
         );
     }
 
