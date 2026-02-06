@@ -101,7 +101,8 @@
                     </div>
 
                     <div class="col-lg-6">
-                        <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+                        <form action="{{ route('contact.send') }}" method="post" role="form" class="php-email-form">
+                            @csrf
                             <div class="row">
                                 <div class="col form-group">
                                     <input type="text" name="name" class="form-control" id="name"
@@ -120,9 +121,9 @@
                                 <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
                             </div>
                             <div class="my-3">
-                                <div class="loading">Loading</div>
+                                <div class="loading">Envoi en cours...</div>
                                 <div class="error-message"></div>
-                                <div class="sent-message">Your message has been sent. Thank you!</div>
+                                <div class="sent-message">Votre message a bien été envoyé. Merci !</div>
                             </div>
                             <div class="text-center"><button type="submit">Envoyer</button></div>
                         </form>

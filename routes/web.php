@@ -49,6 +49,9 @@ Route::get('/inscription', function () {
 
 Auth::routes();
 
+// Contact Route
+Route::post('/nous-contacter', [App\Http\Controllers\HomeController::class, 'sendMessage'])->name('contact.send');
+
 // Email Verification Routes (OTP)
 // Email Verification Routes (OTP) - Accessible by guests/session
 Route::get('/email/verify', [App\Http\Controllers\Auth\OtpVerificationController::class, 'show'])->name('verification.notice');

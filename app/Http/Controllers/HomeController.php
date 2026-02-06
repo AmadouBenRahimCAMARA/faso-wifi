@@ -82,4 +82,24 @@ class HomeController extends Controller
         }
         return redirect()->route('home');
     }
+
+    public function sendMessage(\Illuminate\Http\Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email',
+            'subject' => 'required|string',
+            'message' => 'required|string',
+        ]);
+
+        $data = $request->all();
+
+        try {
+            // Send to the admin email defined in .env
+            \Illuminate\Support\Facades\Mail::to(config('mail.from.address'))->send(new \App\Mail\ContactMail($data));
+            return 'OK';
+        } catch (\Exception $e) {
+            return response('Erreur lors de l\'envoi: ' . $e->getMessage(), 500);
+        }
+    }
 }

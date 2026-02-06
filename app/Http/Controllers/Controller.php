@@ -218,6 +218,12 @@ class Controller extends BaseController
         $paiement = [];
         $datas = [];
         $data = Ticket::where("slug", $slug)->first();
+        
+        // SECURITY FIX: Prevent download if ticket is not sold
+        if(!$data || $data->etat_ticket !== 'VENDU'){
+            return redirect('/')->with('error', 'Ce reçu n\'est pas disponible.');
+        }
+
         if($data){
             //dd($data);
             $paiement = Paiement::where("ticket_id",$data->id)->first();
