@@ -16,34 +16,56 @@
             <h3 class="text-dark mb-4">Tickets</h3>
             <div class="card shadow">
                 <div class="card-header py-3">
-                    <div class="d-flex flex-wrap align-items-center">
-                        <p class="text-primary m-0 fw-bold me-auto">Liste des tickets</p>
-                        
-                        <!-- Filtres -->
-                        <div class="btn-group me-3 mb-2 mb-md-0" role="group" aria-label="Filtre tickets">
-                            <a href="{{ route('ticket.index', ['filter' => 'en_vente']) }}" 
-                               class="btn btn-sm {{ $filter === 'en_vente' ? 'btn-success' : 'btn-outline-success' }}">
-                                <i class="fas fa-wifi me-1"></i>En vente <span class="badge bg-light text-dark">{{ $counts['en_vente'] }}</span>
-                            </a>
-                            <a href="{{ route('ticket.index', ['filter' => 'en_cours']) }}" 
-                               class="btn btn-sm {{ $filter === 'en_cours' ? 'btn-warning' : 'btn-outline-warning' }}">
-                                <i class="fas fa-hourglass-half me-1"></i>En cours <span class="badge bg-light text-dark">{{ $counts['en_cours'] }}</span>
-                            </a>
-                            <a href="{{ route('ticket.index', ['filter' => 'vendu']) }}" 
-                               class="btn btn-sm {{ $filter === 'vendu' ? 'btn-secondary' : 'btn-outline-secondary' }}">
-                                <i class="fas fa-check me-1"></i>Vendus <span class="badge bg-light text-dark">{{ $counts['vendu'] }}</span>
-                            </a>
-                            <a href="{{ route('ticket.index', ['filter' => 'tous']) }}" 
-                               class="btn btn-sm {{ $filter === 'tous' ? 'btn-primary' : 'btn-outline-primary' }}">
-                                <i class="fas fa-list me-1"></i>Tous <span class="badge bg-light text-dark">{{ $counts['tous'] }}</span>
+                    <!-- Titre et bouton Ajouter -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <p class="text-primary m-0 fw-bold">Liste des tickets</p>
+                        <div>
+                            <button type="button" class="btn btn-danger me-2 d-none" id="bulk-delete-btn" data-bs-toggle="modal"
+                                    data-bs-target="#bulkDeleteModal">
+                                    <i class="fas fa-trash d-md-none"></i>
+                                    <span class="d-none d-md-inline">Supprimer la sélection</span>
+                            </button>
+                            <a href="{{ route('ticket.create') }}" class="btn btn-primary">
+                                <i class="fas fa-plus d-md-none"></i>
+                                <span class="d-none d-md-inline">Ajouter</span>
                             </a>
                         </div>
-                        
-                        <button type="button" class="btn btn-danger me-2 d-none" id="bulk-delete-btn" data-bs-toggle="modal"
-                                data-bs-target="#bulkDeleteModal">
-                                Supprimer la sélection
-                        </button>
-                        <a href="{{ route('ticket.create') }}" class="btn btn-primary">Ajouter</a>
+                    </div>
+                    
+                    <!-- Filtres - Responsive Grid -->
+                    <div class="row g-2">
+                        <div class="col-6 col-md-auto">
+                            <a href="{{ route('ticket.index', ['filter' => 'en_vente']) }}" 
+                               class="btn w-100 {{ $filter === 'en_vente' ? 'btn-success' : 'btn-outline-success' }}">
+                                <i class="fas fa-wifi me-1"></i>
+                                <span class="d-none d-sm-inline">En vente</span>
+                                <span class="badge bg-light text-dark ms-1">{{ $counts['en_vente'] }}</span>
+                            </a>
+                        </div>
+                        <div class="col-6 col-md-auto">
+                            <a href="{{ route('ticket.index', ['filter' => 'en_cours']) }}" 
+                               class="btn w-100 {{ $filter === 'en_cours' ? 'btn-warning' : 'btn-outline-warning' }}">
+                                <i class="fas fa-hourglass-half me-1"></i>
+                                <span class="d-none d-sm-inline">En cours</span>
+                                <span class="badge bg-light text-dark ms-1">{{ $counts['en_cours'] }}</span>
+                            </a>
+                        </div>
+                        <div class="col-6 col-md-auto">
+                            <a href="{{ route('ticket.index', ['filter' => 'vendu']) }}" 
+                               class="btn w-100 {{ $filter === 'vendu' ? 'btn-secondary' : 'btn-outline-secondary' }}">
+                                <i class="fas fa-check me-1"></i>
+                                <span class="d-none d-sm-inline">Vendus</span>
+                                <span class="badge bg-light text-dark ms-1">{{ $counts['vendu'] }}</span>
+                            </a>
+                        </div>
+                        <div class="col-6 col-md-auto">
+                            <a href="{{ route('ticket.index', ['filter' => 'tous']) }}" 
+                               class="btn w-100 {{ $filter === 'tous' ? 'btn-primary' : 'btn-outline-primary' }}">
+                                <i class="fas fa-list me-1"></i>
+                                <span class="d-none d-sm-inline">Tous</span>
+                                <span class="badge bg-light text-dark ms-1">{{ $counts['tous'] }}</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div class="card-body">
