@@ -69,7 +69,7 @@
                                     <th>Wifi</th>
                                     <th>Forfait</th>
                                     <th>Montant</th>
-                                    <th>identifient</th>
+                                    <th>identifiant</th>
                                     <th>Mot de passe</th>
                                     <th>Durée</th>
                                     <th>Etat</th>
