@@ -31,7 +31,9 @@ class HomeController extends Controller
         $dateDuJour = Carbon::today(); // Récupère la date d'aujourd'hui
 
         if (Auth::user()->isAdmin()) {
-            $paiements = Paiement::latest()->paginate(10);
+            $paiements = Paiement::whereDate('updated_at', $dateDuJour)
+                        ->where('status', 'completed')
+                        ->latest()->paginate(10);
             $ticketsDuJour = Ticket::whereDate('updated_at', $dateDuJour)->where('etat_ticket', 'VENDU')->get();
             $ticketsTotalVendu = Ticket::where('etat_ticket', 'VENDU')->get();
             $solde = Solde::orderBy('id', 'desc')->first(); // This might need more thought for a global admin view
