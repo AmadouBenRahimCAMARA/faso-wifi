@@ -16,9 +16,26 @@
             <h3 class="text-dark mb-4">Tickets</h3>
             <div class="card shadow">
                 <div class="card-header py-3">
-                    <div class="d-flex">
+                    <div class="d-flex flex-wrap align-items-center">
                         <p class="text-primary m-0 fw-bold me-auto">Liste des tickets</p>
-                         <button type="button" class="btn btn-danger me-2 d-none" id="bulk-delete-btn" data-bs-toggle="modal"
+                        
+                        <!-- Filtres -->
+                        <div class="btn-group me-3 mb-2 mb-md-0" role="group" aria-label="Filtre tickets">
+                            <a href="{{ route('ticket.index', ['filter' => 'en_vente']) }}" 
+                               class="btn btn-sm {{ $filter === 'en_vente' ? 'btn-success' : 'btn-outline-success' }}">
+                                <i class="fas fa-wifi me-1"></i>En vente
+                            </a>
+                            <a href="{{ route('ticket.index', ['filter' => 'vendu']) }}" 
+                               class="btn btn-sm {{ $filter === 'vendu' ? 'btn-secondary' : 'btn-outline-secondary' }}">
+                                <i class="fas fa-check me-1"></i>Vendus
+                            </a>
+                            <a href="{{ route('ticket.index', ['filter' => 'tous']) }}" 
+                               class="btn btn-sm {{ $filter === 'tous' ? 'btn-primary' : 'btn-outline-primary' }}">
+                                <i class="fas fa-list me-1"></i>Tous
+                            </a>
+                        </div>
+                        
+                        <button type="button" class="btn btn-danger me-2 d-none" id="bulk-delete-btn" data-bs-toggle="modal"
                                 data-bs-target="#bulkDeleteModal">
                                 Supprimer la sélection
                         </button>

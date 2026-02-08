@@ -33,14 +33,28 @@ class TicketController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        // Filtre par défaut : EN_VENTE (tickets disponibles)
+        $filter = $request->get('filter', 'en_vente');
+        
         if (Auth::user()->isAdmin()) {
-            $datas = Ticket::with('owner')->latest()->paginate(10);
+            $query = Ticket::with('owner');
         } else {
-            $datas = Auth::user()->tickets()->latest()->paginate(10);
+            $query = Auth::user()->tickets();
         }
-        return view("admin.ticket-liste",compact("datas"));
+        
+        // Appliquer le filtre
+        if ($filter === 'en_vente') {
+            $query->where('etat_ticket', 'EN_VENTE');
+        } elseif ($filter === 'vendu') {
+            $query->where('etat_ticket', 'VENDU');
+        }
+        // Si 'tous', pas de filtre sur etat_ticket
+        
+        $datas = $query->latest()->paginate(10)->appends(['filter' => $filter]);
+        
+        return view("admin.ticket-liste", compact("datas", "filter"));
     }
 
     public function create()
