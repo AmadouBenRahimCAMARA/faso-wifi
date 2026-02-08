@@ -98,7 +98,15 @@
                                         <th>{{ $values->user }}</th>
                                         <th>{{ $values->password}}</th>
                                         <th>{{ $values->dure }}</th>
-                                        <th>{{ $values->etat_ticket ==="EN_VENTE" ? "En vente" : "Vendu" }}</th>
+                                        <th>
+                                            @if($values->etat_ticket === 'EN_VENTE')
+                                                <span class="badge bg-success">En vente</span>
+                                            @elseif($values->etat_ticket === 'EN_COURS')
+                                                <span class="badge bg-warning text-dark">En cours</span>
+                                            @else
+                                                <span class="badge bg-secondary">Vendu</span>
+                                            @endif
+                                        </th>
                                         @if(Auth::user()->isAdmin())
                                         <th>{{ $values->owner->nom }} {{ $values->owner->prenom }}</th>
                                         @endif
