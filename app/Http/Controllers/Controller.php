@@ -45,7 +45,12 @@ class Controller extends BaseController
 
         DB::beginTransaction();
         try {
-            // Select available ticket OR one reserved > 15min ago (expired reservation)
+            // Nettoyage automatique : Remettre les tickets EN_COURS expirés (> 3 min) en EN_VENTE
+            Ticket::where('etat_ticket', 'EN_COURS')
+                ->where('updated_at', '<', now()->subMinutes(3))
+                ->update(['etat_ticket' => 'EN_VENTE']);
+            
+            // Select available ticket
             $ticket = Ticket::where('tarif_id', $tarif->id)
                 ->where(function($query) {
                     $query->where('etat_ticket', 'EN_VENTE')
