@@ -49,6 +49,8 @@ class TicketController extends Controller
             $query->where('etat_ticket', 'EN_VENTE');
         } elseif ($filter === 'vendu') {
             $query->where('etat_ticket', 'VENDU');
+        } elseif ($filter === 'en_cours') {
+            $query->where('etat_ticket', 'EN_COURS');
         }
         // Si 'tous', pas de filtre sur etat_ticket
         

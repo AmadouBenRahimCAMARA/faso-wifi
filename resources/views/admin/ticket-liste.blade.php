@@ -25,6 +25,10 @@
                                class="btn btn-sm {{ $filter === 'en_vente' ? 'btn-success' : 'btn-outline-success' }}">
                                 <i class="fas fa-wifi me-1"></i>En vente
                             </a>
+                            <a href="{{ route('ticket.index', ['filter' => 'en_cours']) }}" 
+                               class="btn btn-sm {{ $filter === 'en_cours' ? 'btn-warning' : 'btn-outline-warning' }}">
+                                <i class="fas fa-hourglass-half me-1"></i>En cours
+                            </a>
                             <a href="{{ route('ticket.index', ['filter' => 'vendu']) }}" 
                                class="btn btn-sm {{ $filter === 'vendu' ? 'btn-secondary' : 'btn-outline-secondary' }}">
                                 <i class="fas fa-check me-1"></i>Vendus
