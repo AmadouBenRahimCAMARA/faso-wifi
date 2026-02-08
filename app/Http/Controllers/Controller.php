@@ -51,7 +51,7 @@ class Controller extends BaseController
                     $query->where('etat_ticket', 'EN_VENTE')
                           ->orWhere(function($q) {
                               $q->where('etat_ticket', 'EN_COURS')
-                                ->where('updated_at', '<', now()->subMinutes(15));
+                                ->where('updated_at', '<', now()->subMinutes(3));
                           });
                 })
                 ->lockForUpdate() // Lock row to prevent double selection
