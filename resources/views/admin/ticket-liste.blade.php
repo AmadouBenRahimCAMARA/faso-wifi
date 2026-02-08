@@ -23,19 +23,19 @@
                         <div class="btn-group me-3 mb-2 mb-md-0" role="group" aria-label="Filtre tickets">
                             <a href="{{ route('ticket.index', ['filter' => 'en_vente']) }}" 
                                class="btn btn-sm {{ $filter === 'en_vente' ? 'btn-success' : 'btn-outline-success' }}">
-                                <i class="fas fa-wifi me-1"></i>En vente
+                                <i class="fas fa-wifi me-1"></i>En vente <span class="badge bg-light text-dark">{{ $counts['en_vente'] }}</span>
                             </a>
                             <a href="{{ route('ticket.index', ['filter' => 'en_cours']) }}" 
                                class="btn btn-sm {{ $filter === 'en_cours' ? 'btn-warning' : 'btn-outline-warning' }}">
-                                <i class="fas fa-hourglass-half me-1"></i>En cours
+                                <i class="fas fa-hourglass-half me-1"></i>En cours <span class="badge bg-light text-dark">{{ $counts['en_cours'] }}</span>
                             </a>
                             <a href="{{ route('ticket.index', ['filter' => 'vendu']) }}" 
                                class="btn btn-sm {{ $filter === 'vendu' ? 'btn-secondary' : 'btn-outline-secondary' }}">
-                                <i class="fas fa-check me-1"></i>Vendus
+                                <i class="fas fa-check me-1"></i>Vendus <span class="badge bg-light text-dark">{{ $counts['vendu'] }}</span>
                             </a>
                             <a href="{{ route('ticket.index', ['filter' => 'tous']) }}" 
                                class="btn btn-sm {{ $filter === 'tous' ? 'btn-primary' : 'btn-outline-primary' }}">
-                                <i class="fas fa-list me-1"></i>Tous
+                                <i class="fas fa-list me-1"></i>Tous <span class="badge bg-light text-dark">{{ $counts['tous'] }}</span>
                             </a>
                         </div>
                         

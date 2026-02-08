@@ -39,10 +39,20 @@ class TicketController extends Controller
         $filter = $request->get('filter', 'en_vente');
         
         if (Auth::user()->isAdmin()) {
+            $baseQuery = Ticket::query();
             $query = Ticket::with('owner');
         } else {
+            $baseQuery = Auth::user()->tickets();
             $query = Auth::user()->tickets();
         }
+        
+        // Calculer les compteurs pour chaque état
+        $counts = [
+            'en_vente' => (clone $baseQuery)->where('etat_ticket', 'EN_VENTE')->count(),
+            'en_cours' => (clone $baseQuery)->where('etat_ticket', 'EN_COURS')->count(),
+            'vendu' => (clone $baseQuery)->where('etat_ticket', 'VENDU')->count(),
+            'tous' => (clone $baseQuery)->count(),
+        ];
         
         // Appliquer le filtre
         if ($filter === 'en_vente') {
@@ -56,7 +66,7 @@ class TicketController extends Controller
         
         $datas = $query->latest()->paginate(10)->appends(['filter' => $filter]);
         
-        return view("admin.ticket-liste", compact("datas", "filter"));
+        return view("admin.ticket-liste", compact("datas", "filter", "counts"));
     }
 
     public function create()
