@@ -38,6 +38,7 @@
                             <a href="{{ route('ticket.index', ['filter' => 'en_vente']) }}" 
                                class="btn w-100 {{ $filter === 'en_vente' ? 'btn-success' : 'btn-outline-success' }}">
                                 <i class="fas fa-wifi me-1"></i>
+                                <span class="d-sm-none">Vente</span>
                                 <span class="d-none d-sm-inline">En vente</span>
                                 <span class="badge bg-light text-dark ms-1">{{ $counts['en_vente'] }}</span>
                             </a>
@@ -46,6 +47,7 @@
                             <a href="{{ route('ticket.index', ['filter' => 'en_cours']) }}" 
                                class="btn w-100 {{ $filter === 'en_cours' ? 'btn-warning' : 'btn-outline-warning' }}">
                                 <i class="fas fa-hourglass-half me-1"></i>
+                                <span class="d-sm-none">Cours</span>
                                 <span class="d-none d-sm-inline">En cours</span>
                                 <span class="badge bg-light text-dark ms-1">{{ $counts['en_cours'] }}</span>
                             </a>
@@ -54,6 +56,7 @@
                             <a href="{{ route('ticket.index', ['filter' => 'vendu']) }}" 
                                class="btn w-100 {{ $filter === 'vendu' ? 'btn-secondary' : 'btn-outline-secondary' }}">
                                 <i class="fas fa-check me-1"></i>
+                                <span class="d-sm-none">Vendu</span>
                                 <span class="d-none d-sm-inline">Vendus</span>
                                 <span class="badge bg-light text-dark ms-1">{{ $counts['vendu'] }}</span>
                             </a>
@@ -62,7 +65,7 @@
                             <a href="{{ route('ticket.index', ['filter' => 'tous']) }}" 
                                class="btn w-100 {{ $filter === 'tous' ? 'btn-primary' : 'btn-outline-primary' }}">
                                 <i class="fas fa-list me-1"></i>
-                                <span class="d-none d-sm-inline">Tous</span>
+                                <span>Tous</span>
                                 <span class="badge bg-light text-dark ms-1">{{ $counts['tous'] }}</span>
                             </a>
                         </div>
