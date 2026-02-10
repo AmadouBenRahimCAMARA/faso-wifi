@@ -81,7 +81,6 @@ class RetraitController extends Controller
         }
 
         $dateDuJour = Carbon::today(); // Récupère la date d'aujourd'hui
-        $dateDuJour = Carbon::today(); // Récupère la date d'aujourd'hui
         $solde = Solde::whereDate('updated_at', $dateDuJour)->orderBy('id', 'desc')->first();
         $montant = isset($solde) ? $solde->solde : 0;
         

@@ -26,7 +26,7 @@ class Ticket extends Model
     }
 
     public function paiements(){
-        $this->hasMany(Paiement::class);
+        return $this->hasMany(Paiement::class);
     }
 
     public function owner(){
