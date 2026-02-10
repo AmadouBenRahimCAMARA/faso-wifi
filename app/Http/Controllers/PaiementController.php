@@ -25,15 +25,28 @@ class PaiementController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $limit = session()->has('view') ? session()->get('view') : 10;
+        $search = $request->get('search');
+
         if (Auth::user()->isAdmin()) {
-            $datas = Paiement::with('ticket.owner')->latest()->paginate($limit);
+            $query = Paiement::with(['ticket.owner', 'ticket.tarif']);
         } else {
-            $datas = Auth::user()->paiements()->latest()->paginate($limit);
+            $query = Auth::user()->paiements()->with('ticket.tarif');
         }
-        return view("admin.paiement-liste",compact("datas","limit"));
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('transaction_id', 'LIKE', '%' . $search . '%')
+                  ->orWhere('numero', 'LIKE', '%' . $search . '%')
+                  ->orWhere('moyen_de_paiement', 'LIKE', '%' . $search . '%');
+            });
+        }
+
+        $datas = $query->latest()->paginate($limit)->appends($request->only('search'));
+
+        return view("admin.paiement-liste", compact("datas", "limit", "search"));
     }
 
     

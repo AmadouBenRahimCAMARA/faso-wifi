@@ -5,10 +5,14 @@
         <nav class="navbar navbar-expand bg-white shadow mb-4 topbar static-top navbar-light">
             <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop"
                     type="button"><i class="fas fa-bars"></i></button>
-                <form class="d-none d-sm-inline-block me-auto ms-md-3 my-2 my-md-0 mw-100 navbar-search">
-                    <div class="input-group"><input class="bg-light form-control border-0 small" type="text"
-                            placeholder="Rechercher ..."><button class="btn btn-primary py-0" type="button"><i
-                                class="fas fa-search"></i></button></div>
+                <form class="d-none d-sm-inline-block me-auto ms-md-3 my-2 my-md-0 mw-100 navbar-search"
+                      method="GET" action="{{ route('paiement.index') }}">
+                    <div class="input-group">
+                        <input class="bg-light form-control border-0 small" type="text"
+                            name="search" value="{{ $search }}"
+                            placeholder="Rechercher par transaction, numéro ou moyen de paiement...">
+                        <button class="btn btn-primary py-0" type="submit"><i class="fas fa-search"></i></button>
+                    </div>
                 </form>
             </div>
         </nav>
@@ -16,26 +20,24 @@
             <h3 class="text-dark mb-4">Paiements</h3>
             <div class="card shadow">
                 <div class="card-header py-3">
-                    <p class="text-primary m-0 fw-bold">Historique des paiements</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="text-primary m-0 fw-bold">Historique des paiements</p>
+                        @if($search)
+                            <a href="{{ route('paiement.index') }}" class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-times me-1"></i>Réinitialiser
+                            </a>
+                        @endif
+                    </div>
+                    {{-- Barre de recherche mobile --}}
+                    <form method="GET" action="{{ route('paiement.index') }}" class="d-sm-none mt-2">
+                        <div class="input-group">
+                            <input class="form-control form-control-sm" type="text" name="search" value="{{ $search }}"
+                                placeholder="Transaction, numéro...">
+                            <button class="btn btn-sm btn-primary" type="submit"><i class="fas fa-search"></i></button>
+                        </div>
+                    </form>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6 text-nowrap">
-                            
-                            <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label
-                                    class="form-label">Voir&nbsp;<select id="view"
-                                        class="d-inline-block form-select form-select-sm" onchange="get()">
-                                        <option value="10" selected={{ session()->get('view') == '10' ? 'selected' : '' }}>10</option>
-                                        <option value="25" selected={{ session()->get('view') == '25' ? 'selected' : '' }}>25 </option>
-                                        <option value="50" selected={{ session()->get('view') == '50' ? 'selected' : '' }}>50 </option>
-                                        <option value="100" selected={{ session()->get('view') == '100' ? 'selected' : '' }}>100 </option>
-
-                                    </select>&nbsp;</label></div>
-                        </div>
-                        <!--div class="col-md-6">
-                                <div class="text-md-end dataTables_filter" id="dataTable_filter"><label class="form-label"><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label></div>
-                            </div-->
-                    </div>
                     <div class="table-responsive table mt-2" id="dataTable" role="grid"
                         aria-describedby="dataTable_info">
                         <table class="table my-0" id="dataTable">

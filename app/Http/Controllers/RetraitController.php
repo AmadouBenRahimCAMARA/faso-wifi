@@ -18,19 +18,20 @@ class RetraitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         {
             $limit = "";
             $user = Auth::user();
+            $search = $request->get('search');
 
             if ($user->isAdmin()) {
-                $datas = Retrait::with('user')->latest()->paginate(10);
+                $query = Retrait::with('user');
                 $ticketsDuJour = Ticket::whereDate('updated_at', Carbon::today())->where('etat_ticket', 'VENDU')->get();
                 $ticketsTotalVendu = Ticket::where('etat_ticket', 'VENDU')->get();
                 $solde = Solde::orderBy('id', 'desc')->first(); // Global latest solde
             } else {
-                $datas = $user->retraits()->latest()->paginate(10);
+                $query = $user->retraits();
                 $dateDuJour = Carbon::today();
                 $ticketsDuJour = Ticket::whereDate('updated_at', $dateDuJour)
                                 ->where([
@@ -46,6 +47,18 @@ class RetraitController extends Controller
                 $solde = Solde::where('user_id', $user->id)->orderBy('id', 'desc')->first();
             }
 
+            // Recherche
+            if ($search) {
+                $query->where(function($q) use ($search) {
+                    $q->where('transaction_id', 'LIKE', '%' . $search . '%')
+                      ->orWhere('numero_paiement', 'LIKE', '%' . $search . '%')
+                      ->orWhere('moyen_de_paiement', 'LIKE', '%' . $search . '%')
+                      ->orWhere('montant', 'LIKE', '%' . $search . '%');
+                });
+            }
+
+            $datas = $query->latest()->paginate(10)->appends($request->only('search'));
+
             $soldesDuJour = 0;
             foreach($ticketsDuJour as $ticket){
                 $soldesDuJour = $soldesDuJour + $ticket->tarif->montant;
@@ -60,7 +73,7 @@ class RetraitController extends Controller
                 "ticket_total_vendu" => count($ticketsTotalVendu),
             ];
 
-            return view("admin.retrait-liste",compact("datas","limit","user","compte"));
+            return view("admin.retrait-liste", compact("datas", "limit", "user", "compte", "search"));
         }
     }
 

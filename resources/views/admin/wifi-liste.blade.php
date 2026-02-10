@@ -5,10 +5,14 @@
         <nav class="navbar navbar-expand bg-white shadow mb-4 topbar static-top navbar-light">
             <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop"
                     type="button"><i class="fas fa-bars"></i></button>
-                <form class="d-none d-sm-inline-block me-auto ms-md-3 my-2 my-md-0 mw-100 navbar-search">
-                    <div class="input-group"><input class="bg-light form-control border-0 small" type="text"
-                            placeholder="Rechercher ..."><button class="btn btn-primary py-0" type="button"><i
-                                class="fas fa-search"></i></button></div>
+                <form class="d-none d-sm-inline-block me-auto ms-md-3 my-2 my-md-0 mw-100 navbar-search"
+                      method="GET" action="{{ route('wifi.index') }}">
+                    <div class="input-group">
+                        <input class="bg-light form-control border-0 small" type="text"
+                            name="search" value="{{ $search }}"
+                            placeholder="Rechercher par nom ou description...">
+                        <button class="btn btn-primary py-0" type="submit"><i class="fas fa-search"></i></button>
+                    </div>
                 </form>
             </div>
         </nav>
@@ -16,10 +20,29 @@
             <h3 class="text-dark mb-4">Wifi</h3>
             <div class="card shadow">
                 <div class="card-header py-3">
-                    <div class="d-flex">
-                        <p class="text-primary m-0 fw-bold me-auto">Liste des reseaux wifi</p>
-                        <a href="{{ route('wifi.create') }}" class="btn btn-primary">Ajouter</a>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <p class="text-primary m-0 fw-bold">Liste des reseaux wifi</p>
+                        <a href="{{ route('wifi.create') }}" class="btn btn-primary">
+                            <i class="fas fa-plus d-md-none"></i>
+                            <span class="d-none d-md-inline">Ajouter</span>
+                        </a>
                     </div>
+                    @if($search)
+                        <div class="d-flex align-items-center">
+                            <span class="small text-muted">Résultats pour "{{ $search }}"</span>
+                            <a href="{{ route('wifi.index') }}" class="btn btn-sm btn-outline-danger ms-2">
+                                <i class="fas fa-times me-1"></i>Réinitialiser
+                            </a>
+                        </div>
+                    @endif
+                    {{-- Barre de recherche mobile --}}
+                    <form method="GET" action="{{ route('wifi.index') }}" class="d-sm-none mt-2">
+                        <div class="input-group">
+                            <input class="form-control form-control-sm" type="text" name="search" value="{{ $search }}"
+                                placeholder="Nom ou description...">
+                            <button class="btn btn-sm btn-primary" type="submit"><i class="fas fa-search"></i></button>
+                        </div>
+                    </form>
                 </div>
                 <div class="card-body">
                     <div class="row">

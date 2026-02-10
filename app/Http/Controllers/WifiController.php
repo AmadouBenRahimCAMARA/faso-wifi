@@ -23,14 +23,26 @@ class WifiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->get('search');
+
         if (Auth::user()->isAdmin()) {
-            $datas = Wifi::with('user')->latest()->paginate(10);
+            $query = Wifi::with('user');
         } else {
-            $datas = Auth::user()->wifis()->paginate(10);
+            $query = Auth::user()->wifis();
         }
-        return view("admin.wifi-liste",compact("datas"));
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('nom', 'LIKE', '%' . $search . '%')
+                  ->orWhere('description', 'LIKE', '%' . $search . '%');
+            });
+        }
+
+        $datas = $query->latest()->paginate(10)->appends($request->only('search'));
+
+        return view("admin.wifi-liste", compact("datas", "search"));
     }
 
     /**
