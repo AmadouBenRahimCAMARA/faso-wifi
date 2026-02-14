@@ -47,7 +47,7 @@ class Controller extends BaseController
         try {
             // Nettoyage automatique : Remettre les tickets EN_COURS expirés (> 3 min) en EN_VENTE
             Ticket::where('etat_ticket', 'EN_COURS')
-                ->where('updated_at', '<', now()->subMinutes(3))
+                ->where('updated_at', '<', now()->subMinutes(5))
                 ->update(['etat_ticket' => 'EN_VENTE']);
             
             // Select available ticket
@@ -56,7 +56,7 @@ class Controller extends BaseController
                     $query->where('etat_ticket', 'EN_VENTE')
                           ->orWhere(function($q) {
                               $q->where('etat_ticket', 'EN_COURS')
-                                ->where('updated_at', '<', now()->subMinutes(3));
+                                ->where('updated_at', '<', now()->subMinutes(5));
                           });
                 })
                 ->lockForUpdate() // Lock row to prevent double selection
