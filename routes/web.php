@@ -83,6 +83,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::put('/admin/users/{id}', [App\Http\Controllers\AdminController::class, 'update'])->name('admin.users.update');
     Route::get('/admin/users/{id}/impersonate', [App\Http\Controllers\AdminController::class, 'impersonate'])->name('admin.users.impersonate');
     Route::post('/admin/users/{id}/toggle-status', [App\Http\Controllers\AdminController::class, 'toggleUserStatus'])->name('admin.users.toggleStatus');
+    Route::delete('/admin/users/{id}', [App\Http\Controllers\AdminController::class, 'destroy'])->name('admin.users.destroy');
     
     // Contact Messages
     Route::get('/admin/messages', [App\Http\Controllers\AdminController::class, 'messages'])->name('admin.messages');

@@ -55,8 +55,15 @@
                                     <td>{{ $user->created_at->format('d/m/Y') }}</td>
                                     <td>
                                         <a href="{{ route('admin.users.show', $user->id) }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
-                                        <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
-                                        <form action="{{ route('admin.users.toggleStatus', $user->id) }}" method="POST" style="display:inline;">
+                                            <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                                            <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('ATTTENTION : Voulez-vous vraiment supprimer cet utilisateur ? \n\nToutes ses données (Wifis, Tickets, Paiements) seront définitivement effacées.\n\nCette action est irréversible.');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger text-white fs-6">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                            <form action="{{ route('admin.users.toggleStatus', $user->id) }}" method="POST" style="display:inline;">
                                             @csrf
                                             <button type="submit" class="btn btn-sm {{ $user->status == 'active' ? 'btn-danger' : 'btn-success' }}">
                                                 <i class="fas {{ $user->status == 'active' ? 'fa-ban' : 'fa-check' }}"></i>

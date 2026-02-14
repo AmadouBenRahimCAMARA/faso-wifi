@@ -161,4 +161,37 @@ class AdminController extends Controller
         return view('admin.messages.show', compact('message'));
     }
 
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+
+        if ($user->id === Auth::id()) {
+            return redirect()->back()->with('error', 'Vous ne pouvez pas supprimer votre propre compte.');
+        }
+
+        // Delete related data manually to ensure cleanup
+        // 1. Delete Wifis (and their related data if not on cascade)
+        // Ideally Wifis should delete their tickets/tarifs, but let's be safe
+        foreach ($user->wifis as $wifi) {
+            $wifi->tarifs()->delete(); // Delete tarifs
+            $wifi->delete();
+        }
+
+        // 2. Delete Tickets owned by user
+        $user->tickets()->delete();
+
+        // 3. Delete Paiements related to user (Vendor) -- Optional: Keep for history? 
+        // If we delete user, paiements user_id will be orphan or fail.
+        // Let's delete them to be clean, or set Null if nullable.
+        // Assuming strict cleanup:
+        $user->paiements()->delete();
+
+        // 4. Delete Solde entries
+        \App\Models\Solde::where('user_id', $user->id)->delete();
+
+        // 5. Delete User
+        $user->delete();
+
+        return redirect()->route('admin.users')->with('success', 'Utilisateur et ses données supprimés avec succès.');
+    }
 }
