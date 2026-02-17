@@ -93,8 +93,7 @@ class RetraitController extends Controller
             abort(403, "Les administrateurs ne peuvent pas faire de demande de retrait.");
         }
 
-        $dateDuJour = Carbon::today(); // Récupère la date d'aujourd'hui
-        $solde = Solde::whereDate('updated_at', $dateDuJour)->orderBy('id', 'desc')->first();
+        $solde = Solde::where('user_id', Auth::id())->orderBy('id', 'desc')->first();
         $montant = isset($solde) ? $solde->solde : 0;
         
         // Solde is now stored as Net (Commission already deducted at sale)
