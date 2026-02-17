@@ -23,126 +23,169 @@
         body {
             width: 100%;
             font-size: 16px;
-            line-height: 170%;
+            line-height: 1.5;
             font-family: Poppins, Arial, Helvetica, sans-serif;
+            background-color: #f8f9fa;
         }
 
         .container {
-            width: 75%;
-            min-width: 500px;
-            margin: 32px auto;
-            margin-bottom: 0;
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
             background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .text-right {
-            text-align: right;
-        }
-
-        .text-center {
+        .header {
             text-align: center;
+            margin-bottom: 20px;
         }
 
-        .text-italic {
+        .header img {
+            max-width: 100px;
+            height: auto;
+        }
+
+        .header h1 {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            margin: 10px 0;
+            color: var(--primary-color);
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .content {
+            margin-bottom: 20px;
+        }
+
+        .facture-title {
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin: 20px 0;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .info-text {
+            font-size: 0.85rem;
+            color: #666;
+            text-align: center;
+            margin-bottom: 20px;
             font-style: italic;
         }
 
-        .text-14 {
-            font-size: 14px;
+        .details-box {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
         }
 
-        .text-uppercase {
-            text-transform: uppercase;
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
         }
 
-        .fw-bold {
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .detail-value {
+            text-align: right;
+            color: #000;
+        }
+
+        .credentials-box {
+            background-color: #eef2ff;
+            border: 2px solid var(--secondary-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .credentials-title {
+            color: var(--primary-color);
             font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            font-size: 1rem;
         }
 
-        .table {
-            width: 80%;
-            min-width: 300px;
-            margin: 0 auto;
-            margin-top: 40px;
+        .credential-item {
+            margin: 10px 0;
+            font-size: 1.2rem;
         }
 
-        .py-2 {
-            padding: 16px 0;
+        .credential-label {
+            font-size: 0.9rem;
+            color: #555;
+            display: block;
         }
 
-        .pt-2 {
-            padding-top: 16px;
+        .credential-value {
+            font-weight: bold;
+            color: #000;
+            font-family: monospace;
+            font-size: 1.4rem;
+            background: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 5px;
+            border: 1px solid #ccc;
         }
 
-        .ps-5 {
-            padding-left: 80px;
-        }
-
-        .ms-3 {
-            margin-left: 24px;
-        }
-
-        .d-inline-block {
-            display: inline-block !important;
-        }
-
-        .d-block {
-            display: block !important;
-        }
-
-        .bg-primary {
-            background-color: blue;
-        }
-
-        .text-primary{
-            color: #2465dd;
-        }
-
-        .table-container {
+        .btn-download {
+            display: block;
             width: 100%;
-            max-width: 100%;
-            display: table;
-            table-layout: fixed;
+            text-align: center;
+            background-color: var(--secondary-color);
+            color: #fff;
+            padding: 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 20px;
+            transition: background-color 0.3s;
         }
 
-        .column {
-            display: table-cell;
+        .btn-download:hover {
+            background-color: var(--primary-color);
         }
 
-        .border>.column {
-            border: 1px solid black;
-            border-left: none;
-            border-right: none;
-            padding: 0 8px;
+        .footer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 20px;
         }
 
-        .mt-5 {
-            margin-top: 40px;
-        }
-
-        .my-3 {
-            margin: 24px 0;
-        }
-
-        .mx-auto {
-            margin: 0 auto !important;
-        }
-
-        .w-100 {
-            width: 100%;
-        }
-
-        .postion-relative {
-            position: relative;
-        }
-
-        .postion-absolute-top {
-            position: absolute;
-            top: 0;
-        }
-
-        .cursor{
-            cursor: pointer;
+        @media (max-width: 480px) {
+            .container {
+                margin: 0;
+                border-radius: 0;
+                box-shadow: none;
+                padding: 15px;
+            }
+            
+            .credential-value {
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
@@ -150,100 +193,66 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="table-container py-21">
-                <div class="column">
-                    <div class="ps-51">
-                    </div>
-                </div>
-                <div class="column postion-relative">
-                    <p class="text-center text-uppercase postion-absolute-top1 pt-2 w-100">
-                        <img width="120px" src="{{ asset('assets/img/logo.png') }}" alt="LOGO WiLink Tickets" /> <br />
-                        WiLink Tickets<br />
-                        <span class="text-uppercase">+226 54 78 19 78 / +226 56 36 80 34 / +226 65 86 33 36 </span><br />
-                        <span>info.wilink.ticket@gmail.com </span><br />
-                        <span class="text-uppercase">Bobo-Dioulasso, Burkina Faso </span><br />
-                    </p>
-                </div>
-                <div class="column">
-                    <div class="text-right">
-                    </div>
-                </div>
-            </div>
+            <img src="{{ asset('assets/img/logo.png') }}" alt="LOGO WiLink Tickets" />
+            <h1>WiLink Tickets</h1>
+            <p>+226 54 78 19 78 / 56 36 80 34</p>
+            <p>Bobo-Dioulasso, Burkina Faso</p>
         </div>
+
         <div class="content">
-            <p class="text-uppercase text-center fw-bold my-3">
+            <div class="facture-title">
                 Facture {{ 'FW-' . date('dmYHis') . '-TICKET' }}
-            </p>
-            <div class="table">
-                <p class="text-14 ps-4">
-                    <span class="ms-3 d-inline-block">Ce reçu est la preuve de la facture de votre paiement de ticket wifi, il est à usage unique et non transférable et ne devra en aucun cas être partagé à qui que ce soit.
-                    </span>
-                    <br />
-                </p>
             </div>
-            <p class="text-uppercase text-center fw-bold my-3">Réference de la facture</p>
 
-            <div class="table">
-                <div class="table-container border">
-                    <div class="column">
-                        <p class=" fw-bold">Wifi zone</p>
-                    </div>
-                    <div class="column">
-                        <p class="text-right">{{ $data->tarif->wifi->nom }}</p>
-                    </div>
-                </div>
-                <div class="table-container border">
-                    <div class="column">
-                        <p class=" fw-bold">Transaction id</p>
-                    </div>
-                    <div class="column">
-                        <p class="text-right">{{ $paiement->transaction_id }}</p>
-                    </div>
-                </div>
-                <div class="table-container border">
-                    <div class="column">
-                        <p class=" fw-bold">Date de paiement</p>
-                    </div>
-                    <div class="column">
-                        <p class="text-right">{{ date_format($paiement->created_at, 'd/m/Y H:i:s') }}</p>
-                    </div>
-                </div>
-                <div class="table-container border">
-                    <div class="column">
-                        <p class=" fw-bold">Montant</p>
-                    </div>
-                    <div class="column">
-                        <p class="text-right">{{ $data->tarif->montant }} Fcfa</p>
-                    </div>
-                </div>
-                <div class="table-container border">
-                    <div class="column">
-                        <p class=" fw-bold">identifiant</p>
-                    </div>
-                    <div class="column fw-bold">
-                        <p class="text-right">{{ $data->user }}</p>
-                    </div>
-                </div>
-                <div class="table-container border">
-                    <div class="column">
-                        <p class=" fw-bold">Mot de passe</p>
-                    </div>
-                    <div class="column fw-bold">
-                        <p class="text-right">{{ $data->password }}</p>
-                    </div>
+            <p class="info-text">
+                Ce reçu est personnel. Ne partagez pas vos identifiants.
+            </p>
+
+            <!-- Identifiants en premier pour la visibilité -->
+            <div class="credentials-box">
+                <div class="credentials-title">VOS IDENTIFIANTS DE CONNEXION</div>
+                
+                <div class="credential-item">
+                    <span class="credential-label">Identifiant (User)</span>
+                    <span class="credential-value">{{ $data->user }}</span>
                 </div>
 
+                <div class="credential-item">
+                    <span class="credential-label">Mot de passe (Pass)</span>
+                    <span class="credential-value">{{ $data->password }}</span>
+                </div>
+            </div>
 
+            <div style="height: 20px;"></div>
+
+            <div class="details-box">
+                <div class="detail-row">
+                    <span class="detail-label">Wifi Zone</span>
+                    <span class="detail-value">{{ $data->tarif->wifi->nom }}</span>
+                </div>
+                <!--div class="detail-row">
+                    <span class="detail-label">Transaction ID</span>
+                    <span class="detail-value">{{ $paiement->transaction_id }}</span>
+                </div-->
+                <div class="detail-row">
+                    <span class="detail-label">Date</span>
+                    <span class="detail-value">{{ date_format($paiement->created_at, 'd/m/Y H:i') }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Montant</span>
+                    <span class="detail-value">{{ $data->tarif->montant }} Fcfa</span>
+                </div>
             </div>
         </div>
-        <div class="table">
-            <p class="text-14 ps-4">
-                <span class="ms-3 d-inline-block">Tous droits réservés à WiLink Tickets!
-                </span>
-                <br />
-                <a href="{{ url('/telecharger-mon-recu/'.$data->slug) }}" class="text-uppercase text-center fw-bold my-3 text-primary cursor d-block" style="text-decoration:none;">Télécharger le reçu</a>
-            </p>
+
+        <a href="{{ url('/telecharger-mon-recu/'.$data->slug) }}" class="btn-download">
+            Télécharger le reçu (PDF)
+        </a>
+
+        <div class="footer">
+            <p>&copy; {{ date('Y') }} WiLink Tickets. Tous droits réservés.</p>
         </div>
+    </div>
         <!--div class="footer text-14">
         <p class="text-center mt-5">
           <span>Email : info@gmail.com</span>
