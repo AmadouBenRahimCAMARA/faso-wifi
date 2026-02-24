@@ -21,15 +21,15 @@ class TicketsImport implements ToModel, WithStartRow
     {
         $user_id = Auth::user()->id;
         // Check if row is empty or invalid if needed, but for now just map
-        if(!isset($row[1])) return null; 
+        if(!isset($row[0])) return null; 
 
         return new Ticket([
-            'user'     => $row[1],
-           'password'    => $row[2],
-           'dure' => $row[5],
-           'slug' => Str::slug(Str::random(10)),
-           'tarif_id' => Session::get("tarif_id"),
-           'user_id' => $user_id,
+            'user'     => $row[0],
+            'password' => $row[1],
+            'dure'     => $row[2],
+            'slug'     => Str::slug(Str::random(10)),
+            'tarif_id' => Session::get("tarif_id"),
+            'user_id'  => $user_id,
         ]);
     }
 
