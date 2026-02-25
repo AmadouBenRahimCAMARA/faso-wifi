@@ -50,8 +50,8 @@ class RetraitController extends Controller
                                 'user_id' => $user->id])
                                 ->get();
 
-                $solde = Solde::where('user_id', $user->id)->orderBy('id', 'desc')->first();
-                $montant = isset($solde) ? $solde->solde : 0;
+                $solde = null; // No longer used for the final amount
+                $montant = $user->calculateBalance();
             }
 
             // Recherche
@@ -100,8 +100,7 @@ class RetraitController extends Controller
             abort(403, "Les administrateurs ne peuvent pas faire de demande de retrait.");
         }
 
-        $solde = Solde::where('user_id', Auth::id())->orderBy('id', 'desc')->first();
-        $montant = isset($solde) ? $solde->solde : 0;
+        $montant = Auth::user()->calculateBalance();
         
         // Solde is now stored as Net (Commission already deducted at sale)
         $retrait = $montant;

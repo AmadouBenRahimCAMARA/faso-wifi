@@ -155,20 +155,11 @@ class Controller extends BaseController
                             $ticket->etat_ticket = 'VENDU';
                             $ticket->save();
 
-                            $lastSolde = Solde::where('user_id', $lockedPaiement->user_id)
-                                ->orderBy('id', 'desc')
-                                ->lockForUpdate()
-                                ->first();
-                            
-                            $montantCompte = $lastSolde ? $lastSolde->solde : 0;
-                            
-                            // Apply 10% Commission at the source (Exempt if Admin)
-                            $owner = $ticket->owner;
-                            $is_admin = $owner && $owner->isAdmin();
-                            $netAmount = $is_admin ? $ticket->tarif->montant : ($ticket->tarif->montant * 0.90);
+                            // Update Solde (Credit Vendor) - SELF-CORRECTING LOGIC
+                            $newTotalBalance = $owner->calculateBalance();
 
                             Solde::create([
-                                "solde" => $montantCompte + $netAmount,
+                                "solde" => $newTotalBalance,
                                 "type" => "PAIEMENT",
                                 "slug" => Str::slug(Str::random(10)),
                                 "user_id" => $lockedPaiement->user_id,

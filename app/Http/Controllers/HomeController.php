@@ -56,14 +56,15 @@ class HomeController extends Controller
                             ])
                             ->get();
 
-            $solde = Solde::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->first();
+            $solde = null; // No longer used for the final amount
         }
-        //dd($solde);
+        
+        $montant = Auth::user()->calculateBalance();
+
         $soldesDuJour = 0;
         foreach($ticketsDuJour as $ticket){
             $soldesDuJour = $soldesDuJour + $ticket->tarif->montant;
         }
-        $montant = isset($solde) ? $solde->solde : 0;
         $datas = [
             "solde_total" => $montant,
             "retrait_total" => $montant,

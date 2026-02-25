@@ -67,9 +67,8 @@ class BilanController extends Controller
             ->get()
             ->sum('montant');
 
-        // Solde Actuel (Ce qui reste en poche)
-        $lastSolde = Solde::where('user_id', $user->id)->orderBy('id', 'desc')->first();
-        $soldeActuel = $lastSolde ? $lastSolde->solde : 0;
+        // Solde Actuel (Ce qui reste en poche) - NOW ALIGNED on Gain Net - Withdrawals
+        $soldeActuel = $user->calculateBalance();
 
         return [
             'chiffre_affaires' => $chiffreAffairesTotal,

@@ -97,4 +97,40 @@ class User extends Authenticatable
 
         return $this->hasMany(Retrait::class);
     }
+
+    /**
+     * Calculate the real-time balance for the user.
+     * For Admin: Total Gross Revenue.
+     * For Reseller: (Total Net Gain) - (Total Paid Withdrawals).
+     */
+    public function calculateBalance()
+    {
+        if ($this->isAdmin()) {
+            return \App\Models\Paiement::where('paiements.status', 'completed')
+                ->join('tickets', 'paiements.ticket_id', '=', 'tickets.id')
+                ->join('tarifs', 'tickets.tarif_id', '=', 'tarifs.id')
+                ->sum(\Illuminate\Support\Facades\DB::raw('CAST(tarifs.montant AS DECIMAL)'));
+        }
+
+        // Reseller Logic: Align with Bilan View
+        $paiements = \App\Models\Paiement::whereHas('ticket', function($q) {
+            $q->where('user_id', $this->id);
+        })->where('status', 'completed')->get();
+
+        $chiffreAffairesTotal = 0;
+        foreach($paiements as $p){
+             // Load relationship if not loaded
+             $chiffreAffairesTotal += (float)$p->ticket->tarif->montant;
+        }
+
+        // 10% Commission
+        $netTotal = $chiffreAffairesTotal * 0.90;
+
+        // Paid Withdrawals
+        $totalRetraits = \App\Models\Retrait::where('user_id', $this->id)
+            ->where('statut', 'PAYE')
+            ->sum('montant');
+
+        return $netTotal - $totalRetraits;
+    }
 }
