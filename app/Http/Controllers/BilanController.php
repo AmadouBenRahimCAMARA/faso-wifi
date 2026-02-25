@@ -82,7 +82,7 @@ class BilanController extends Controller
         if ($start) $retraitQuery->where('updated_at', '>=', Carbon::parse($start)->startOfDay());
         if ($end) $retraitQuery->where('updated_at', '<=', Carbon::parse($end)->endOfDay());
         
-        $totalRetraits = $retraitQuery->sum('montant');
+        $totalRetraits = $retraitQuery->get()->sum('montant');
 
         // Solde Actuel (Toujours le même, c'est ce qui reste en poche)
         $lastSolde = Solde::where('user_id', $user->id)->orderBy('id', 'desc')->first();
