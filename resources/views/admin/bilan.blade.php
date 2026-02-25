@@ -9,43 +9,10 @@
         </a>
     </div>
 
-    <!-- Optional Filter Form -->
-    <div class="card shadow mb-4 collapse" id="filterCard">
-        <div class="card-header py-3 d-flex justify-content-between align-items-center">
-            <h6 class="m-0 fw-bold text-primary">Filtrer par période personnalisée</h6>
-            <button class="btn btn-sm btn-close" type="button" data-bs-toggle="collapse" data-bs-target="#filterCard"></button>
-        </div>
-        <div class="card-body">
-            <form method="GET" action="{{ route('bilan.index') }}" class="row g-3">
-                <div class="col-md-4">
-                    <label for="start_date" class="form-label">Date de début</label>
-                    <input type="date" class="form-control" id="start_date" name="start_date" value="{{ $start_date }}">
-                </div>
-                <div class="col-md-4">
-                    <label for="end_date" class="form-label">Date de fin</label>
-                    <input type="date" class="form-control" id="end_date" name="end_date" value="{{ $end_date }}">
-                </div>
-                <div class="col-md-4 d-flex align-items-end gap-2">
-                    <button type="submit" class="btn btn-primary flex-grow-1"><i class="fas fa-filter me-2"></i> Appliquer</button>
-                    <a href="{{ route('bilan.index') }}" class="btn btn-secondary">Effacer</a>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <!-- Stats Header Info -->
-    <div class="alert alert-info d-flex justify-content-between align-items-center shadow-sm mb-4">
-        <div>
-            <i class="fas fa-info-circle me-2"></i>
-            @if($start_date || $end_date)
-                Affichage des statistiques pour la période du <strong>{{ $start_date ?? 'Début' }}</strong> au <strong>{{ $end_date ?? 'Aujourd\'hui' }}</strong>.
-            @else
-                Affichage de votre bilan <strong>Total (Depuis la création du compte)</strong>.
-            @endif
-        </div>
-        <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#filterCard">
-            <i class="fas fa-calendar-alt me-1"></i> Filtrer
-        </button>
+    <div class="alert alert-info shadow-sm mb-4">
+        <i class="fas fa-info-circle me-2"></i>
+        Affichage de votre bilan <strong>Total (Depuis la création du compte)</strong>.
     </div>
 
     <!-- Statistics Cards -->

@@ -24,13 +24,9 @@ class BilanController extends Controller
              return redirect()->route('admin.dashboard');
         }
 
-        // Show All Time by default or if filter is removed
-        $start_date = $request->input('start_date');
-        $end_date = $request->input('end_date');
+        $stats = $this->calculateStats($user);
 
-        $stats = $this->calculateStats($user, $start_date, $end_date);
-
-        return view('admin.bilan', compact('stats', 'start_date', 'end_date'));
+        return view('admin.bilan', compact('stats'));
     }
 
     public function downloadPdf(Request $request)
@@ -40,31 +36,18 @@ class BilanController extends Controller
              abort(403);
         }
 
-        $start_date = $request->input('start_date');
-        $end_date = $request->input('end_date');
+        $stats = $this->calculateStats($user);
 
-        $stats = $this->calculateStats($user, $start_date, $end_date);
-
-        $pdf = PDF::loadView('pdf.bilan', compact('stats', 'start_date', 'end_date', 'user'));
+        $pdf = PDF::loadView('pdf.bilan', compact('stats', 'user'));
         
         return $pdf->download('Bilan_'.$user->nom.'_'.now()->format('d_m_Y').'.pdf');
     }
 
-    private function calculateStats($user, $start = null, $end = null)
+    private function calculateStats($user)
     {
-        $query = Paiement::whereHas('ticket', function($q) use ($user){
+        $paiements = Paiement::whereHas('ticket', function($q) use ($user){
             $q->where('user_id', $user->id);
-        })->where('status', 'completed');
-
-        // Apply filters only if provided
-        if ($start) {
-            $query->where('created_at', '>=', Carbon::parse($start)->startOfDay());
-        }
-        if ($end) {
-            $query->where('created_at', '<=', Carbon::parse($end)->endOfDay());
-        }
-
-        $paiements = $query->get();
+        })->where('status', 'completed')->get();
 
         $chiffreAffairesTotal = 0;
         foreach($paiements as $p){
@@ -78,13 +61,12 @@ class BilanController extends Controller
         $netTotal = $chiffreAffairesTotal - $commissionTotal;
 
         // Retraits Effectués (PAYE)
-        $retraitQuery = Retrait::where('user_id', $user->id)->where('statut', 'PAYE');
-        if ($start) $retraitQuery->where('updated_at', '>=', Carbon::parse($start)->startOfDay());
-        if ($end) $retraitQuery->where('updated_at', '<=', Carbon::parse($end)->endOfDay());
-        
-        $totalRetraits = $retraitQuery->get()->sum('montant');
+        $totalRetraits = Retrait::where('user_id', $user->id)
+            ->where('statut', 'PAYE')
+            ->get()
+            ->sum('montant');
 
-        // Solde Actuel (Toujours le même, c'est ce qui reste en poche)
+        // Solde Actuel (Ce qui reste en poche)
         $lastSolde = Solde::where('user_id', $user->id)->orderBy('id', 'desc')->first();
         $soldeActuel = $lastSolde ? $lastSolde->solde : 0;
 
