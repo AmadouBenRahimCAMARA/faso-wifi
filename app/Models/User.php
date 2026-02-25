@@ -129,7 +129,7 @@ class User extends Authenticatable
         // Paid Withdrawals
         $totalRetraits = \App\Models\Retrait::where('user_id', $this->id)
             ->where('statut', 'PAYE')
-            ->sum('montant');
+            ->sum(\Illuminate\Support\Facades\DB::raw('CAST(montant AS DECIMAL)'));
 
         return $netTotal - $totalRetraits;
     }
