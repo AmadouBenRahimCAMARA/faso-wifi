@@ -67,7 +67,13 @@ class CleanupPendingPayments extends Command
                                 $this->info("Paiement #{$lockedPaiement->id} validé avec succès.");
                             } elseif ($verifiedStatus === 'pending') {
                                 // Toujours en attente, on laisse pour le prochain cycle
-                                $shouldFail = false;
+                                // SECURITY FIX: Empêcher un blocage infini si Ligdicash ne répond jamais "failed"
+                                if ($lockedPaiement->created_at < now()->subHours(24)) {
+                                    $shouldFail = true;
+                                    $this->warn("Paiement #{$lockedPaiement->id} expiré (bloqué en pending chez Ligdicash depuis 24h).");
+                                } else {
+                                    $shouldFail = false;
+                                }
                             }
                         }
                     }

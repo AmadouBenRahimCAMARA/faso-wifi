@@ -109,6 +109,11 @@ class Controller extends BaseController
             // Failed to initiate: mark as failed
             $paiement->status = 'failed';
             $paiement->save();
+            
+            // SECURITY FIX: Release the ticket immediately if initiation fails
+            $ticket->etat_ticket = 'EN_VENTE';
+            $ticket->save();
+            
             return $this->showPaymentError($redirectPayin);
         }
     }
@@ -174,6 +179,14 @@ class Controller extends BaseController
             } elseif (isset($payin) && trim($payin->status) == 'nocompleted') {
                  $paiement->status = 'failed';
                  $paiement->save();
+                 
+                 // SECURITY FIX: Release the ticket since UI callback confirmed failure
+                 $ticket = $paiement->ticket;
+                 if ($ticket && $ticket->etat_ticket === 'EN_COURS') {
+                     $ticket->etat_ticket = 'EN_VENTE';
+                     $ticket->save();
+                 }
+                 
                  return $this->showPaymentError($payin, 'Le client a annulé le paiement');
             }
         }

@@ -113,8 +113,17 @@ class WebhookController extends Controller
         } else if ($verifiedStatus == 'completed' && $paiement->status == 'completed') {
              Log::info('Payment already processed for transaction: ' . $transactionId);
         } else {
-             $paiement->status = 'failed'; // or pending
-             $paiement->save();
+             if ($paiement->status != 'completed') {
+                 $paiement->status = 'failed'; // or pending
+                 $paiement->save();
+                 
+                 // SECURITY FIX: Release the ticket based on explicit failure webhook
+                 $ticket = Ticket::find($paiement->ticket_id);
+                 if ($ticket && $ticket->etat_ticket === 'EN_COURS') {
+                     $ticket->etat_ticket = 'EN_VENTE';
+                     $ticket->save();
+                 }
+             }
         }
 
         return response()->json(['status' => 'success']);
