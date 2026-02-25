@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <div class="d-sm-flex justify-content-between align-items-center mb-4">
         <h3 class="text-dark mb-0">Mon Bilan d'Activité</h3>
-        <a href="{{ route('bilan.download', ['start_date' => $start_date, 'end_date' => $end_date]) }}" class="btn btn-primary btn-sm d-none d-sm-inline-block">
+        <a href="{{ route('bilan.download') }}" class="btn btn-primary btn-sm d-none d-sm-inline-block">
             <i class="fas fa-download fa-sm text-white-50"></i> Télécharger le PDF
         </a>
     </div>

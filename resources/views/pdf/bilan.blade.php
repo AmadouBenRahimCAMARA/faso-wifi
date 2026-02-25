@@ -31,7 +31,7 @@
         <tr>
             <td>
                 <strong>Période :</strong><br>
-                Du {{ \Carbon\Carbon::parse($start_date)->format('d/m/Y') }} au {{ \Carbon\Carbon::parse($end_date)->format('d/m/Y') }}
+                Bilan Global (Historique complet)
             </td>
             <td style="text-align: right;">
                 <strong>Revendeur :</strong><br>
