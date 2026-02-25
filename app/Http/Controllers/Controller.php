@@ -136,25 +136,26 @@ class Controller extends BaseController
 
             if (isset($payin) && trim($payin->status) == 'completed') {
                 // Process completion (Duplicate logic from Webhook to ensure consistency)
-                // Use transaction to avoid race condition with Webhook
+                // Use transaction and lockForUpdate on PAIEMENT to ensure absolute uniqueness of credit
                 DB::transaction(function () use ($paiement, $payin) {
-                    $paiement->refresh(); // Reload to be sure
+                    // Lock the payment row specifically
+                    $lockedPaiement = Paiement::where('id', $paiement->id)->lockForUpdate()->first();
                     
                     // Strict check: Transaction is valid ONLY if phone and operator are present
                     $hasValidInfo = !empty($payin->customer) && !empty($payin->operator_name);
 
-                    if ($paiement->status != 'completed' && $hasValidInfo) {
-                        $paiement->status = 'completed';
-                        $paiement->moyen_de_paiement = $payin->operator_name ?? 'Ligdicash';
-                        $paiement->numero = $payin->customer ?? '';
-                        $paiement->save();
+                    if ($lockedPaiement->status != 'completed' && $hasValidInfo) {
+                        $lockedPaiement->status = 'completed';
+                        $lockedPaiement->moyen_de_paiement = $payin->operator_name ?? 'Ligdicash';
+                        $lockedPaiement->numero = $payin->customer ?? '';
+                        $lockedPaiement->save();
 
-                        $ticket = $paiement->ticket;
+                        $ticket = $lockedPaiement->ticket;
                         if ($ticket && $ticket->etat_ticket != 'VENDU') {
                             $ticket->etat_ticket = 'VENDU';
                             $ticket->save();
 
-                            $lastSolde = Solde::where('user_id', $paiement->user_id)
+                            $lastSolde = Solde::where('user_id', $lockedPaiement->user_id)
                                 ->orderBy('id', 'desc')
                                 ->lockForUpdate()
                                 ->first();
@@ -170,8 +171,8 @@ class Controller extends BaseController
                                 "solde" => $montantCompte + $netAmount,
                                 "type" => "PAIEMENT",
                                 "slug" => Str::slug(Str::random(10)),
-                                "user_id" => $paiement->user_id,
-                                "paiement_id" => $paiement->id
+                                "user_id" => $lockedPaiement->user_id,
+                                "paiement_id" => $lockedPaiement->id
                             ]);
                         }
                     }

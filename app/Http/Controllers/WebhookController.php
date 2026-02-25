@@ -70,39 +70,43 @@ class WebhookController extends Controller
             
             DB::beginTransaction();
             try {
-                // Update Paiement
-                $paiement->status = 'completed';
-                $paiement->moyen_de_paiement = $verifiedPayin->operator_name ?? 'Ligdicash';
-                $paiement->numero = $verifiedPayin->customer ?? '';
-                $paiement->save();
+                // Lock the payment row to prevent concurrent processing by Controller@statutPaiement
+                $lockedPaiement = Paiement::where('id', $paiement->id)->lockForUpdate()->first();
 
-                // Update Ticket
-                $ticket = Ticket::find($paiement->ticket_id);
-                if ($ticket && $ticket->etat_ticket != 'VENDU') {
-                    $ticket->etat_ticket = 'VENDU';
-                    $ticket->save();
+                if ($lockedPaiement->status != 'completed') {
+                    // Update Paiement
+                    $lockedPaiement->status = 'completed';
+                    $lockedPaiement->moyen_de_paiement = $verifiedPayin->operator_name ?? 'Ligdicash';
+                    $lockedPaiement->numero = $verifiedPayin->customer ?? '';
+                    $lockedPaiement->save();
 
-                    // Update Solde (Credit Vendor)
-                    // Use lockForUpdate to prevent race conditions
-                    $lastSolde = Solde::where('user_id', $paiement->user_id)
-                        ->orderBy('id', 'desc')
-                        ->lockForUpdate()
-                        ->first();
-                    
-                    $montantCompte = $lastSolde ? $lastSolde->solde : 0;
-                    
-                    // Apply 10% Commission (Exempt if Admin)
-                    $owner = $ticket->owner; // relationship must exist
-                    $is_admin = $owner && $owner->isAdmin();
-                    $netAmount = $is_admin ? $ticket->tarif->montant : ($ticket->tarif->montant * 0.90);
+                    // Update Ticket
+                    $ticket = Ticket::find($lockedPaiement->ticket_id);
+                    if ($ticket && $ticket->etat_ticket != 'VENDU') {
+                        $ticket->etat_ticket = 'VENDU';
+                        $ticket->save();
 
-                    Solde::create([
-                        "solde" => $montantCompte + $netAmount,
-                        "type" => "PAIEMENT",
-                        "slug" => Str::slug(Str::random(10)),
-                        "user_id" => $paiement->user_id,
-                        "paiement_id" => $paiement->id
-                    ]);
+                        // Update Solde (Credit Vendor)
+                        $lastSolde = Solde::where('user_id', $lockedPaiement->user_id)
+                            ->orderBy('id', 'desc')
+                            ->lockForUpdate()
+                            ->first();
+                        
+                        $montantCompte = $lastSolde ? $lastSolde->solde : 0;
+                        
+                        // Apply 10% Commission (Exempt if Admin)
+                        $owner = $ticket->owner;
+                        $is_admin = $owner && $owner->isAdmin();
+                        $netAmount = $is_admin ? $ticket->tarif->montant : ($ticket->tarif->montant * 0.90);
+
+                        Solde::create([
+                            "solde" => $montantCompte + $netAmount,
+                            "type" => "PAIEMENT",
+                            "slug" => Str::slug(Str::random(10)),
+                            "user_id" => $lockedPaiement->user_id,
+                            "paiement_id" => $lockedPaiement->id
+                        ]);
+                    }
                 }
                 
                 DB::commit();

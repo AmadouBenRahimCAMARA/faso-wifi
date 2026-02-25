@@ -54,8 +54,9 @@ class BilanController extends Controller
              $chiffreAffairesTotal += $p->ticket->tarif->montant;
         }
 
-        // Total Commission
-        $commissionTotal = $chiffreAffairesTotal * 0.10;
+        // Total Commission (0% for admins, 10% for resellers)
+        $commissionRate = $user->isAdmin() ? 0 : 0.10;
+        $commissionTotal = $chiffreAffairesTotal * $commissionRate;
 
         // Total Net
         $netTotal = $chiffreAffairesTotal - $commissionTotal;
