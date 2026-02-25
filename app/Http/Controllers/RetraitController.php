@@ -31,12 +31,11 @@ class RetraitController extends Controller
                 $ticketsDuJour = Ticket::whereDate('updated_at', Carbon::today())->where('etat_ticket', 'VENDU')->get();
                 $ticketsTotalVendu = Ticket::where('etat_ticket', 'VENDU')->get();
                 
-                // For admin, the total balance is the sum of ALL users' last balance entries
-                $montant = Solde::whereIn('id', function($q) {
-                    $q->select(DB::raw('MAX(id)'))
-                      ->from('soldes')
-                      ->groupBy('user_id');
-                })->get()->sum('solde');
+                // For admin, align Solde and Retrait available with Global Revenue (Chiffre d'Affaire Global)
+                $montant = Paiement::where('paiements.status', 'completed')
+                    ->join('tickets', 'paiements.ticket_id', '=', 'tickets.id')
+                    ->join('tarifs', 'tickets.tarif_id', '=', 'tarifs.id')
+                    ->sum(DB::raw('CAST(tarifs.montant AS DECIMAL)'));
             } else {
                 $query = $user->retraits();
                 $dateDuJour = Carbon::today();
