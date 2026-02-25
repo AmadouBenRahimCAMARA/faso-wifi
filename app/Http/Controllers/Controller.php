@@ -45,10 +45,7 @@ class Controller extends BaseController
 
         DB::beginTransaction();
         try {
-            // Nettoyage automatique : Remettre les tickets EN_COURS expirés (> 3 min) en EN_VENTE
-            Ticket::where('etat_ticket', 'EN_COURS')
-                ->where('updated_at', '<', now()->subMinutes(5))
-                ->update(['etat_ticket' => 'EN_VENTE']);
+            // Le nettoyage automatique est désormais géré par un Cron Job (CleanupPendingPayments) par sécurité
             
             // Select available ticket
             $ticket = Ticket::where('tarif_id', $tarif->id)
@@ -103,6 +100,10 @@ class Controller extends BaseController
             session([
                 'invoiceToken' => $redirectPayin->token
             ]);
+            
+            $paiement->provider_token = $redirectPayin->token;
+            $paiement->save();
+            
             return redirect($redirectPayin->response_text);
         } else {
             // Failed to initiate: mark as failed

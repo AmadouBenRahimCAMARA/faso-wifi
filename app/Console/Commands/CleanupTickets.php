@@ -13,7 +13,7 @@ class CleanupTickets extends Command
      *
      * @var string
      */
-    protected $signature = 'tickets:cleanup';
+    protected $signature = 'legacy:tickets:cleanup';
 
     /**
      * The console command description.
