@@ -24,8 +24,9 @@ class BilanController extends Controller
              return redirect()->route('admin.dashboard');
         }
 
-        $start_date = $request->input('start_date', Carbon::now()->startOfMonth()->format('Y-m-d'));
-        $end_date = $request->input('end_date', Carbon::now()->endOfMonth()->format('Y-m-d'));
+        // Show All Time by default or if filter is removed
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
 
         $stats = $this->calculateStats($user, $start_date, $end_date);
 
@@ -39,67 +40,60 @@ class BilanController extends Controller
              abort(403);
         }
 
-        $start_date = $request->input('start_date', Carbon::now()->startOfMonth()->format('Y-m-d'));
-        $end_date = $request->input('end_date', Carbon::now()->endOfMonth()->format('Y-m-d'));
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
 
         $stats = $this->calculateStats($user, $start_date, $end_date);
 
         $pdf = PDF::loadView('pdf.bilan', compact('stats', 'start_date', 'end_date', 'user'));
         
-        return $pdf->download('Bilan_'.$user->nom.'_'.$start_date.'_au_'.$end_date.'.pdf');
+        return $pdf->download('Bilan_'.$user->nom.'_'.now()->format('d_m_Y').'.pdf');
     }
 
-    private function calculateStats($user, $start, $end)
+    private function calculateStats($user, $start = null, $end = null)
     {
-        // Convert to Carbon for comparison
-        $start = Carbon::parse($start)->startOfDay();
-        $end = Carbon::parse($end)->endOfDay();
-
-        // 1. Total Chiffre d'Affaires (Somme des tickets vendus par ce User)
-        // Les paiements sont liés aux tickets, et les tickets au User (via owner)
-        // Mais plus simple: Auth::user()->tickets() -> sum(tarif.montant) WHERE etat_ticket = VENDU
-        // Ou via Paiement qui a le montant réel payé.
-        // Utilisons les paiements reçus pour les tickets de ce vendeur.
-        
-        $paiements = Paiement::whereHas('ticket', function($q) use ($user){
+        $query = Paiement::whereHas('ticket', function($q) use ($user){
             $q->where('user_id', $user->id);
-        })->whereBetween('created_at', [$start, $end])
-          ->where('status', 'completed')
-          ->get();
+        })->where('status', 'completed');
 
-        $chiffreAffaires = 0;
-        foreach($paiements as $p){
-            // Le montant est dans le tarif du ticket
-             $chiffreAffaires += $p->ticket->tarif->montant;
+        // Apply filters only if provided
+        if ($start) {
+            $query->where('created_at', '>=', Carbon::parse($start)->startOfDay());
+        }
+        if ($end) {
+            $query->where('created_at', '<=', Carbon::parse($end)->endOfDay());
         }
 
-        // 2. Commission (10%)
-        $commission = $chiffreAffaires * 0.10;
+        $paiements = $query->get();
 
-        // 3. Net Percu (Ce qui revient au vendeur)
-        $netPercu = $chiffreAffaires - $commission;
+        $chiffreAffairesTotal = 0;
+        foreach($paiements as $p){
+             $chiffreAffairesTotal += $p->ticket->tarif->montant;
+        }
 
-        // 4. Retraits Effectués (PAYE)
-        $retraits = Retrait::where('user_id', $user->id)
-                           ->where('statut', 'PAYE')
-                           ->whereBetween('updated_at', [$start, $end]) // Date de validation
-                           ->get()
-                           ->sum('montant');
+        // Total Commission
+        $commissionTotal = $chiffreAffairesTotal * 0.10;
 
-        // 5. Solde Actuel (Indépendant de la période, c'est l'état à l'instant T)
+        // Total Net
+        $netTotal = $chiffreAffairesTotal - $commissionTotal;
+
+        // Retraits Effectués (PAYE)
+        $retraitQuery = Retrait::where('user_id', $user->id)->where('statut', 'PAYE');
+        if ($start) $retraitQuery->where('updated_at', '>=', Carbon::parse($start)->startOfDay());
+        if ($end) $retraitQuery->where('updated_at', '<=', Carbon::parse($end)->endOfDay());
+        
+        $totalRetraits = $retraitQuery->sum('montant');
+
+        // Solde Actuel (Toujours le même, c'est ce qui reste en poche)
         $lastSolde = Solde::where('user_id', $user->id)->orderBy('id', 'desc')->first();
         $soldeActuel = $lastSolde ? $lastSolde->solde : 0;
-        
-        // Since we now credit the NET amount in DB, the Solde IS the Net Available.
-        $soldeNetDisponible = $soldeActuel;
 
         return [
-            'chiffre_affaires' => $chiffreAffaires,
-            'commission' => $commission,
-            'net_percu' => $netPercu,
-            'total_retraits' => $retraits,
-            'solde_actuel_brut' => $soldeActuel, // Variable name kept for compat but it is Net
-            'solde_net_disponible' => $soldeNetDisponible
+            'chiffre_affaires' => $chiffreAffairesTotal,
+            'commission' => $commissionTotal,
+            'net_percu' => $netTotal,
+            'total_retraits' => $totalRetraits,
+            'solde_net_disponible' => $soldeActuel
         ];
     }
 }
