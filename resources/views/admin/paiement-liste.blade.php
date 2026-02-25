@@ -7,6 +7,9 @@
                     type="button"><i class="fas fa-bars"></i></button>
                 <form class="d-none d-sm-inline-block me-auto ms-md-3 my-2 my-md-0 mw-100 navbar-search"
                       method="GET" action="{{ route('paiement.index') }}">
+                    <input type="hidden" name="wifi_id" value="{{ $wifi_id }}">
+                    <input type="hidden" name="tarif_id" value="{{ $tarif_id }}">
+                    <input type="hidden" name="user_id" value="{{ $user_id }}">
                     <div class="input-group">
                         <input class="bg-light form-control border-0 small" type="text"
                             name="search" value="{{ $search }}"
@@ -22,14 +25,61 @@
                 <div class="card-header py-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <p class="text-primary m-0 fw-bold">Historique des paiements</p>
-                        @if($search)
-                            <a href="{{ route('paiement.index') }}" class="btn btn-sm btn-outline-danger">
-                                <i class="fas fa-times me-1"></i>Réinitialiser
-                            </a>
-                        @endif
                     </div>
+
+                    {{-- Filtres avancés --}}
+                    <form method="GET" action="{{ route('paiement.index') }}" id="advancedFilterForm" class="mt-3">
+                        @if($search)<input type="hidden" name="search" value="{{ $search }}">@endif
+
+                        <div class="row g-2 align-items-end">
+                            {{-- Filtre Zone WiFi --}}
+                            <div class="col-12 col-sm-6 col-lg-3">
+                                <label class="form-label small text-muted mb-1"><i class="fas fa-wifi me-1"></i>Zone WiFi</label>
+                                <select name="wifi_id" class="form-select form-select-sm" onchange="this.form.submit()">
+                                    <option value="">Toutes les zones</option>
+                                    @foreach($wifis as $w)
+                                        <option value="{{ $w->id }}" {{ $wifi_id == $w->id ? 'selected' : '' }}>{{ $w->nom }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            {{-- Filtre Tarif --}}
+                            <div class="col-12 col-sm-6 col-lg-3">
+                                <label class="form-label small text-muted mb-1"><i class="fas fa-tag me-1"></i>Tarif</label>
+                                <select name="tarif_id" class="form-select form-select-sm" onchange="this.form.submit()">
+                                    <option value="">Tous les tarifs</option>
+                                    @foreach($tarifs as $t)
+                                        <option value="{{ $t->id }}" {{ $tarif_id == $t->id ? 'selected' : '' }}>{{ $t->forfait }} — {{ $t->montant }} FCFA</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            {{-- Filtre Vendeur (admin uniquement) --}}
+                            @if(Auth::user()->isAdmin())
+                            <div class="col-12 col-sm-6 col-lg-3">
+                                <label class="form-label small text-muted mb-1"><i class="fas fa-user me-1"></i>Vendeur</label>
+                                <select name="user_id" class="form-select form-select-sm" onchange="this.form.submit()">
+                                    <option value="">Tous les vendeurs</option>
+                                    @foreach($users as $u)
+                                        <option value="{{ $u->id }}" {{ $user_id == $u->id ? 'selected' : '' }}>{{ $u->nom }} {{ $u->prenom }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @endif
+                            {{-- Bouton Réinitialiser --}}
+                            <div class="col-12 col-sm-6 col-lg-auto">
+                                @if($wifi_id || $tarif_id || $user_id || $search)
+                                    <a href="{{ route('paiement.index') }}" class="btn btn-sm btn-outline-danger w-100">
+                                        <i class="fas fa-times me-1"></i>Réinitialiser
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                    </form>
+
                     {{-- Barre de recherche mobile --}}
-                    <form method="GET" action="{{ route('paiement.index') }}" class="d-sm-none mt-2">
+                    <form method="GET" action="{{ route('paiement.index') }}" class="d-sm-none mt-3">
+                        @if($wifi_id)<input type="hidden" name="wifi_id" value="{{ $wifi_id }}">@endif
+                        @if($tarif_id)<input type="hidden" name="tarif_id" value="{{ $tarif_id }}">@endif
+                        @if($user_id)<input type="hidden" name="user_id" value="{{ $user_id }}">@endif
                         <div class="input-group">
                             <input class="form-control form-control-sm" type="text" name="search" value="{{ $search }}"
                                 placeholder="Transaction, numéro...">
@@ -59,15 +109,21 @@
                             <tbody>
                             @foreach ($datas as $idx => $values)
                                     <tr>
-                                        <td>{{ $values->transaction_id }}</td>
-                                        <td>{{ date_format($values->created_at, 'd/m/Y H:i:s') }}</td>
-                                        <td>{{ $values->numero }}</th>
+                                        <td><span class="small">{{ $values->transaction_id }}</span></td>
+                                        <td>{{ date_format($values->created_at, 'd/m/Y H:i') }}</td>
+                                        <td>{{ $values->numero }}</td>
                                         <td>
-                                            <span>ID: {{ App\Models\Ticket::find($values->ticket_id)->user }}</span> <br>
-                                            <span>CODE: {{ App\Models\Ticket::find($values->ticket_id)->password }}</span>
+                                            @if($values->ticket)
+                                                <span class="small">ID: {{ $values->ticket->user }}</span> <br>
+                                                <span class="fw-bold">CODE: {{ $values->ticket->password }}</span>
+                                            @else
+                                                <span class="text-muted small">N/A</span>
+                                            @endif
                                         </td>
                                         <td>{{ $values->moyen_de_paiement }}</td>
-                                        <td>{{ App\Models\Ticket::find($values->ticket_id)->tarif->montant . ' FCFA' }}</td>
+                                        <td class="fw-bold text-nowrap">
+                                            {{ $values->ticket->tarif->montant ?? '0' }} FCFA
+                                        </td>
                                         <td>
                                             @if($values->status == 'completed')
                                                 <span class="badge bg-success">Payé</span>
@@ -78,11 +134,11 @@
                                             @endif
                                         </td>
                                         @if(Auth::user()->isAdmin())
-                                        <th>{{ $values->ticket->owner->nom }} {{ $values->ticket->owner->prenom }}</th>
+                                        <td>{{ $values->ticket->owner->nom ?? 'Admin' }}</td>
                                         @endif
-                                        <td class="d-flex justify-content-start align-items-center">
-                                            <a href="" class="btn btn-primary btn-fixed-width me-1 mb-1"
-                                                data-bs-target="#view{{ $values->slug }}" data-bs-toggle="modal">Voir</a>
+                                        <td>
+                                            <button type="button" class="btn btn-primary btn-sm"
+                                                data-bs-target="#view{{ $values->slug }}" data-bs-toggle="modal">Voir</button>
                                         </td>
                                     </tr>
                             @endforeach
@@ -116,47 +172,45 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <div>
-                    <span>Transaction id : </span>
-                    <span class="fw-bold">{{ $values->transaction_id }}</span>
-                </div>
-                <div>
-                    <span>Date : </span>
-                    <span
-                        class="fw-bold">{{ date_format($values->created_at, 'd/m/Y H:i:s') }}</span>
-                </div>
-                <div>
-                    <span>Numéro : </span>
-                    <span class="fw-bold">{{ $values->numero }}</span>
-                </div>
-                <div>
-                    <span>Moyen de paiement : </span>
-                    <span
-                        class="fw-bold">{{ $values->moyen_de_paiement }}</span>
-                </div>
-                <div>
-                    <span>Montant : </span>
-                    <span
-                        class="fw-bold">{{ App\Models\Ticket::find($values->ticket_id)->tarif->montant . ' FCFA' }}</span>
-                </div>
-                <div>
-                    <span>Code acheter : </span>
-                    <div class="fw-bold ps-4">
-                        <span>ID:
-                            {{ App\Models\Ticket::find($values->ticket_id)->user }}</span>
-                        <br>
-                        <span>CODE:
-                            {{ App\Models\Ticket::find($values->ticket_id)->password }}</span>
+                <div class="modal-body">
+                    <div class="mb-2">
+                        <span class="text-muted small">Transaction ID :</span><br>
+                        <span class="fw-bold">{{ $values->transaction_id }}</span>
+                    </div>
+                    <div class="mb-2">
+                        <span class="text-muted small">Date :</span><br>
+                        <span class="fw-bold">{{ date_format($values->created_at, 'd/m/Y H:i:s') }}</span>
+                    </div>
+                    <div class="mb-2">
+                        <span class="text-muted small">Numéro Client :</span><br>
+                        <span class="fw-bold">{{ $values->numero }}</span>
+                    </div>
+                    <div class="mb-2">
+                        <span class="text-muted small">Moyen de paiement :</span><br>
+                        <span class="fw-bold">{{ $values->moyen_de_paiement }}</span>
+                    </div>
+                    <div class="mb-2">
+                        <span class="text-muted small">Montant :</span><br>
+                        <span class="fw-bold text-success">{{ $values->ticket->tarif->montant ?? '0' }} FCFA</span>
+                    </div>
+                    <hr>
+                    <div class="bg-light p-2 rounded">
+                        <span class="text-muted small text-uppercase">Tickets Credentials :</span><br>
+                        @if($values->ticket)
+                            <div class="ms-2">
+                                <span>ID: <span class="fw-bold text-primary">{{ $values->ticket->user }}</span></span><br>
+                                <span>CODE: <span class="fw-bold text-primary">{{ $values->ticket->password }}</span></span>
+                            </div>
+                        @else
+                            <span class="text-danger small">Ticket introuvable</span>
+                        @endif
                     </div>
                 </div>
-            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary"
                     data-bs-dismiss="modal">Fermer</button>
             </div>
         </div>
-    </div>
 </div>
 @endforeach
 
