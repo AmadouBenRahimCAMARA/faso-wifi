@@ -9,6 +9,7 @@ use App\Models\Solde;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class RetraitController extends Controller
@@ -29,7 +30,13 @@ class RetraitController extends Controller
                 $query = Retrait::with('user');
                 $ticketsDuJour = Ticket::whereDate('updated_at', Carbon::today())->where('etat_ticket', 'VENDU')->get();
                 $ticketsTotalVendu = Ticket::where('etat_ticket', 'VENDU')->get();
-                $solde = Solde::orderBy('id', 'desc')->first(); // Global latest solde
+                
+                // For admin, the total balance is the sum of ALL users' last balance entries
+                $montant = Solde::whereIn('id', function($q) {
+                    $q->select(DB::raw('MAX(id)'))
+                      ->from('soldes')
+                      ->groupBy('user_id');
+                })->get()->sum('solde');
             } else {
                 $query = $user->retraits();
                 $dateDuJour = Carbon::today();
@@ -45,6 +52,7 @@ class RetraitController extends Controller
                                 ->get();
 
                 $solde = Solde::where('user_id', $user->id)->orderBy('id', 'desc')->first();
+                $montant = isset($solde) ? $solde->solde : 0;
             }
 
             // Recherche
@@ -64,7 +72,7 @@ class RetraitController extends Controller
                 $soldesDuJour = $soldesDuJour + $ticket->tarif->montant;
             }
 
-            $montant = isset($solde) ? $solde->solde : 0;
+            // $montant is already calculated above based on role
             $compte = [
                 "solde_total" => $montant,
                 "retrait_total" => $montant,
