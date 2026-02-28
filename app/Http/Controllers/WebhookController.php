@@ -89,6 +89,7 @@ class WebhookController extends Controller
                         // Update Solde (Credit Vendor) - SELF-CORRECTING LOGIC
                         // We use the centralized calculateBalance() which sums real sales 
                         // this instantly fixes any historical double-credit errors.
+                        $owner = \App\Models\User::find($lockedPaiement->user_id);
                         $newTotalBalance = $owner->calculateBalance();
 
                         Solde::create([

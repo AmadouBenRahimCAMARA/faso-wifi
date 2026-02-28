@@ -162,6 +162,7 @@ class Controller extends BaseController
                             $ticket->save();
 
                             // Update Solde (Credit Vendor) - SELF-CORRECTING LOGIC
+                            $owner = \App\Models\User::find($lockedPaiement->user_id);
                             $newTotalBalance = $owner->calculateBalance();
 
                             Solde::create([
