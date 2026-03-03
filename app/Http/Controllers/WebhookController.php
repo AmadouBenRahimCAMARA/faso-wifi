@@ -86,6 +86,14 @@ class WebhookController extends Controller
                         $ticket->etat_ticket = 'VENDU';
                         $ticket->save();
 
+                        // Low Ticket Notification Logic
+                        $nombreRestant = Ticket::where('tarif_id', $ticket->tarif_id)
+                                                ->where('etat_ticket', 'EN_VENTE')
+                                                ->count();
+                        if ($nombreRestant === 5) {
+                            $ticket->owner->notify(new \App\Notifications\LowTicketAlert($ticket->tarif, $nombreRestant));
+                        }
+
                         // Update Solde (Credit Vendor) - SELF-CORRECTING LOGIC
                         // We use the centralized calculateBalance() which sums real sales 
                         // this instantly fixes any historical double-credit errors.
