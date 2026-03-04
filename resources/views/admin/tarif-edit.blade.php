@@ -13,11 +13,11 @@
             </div>
         </nav>
         <div class="container-fluid">
-            <h3 class="text-dark mb-4">Ajout d'un tarif</h3>
+            <h3 class="text-dark mb-4">Édition du tarif</h3>
             <div class="card shadow">
                 <div class="card-header py-3">
                     <div class="d-flex">
-                        <p class="text-primary m-0 fw-bold me-auto">Enregistrement d'un nouveau tarif</p>
+                        <p class="text-primary m-0 fw-bold me-auto">Modification du tarif existant</p>
                     </div>
                 </div>
                 <div class="card-body">
@@ -29,13 +29,12 @@
                                 <div class="row mb-3">
                                     <label for="wifi_id" class="col-12 col-form-label">{{ __('Wifi') }}</label>
                                     <div class="col-md-6">
-                                        <select class="form-select" id="wifi_id" type="text"
-                                            class="form-control @error('wifi_id') is-invalid @enderror" name="wifi_id"
+                                        <select id="wifi_id" class="form-select @error('wifi_id') is-invalid @enderror" name="wifi_id"
                                             required autocomplete="wifi_id" autofocus>
                                             <option value="">Sélectionnez un wifi</option>
                                             @foreach ($wifi as $item)
                                                 <option value="{{ $item->id }}"
-                                                    selected={{ $data->wifi_id === $item->nom ? 'selected' : '' }}>
+                                                    {{ $data->wifi_id == $item->id ? 'selected' : '' }}>
                                                     {{ $item->nom }}</option>
                                             @endforeach
 
