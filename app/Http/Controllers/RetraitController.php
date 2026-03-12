@@ -37,7 +37,7 @@ class RetraitController extends Controller
                     ->join('tarifs', 'tickets.tarif_id', '=', 'tarifs.id')
                     ->sum(DB::raw('CAST(tarifs.montant AS DECIMAL)'));
                 
-                $totalRetraitsPayes = Retrait::where('statut', 'PAYE')->sum('montant');
+                $totalRetraitsPayes = Retrait::where('statut', 'PAYE')->sum(DB::raw('CAST(montant AS DECIMAL)'));
                 
                 $montant = $totalRevenue - $totalRetraitsPayes;
             } else {
