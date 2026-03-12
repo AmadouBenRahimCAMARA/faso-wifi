@@ -29,12 +29,18 @@ class TarifController extends Controller
     {
         $isAdmin = Auth::user()->isAdmin();
         $wifi_id = $request->get('wifi_id');
+        $user_id = $request->get('user_id');
         $search = $request->get('search');
 
         if ($isAdmin) {
             $query = Tarif::with(['user', 'wifi']);
         } else {
             $query = Auth::user()->tarifs()->with('wifi');
+        }
+
+        // Filtre par Vendeur (Admin uniquement)
+        if ($isAdmin && $user_id) {
+            $query->where('user_id', $user_id);
         }
 
         // Filtre par zone WiFi
@@ -51,17 +57,24 @@ class TarifController extends Controller
             });
         }
 
-        $queryParams = $request->only(['wifi_id', 'search']);
+        $queryParams = $request->only(['wifi_id', 'user_id', 'search']);
         $datas = $query->latest()->paginate(10)->appends($queryParams);
 
-        // Données pour le select WiFi
+        // Données pour les selects
         if ($isAdmin) {
-            $wifis = Wifi::orderBy('nom')->get();
+            $users = \App\Models\User::where('is_admin', false)->orderBy('nom')->get();
+            // Si un vendeur est sélectionné, on restreint la liste des réseaux WiFi à ses réseaux
+            if ($user_id) {
+                $wifis = Wifi::where('user_id', $user_id)->orderBy('nom')->get();
+            } else {
+                $wifis = Wifi::orderBy('nom')->get();
+            }
         } else {
+            $users = collect();
             $wifis = Auth::user()->wifis()->orderBy('nom')->get();
         }
 
-        return view("admin.tarif-liste", compact("datas", "wifis", "wifi_id", "search"));
+        return view("admin.tarif-liste", compact("datas", "wifis", "users", "wifi_id", "user_id", "search"));
     }
 
     /**

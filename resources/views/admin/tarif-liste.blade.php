@@ -29,10 +29,21 @@
                         </a>
                     </div>
 
-                    <!-- Filtre Zone WiFi -->
+                    <!-- Filtres -->
                     <form method="GET" action="{{ route('tarifs.index') }}" id="tarifFilterForm">
                         @if($search)<input type="hidden" name="search" value="{{ $search }}">@endif
                         <div class="row g-2 align-items-end">
+                            @if(Auth::user()->isAdmin())
+                            <div class="col-12 col-sm-6 col-lg-3">
+                                <label class="form-label small text-muted mb-1"><i class="fas fa-user me-1"></i>Vendeur</label>
+                                <select name="user_id" class="form-select form-select-sm" onchange="this.form.submit()">
+                                    <option value="">Tous les vendeurs</option>
+                                    @foreach($users as $u)
+                                        <option value="{{ $u->id }}" {{ $user_id == $u->id ? 'selected' : '' }}>{{ $u->nom }} {{ $u->prenom }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @endif
                             <div class="col-12 col-sm-6 col-lg-3">
                                 <label class="form-label small text-muted mb-1"><i class="fas fa-wifi me-1"></i>Zone WiFi</label>
                                 <select name="wifi_id" class="form-select form-select-sm" onchange="this.form.submit()">
@@ -43,7 +54,7 @@
                                 </select>
                             </div>
                             <div class="col-12 col-sm-6 col-lg-auto">
-                                @if($wifi_id || $search)
+                                @if($wifi_id || $user_id || $search)
                                     <a href="{{ route('tarifs.index') }}" class="btn btn-sm btn-outline-danger w-100">
                                         <i class="fas fa-times me-1"></i>Réinitialiser
                                     </a>

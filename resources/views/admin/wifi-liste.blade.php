@@ -27,7 +27,33 @@
                             <span class="d-none d-md-inline">Ajouter</span>
                         </a>
                     </div>
-                    @if($search)
+                    
+                    @if(Auth::user()->isAdmin())
+                    <!-- Filtre Vendeur -->
+                    <form method="GET" action="{{ route('wifi.index') }}" id="wifiFilterForm" class="mb-3">
+                        @if($search)<input type="hidden" name="search" value="{{ $search }}">@endif
+                        <div class="row g-2 align-items-end">
+                            <div class="col-12 col-sm-6 col-lg-3">
+                                <label class="form-label small text-muted mb-1"><i class="fas fa-user me-1"></i>Vendeur</label>
+                                <select name="user_id" class="form-select form-select-sm" onchange="this.form.submit()">
+                                    <option value="">Tous les vendeurs</option>
+                                    @foreach($users as $u)
+                                        <option value="{{ $u->id }}" {{ $user_id == $u->id ? 'selected' : '' }}>{{ $u->nom }} {{ $u->prenom }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-12 col-sm-6 col-lg-auto">
+                                @if($user_id || $search)
+                                    <a href="{{ route('wifi.index') }}" class="btn btn-sm btn-outline-danger w-100">
+                                        <i class="fas fa-times me-1"></i>Réinitialiser
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                    </form>
+                    @endif
+
+                    @if($search && !Auth::user()->isAdmin())
                         <div class="d-flex align-items-center">
                             <span class="small text-muted">Résultats pour "{{ $search }}"</span>
                             <a href="{{ route('wifi.index') }}" class="btn btn-sm btn-outline-danger ms-2">
