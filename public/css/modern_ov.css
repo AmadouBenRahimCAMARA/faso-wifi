@@ -34,21 +34,36 @@ body {
 #header .logo a {
     font-weight: 800;
     letter-spacing: -1px;
-    color: var(--primary) !important;
+    color: #ffffff !important;
 }
 
 #header .logo a span {
-    color: var(--success) !important;
+    color: #10b981 !important;
 }
 
 /* Navbar Modernization */
 .navbar a, .navbar a:focus {
     font-size: 0.95rem;
     font-weight: 500;
-    color: var(--text-main) !important;
+    color: rgba(255, 255, 255, 0.9) !important;
 }
 
 .navbar a:hover, .navbar .active, .navbar .active:focus, .navbar li:hover > a {
+    color: #ffffff !important;
+}
+
+/* Styles quand on scrolle */
+#header.header-scrolled .logo a {
+    color: var(--primary) !important;
+}
+
+#header.header-scrolled .navbar a, 
+#header.header-scrolled .navbar a:focus {
+    color: var(--text-main) !important;
+}
+
+#header.header-scrolled .navbar a:hover, 
+#header.header-scrolled .navbar .active {
     color: var(--primary) !important;
 }
 
