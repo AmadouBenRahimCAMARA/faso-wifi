@@ -99,62 +99,64 @@
 
     <!-- ======= Footer ======= -->
     <footer id="footer">
-
         <div class="footer-top">
             <div class="container">
-                <div class="row">
+                <div class="row g-4">
 
                     <div class="col-lg-4 col-md-6 footer-contact">
-                        <h3>WiLink Tickets<span>.</span></h3>
-                        <p>
-                            BURKINA FASO <br>
-                            Bobo-Dioulasso<br>
-                            Secteur 22 <br><br>
-                            <strong>Téléphone:</strong> (+226)54 78 19 78<br>
-                            <strong>Email:</strong> info.wilink.ticket@gmail.com<br>
+                        <h3>WiLink Tickets<span style="color: var(--success);">.</span></h3>
+                        <p class="mt-3">
+                            La solution leader pour la vente de tickets WiFi au Burkina Faso. Digitalisez votre activité dès aujourd'hui.
                         </p>
+                        <div class="contact-info mt-4">
+                            <p class="mb-2"><i class="ri-map-pin-line me-2" style="color: var(--success);"></i> Bobo-Dioulasso, Secteur 22</p>
+                            <p class="mb-2"><i class="ri-phone-line me-2" style="color: var(--success);"></i> (+226) 54 78 19 78</p>
+                            <p class="mb-0"><i class="ri-mail-line me-2" style="color: var(--success);"></i> info.wilink.ticket@gmail.com</p>
+                        </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-6 footer-links">
-                        <h4>Liens utiles</h4>
+                    <div class="col-lg-2 col-md-6 footer-links">
+                        <h4>Navigation</h4>
                         <ul>
-                            <li><i class="bx bx-chevron-right"></i> <a href="{{ route('index') }}#hero">Accueil</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="{{ route('recuperation') }}">Récupérer mon ticket</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="{{ route('index') }}#about">A propos</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="{{ route('index') }}#contact">Contact</a></li>
+                            <li><a href="{{ route('index') }}#hero">Accueil</a></li>
+                            <li><a href="{{ route('recuperation') }}">Récupérer ticket</a></li>
+                            <li><a href="#about">À propos</a></li>
+                            <li><a href="#contact">Contact</a></li>
                         </ul>
                     </div>
 
+                    <div class="col-lg-3 col-md-6 footer-links">
+                        <h4>Administratif</h4>
+                        <ul class="text-white-50">
+                            <li><i class="bx bx-chevron-right me-1"></i> RCCM : BFBBD 01202581301633</li>
+                            <li><i class="bx bx-chevron-right me-1"></i> IFU : 00277389V</li>
+                        </ul>
+                    </div>
 
-
-                    <div class="col-lg-4 col-md-6 footer-newsletter">
-                        <h4>Nos réferences</h4>
-                        <p>RCCM : BFBBD 01202581301633</p>
-                        <p>IFU : 00277389V </p>
-                        <!--div class="social-links text-center text-md-end pt-3 pt-md-0">
-                            <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
-                            <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
-                            <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
-                            <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
-                            <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-                        </div-->
+                    <div class="col-lg-3 col-md-6">
+                        <h4>Suivez-nous</h4>
+                        <p>Restez connecté avec l'actualité de WiLink Tickets.</p>
+                        <div class="social-links mt-3">
+                            <a href="#"><i class="bx bxl-facebook"></i></a>
+                            <a href="#"><i class="bx bxl-whatsapp"></i></a>
+                            <a href="#"><i class="bx bxl-linkedin"></i></a>
+                        </div>
                     </div>
 
                 </div>
             </div>
         </div>
 
-        <!--div class="container d-md-flex py-4">
-
-
-            <div class="social-links text-center text-md-end pt-3 pt-md-0">
-                <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
-                <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
-                <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
-                <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
-                <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+        <div class="container footer-bottom">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div class="copyright">
+                    &copy; {{ date('Y') }} <strong><span>WiLink Tickets</span></strong>. Tous droits réservés.
+                </div>
+                <div class="credits" style="font-size: 0.8rem; opacity: 0.6;">
+                    Propulsé par <span class="fw-bold">WiLink Tech</span>
+                </div>
             </div>
-        </div-->
+        </div>
     </footer><!-- End Footer -->
 
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
