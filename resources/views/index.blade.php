@@ -72,7 +72,7 @@
         </section><!-- End About Section -->
 
         <!-- ======= Features Section ======= -->
-        <section id="features" class="features section-bg" style="background: #fff; padding: 100px 0;">
+        <section id="features" class="features section-bg" style="background: #ffffff !important; padding: 100px 0;">
             <div class="container" data-aos="fade-up">
                 <div class="section-title text-center mb-5">
                     <h2>Pourquoi nous choisir ?</h2>
@@ -84,7 +84,7 @@
                             <div class="icon-box mb-4 mx-auto d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background: rgba(30, 58, 138, 0.1); border-radius: 24px;">
                                 <i class="ri-rocket-line" style="font-size: 2.5rem; color: var(--primary);"></i>
                             </div>
-                            <h4 class="fw-bold mb-3" style="color: var(--primary);">Vente Instantanée</h4>
+                            <h4 class="fw-bold mb-3" style="color: #1e3a8a;">Vente Instantanée</h4>
                             <p class="text-muted">Vos clients achètent leurs tickets en quelques clics via Orange Money, Moov Money ou Ligdicash.</p>
                         </div>
                     </div>
@@ -93,7 +93,7 @@
                             <div class="icon-box mb-4 mx-auto d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background: rgba(16, 185, 129, 0.1); border-radius: 24px;">
                                 <i class="ri-shield-check-line" style="font-size: 2.5rem; color: var(--success);"></i>
                             </div>
-                            <h4 class="fw-bold mb-3" style="color: var(--success-dark);">Sécurité Totale</h4>
+                            <h4 class="fw-bold mb-3" style="color: #065f46;">Sécurité Totale</h4>
                             <p class="text-muted">Transactions ultra-sécurisées et gestion rigoureuse de vos revenus via notre registre financier.</p>
                         </div>
                     </div>
@@ -102,7 +102,7 @@
                             <div class="icon-box mb-4 mx-auto d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background: rgba(59, 130, 246, 0.1); border-radius: 24px;">
                                 <i class="ri-pie-chart-2-line" style="font-size: 2.5rem; color: var(--primary-light);"></i>
                             </div>
-                            <h4 class="fw-bold mb-3" style="color: var(--primary);">Statistiques Live</h4>
+                            <h4 class="fw-bold mb-3" style="color: #1e3a8a;">Statistiques Live</h4>
                             <p class="text-muted">Suivez vos ventes, vos retraits et votre bilan en temps réel depuis votre tableau de bord.</p>
                         </div>
                     </div>
