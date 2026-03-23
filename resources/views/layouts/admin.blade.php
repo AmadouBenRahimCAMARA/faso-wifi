@@ -21,7 +21,7 @@
         </div>
     @endif
     <div id="wrapper">
-        <nav class="navbar align-items-start sidebar sidebar-dark accordion p-0 navbar-dark" style="background-color: #2196F3 !important;">
+        <nav class="navbar align-items-start sidebar sidebar-dark accordion p-0 navbar-dark" style="background-color: #1D4ED8 !important;">
             <div class="container-fluid d-flex flex-column p-0"><a
                     class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0"
                     href="{{ route('index') }}">
