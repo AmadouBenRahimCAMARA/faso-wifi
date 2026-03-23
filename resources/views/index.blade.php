@@ -5,7 +5,7 @@
         <div class="container" data-aos="fade-up" data-aos-delay="100">
             <div class="row align-items-center">
                 <div class="col-xl-7">
-                    <h1 class="animate__animated animate__fadeInUp">La vente de tickets WiFi, <br><span style="color: var(--success);">réinventée.</span></h1>
+                    <h1 class="animate__animated animate__fadeInUp">La vente de tickets WiFi, <br><span style="color: #10b981;">réinventée.</span></h1>
                     <h2 class="animate__animated animate__fadeInUp animate__delay-1s">WiLink Tickets simplifie votre activité. Vendez, gérez et suivez vos tickets WiFi Zone en toute sécurité, depuis n'importe où.</h2>
                     <div class="d-flex gap-3 mt-4 animate__animated animate__fadeInUp animate__delay-2s">
                         <a href="{{ route('inscription') }}" class="get-started-btn">Démarrer gratuitement</a>

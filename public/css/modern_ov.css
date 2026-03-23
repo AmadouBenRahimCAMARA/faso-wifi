@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-    --primary: #1E3A8A;
-    --primary-dark: #1e1b4b;
-    --primary-light: #3B82F6;
+    --primary: #1e293b; /* Deep Slate Navy - Less flashy */
+    --primary-dark: #0f172a;
+    --primary-light: #334155;
     --success: #10B981;
     --success-dark: #065F46;
     --bg-slate: #F8FAFC;
@@ -207,7 +207,13 @@ body {
     border-radius: 16px !important;
     padding: 14px 20px !important;
     border: 1px solid #e2e8f0 !important;
-    background: #f8fafc !important;
+    background: #ffffff !important;
+    color: #1e293b !important;
+}
+
+.form-control::placeholder {
+    color: #94a3b8 !important;
+    opacity: 1 !important;
 }
 
 /* Footer Premium */
