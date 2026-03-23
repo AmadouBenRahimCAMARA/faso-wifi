@@ -139,8 +139,8 @@
             <div class="container" data-aos="fade-up">
 
                 <div class="section-title text-center mb-5">
-                    <h2>Contactez-nous</h2>
-                    <p>Une question ? Notre équipe est là pour vous accompagner dans votre succès.</p>
+                    <h2 style="color: #334155 !important;">Contactez-nous</h2>
+                    <p style="color: #64748b !important;">Une question ? Notre équipe est là pour vous accompagner dans votre succès.</p>
                 </div>
 
                 <div class="row g-5" data-aos="fade-up" data-aos-delay="100">
@@ -150,22 +150,22 @@
                             <div class="info-item d-flex mb-4">
                                 <i class="bx bx-map me-3" style="font-size: 1.5rem; color: var(--primary);"></i>
                                 <div>
-                                    <h4 class="fw-bold mb-1">Localisation</h4>
-                                    <p class="text-muted mb-0">Secteur 22, Bobo-Dioulasso, Burkina Faso</p>
+                                    <h4 class="fw-bold mb-1" style="color: #334155;">Localisation</h4>
+                                    <p class="mb-0" style="color: #64748b;">Secteur 22, Bobo-Dioulasso, Burkina Faso</p>
                                 </div>
                             </div>
                             <div class="info-item d-flex mb-4">
                                 <i class="bx bx-envelope me-3" style="font-size: 1.5rem; color: var(--primary);"></i>
                                 <div>
-                                    <h4 class="fw-bold mb-1">Email</h4>
-                                    <p class="text-muted mb-0">info.wilink.ticket@gmail.com</p>
+                                    <h4 class="fw-bold mb-1" style="color: #334155;">Email</h4>
+                                    <p class="mb-0" style="color: #64748b;">info.wilink.ticket@gmail.com</p>
                                 </div>
                             </div>
                             <div class="info-item d-flex">
                                 <i class="bx bx-phone-call me-3" style="font-size: 1.5rem; color: var(--primary);"></i>
                                 <div>
-                                    <h4 class="fw-bold mb-1">Téléphone</h4>
-                                    <p class="text-muted mb-0">(+226) 54 78 19 78</p>
+                                    <h4 class="fw-bold mb-1" style="color: #334155;">Téléphone</h4>
+                                    <p class="mb-0" style="color: #64748b;">(+226) 54 78 19 78</p>
                                 </div>
                             </div>
                         </div>

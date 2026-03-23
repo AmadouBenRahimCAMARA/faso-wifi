@@ -1,17 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-    --primary: #1e3a8a; /* Enterprise Navy */
-    --primary-dark: #172554;
-    --primary-light: #3b82f6;
-    --success: #10b981; /* Emerald Green */
-    --success-dark: #065f46;
-    --action-color: #10b981; /* Default action to green for better balance */
+    --primary: #1e3a8a; /* Navy Institutionnel */
+    --primary-muted: #334155; /* Slate Pro - Pour le texte et éléments sobres */
+    --success: #059669; /* Vert Pro Muteé */
     --bg-slate: #f8fafc;
-    --text-main: #1e293b;
-    --text-muted: #64748b;
-    --glass-bg: rgba(255, 255, 255, 0.85);
-    --glass-border: rgba(255, 255, 255, 0.3);
+    --text-main: #0f172a;
+    --text-muted: #475569;
+    --border-pro: #cbd5e1;
 }
 
 body {
@@ -200,8 +196,8 @@ body {
 /* Nouvel Outline Pro - Moins Flashy */
 .btn-outline-pro {
     background: transparent !important;
-    border: 2px solid var(--primary) !important;
-    color: var(--primary) !important;
+    border: 2px solid var(--primary-muted) !important;
+    color: var(--primary-muted) !important;
     border-radius: 50px !important;
     padding: 12px 35px !important;
     font-weight: 700 !important;
@@ -209,24 +205,28 @@ body {
 }
 
 .btn-outline-pro:hover {
-    background: var(--primary) !important;
+    background: var(--primary-muted) !important;
     color: #fff !important;
-    box-shadow: 0 10px 20px rgba(30, 58, 138, 0.1);
 }
 
 .form-control {
-    border-radius: 12px !important;
-    padding: 14px 20px !important;
-    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    padding: 15px 20px !important;
+    border: 1px solid #94a3b8 !important; /* Bordure bien visible */
     background: #ffffff !important;
-    color: var(--text-main) !important;
-    transition: 0.3s;
+    color: #1e293b !important;
+    font-size: 1rem !important;
 }
 
-.form-control:focus {
-    border-color: var(--primary-light) !important;
-    background: #fff !important;
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.05) !important;
+.form-control::placeholder {
+    color: #64748b !important; /* Placeholder Sombre */
+    opacity: 1 !important;
+}
+
+.form-label {
+    color: #1e293b !important;
+    font-weight: 600 !important;
+    margin-bottom: 8px !important;
 }
 
 /* Footer Premium */
