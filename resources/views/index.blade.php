@@ -28,39 +28,39 @@
                     <div class="row align-items-center">
                         <div class="col-lg-6" data-aos="fade-right" data-aos-delay="100">
                             <div class="pe-lg-5">
-                                <h3 class="fw-bold mb-4" style="color: var(--primary);">À propos de WiLink Tickets</h3>
-                                <p class="lead mb-4" style="font-size: 1.1rem; color: var(--text-main);">
-                                    <span class="fw-bold" style="color: var(--primary-light);">WiLink Tickets</span> est une plateforme innovante conçue pour révolutionner la vente de tickets WiFi Zone au Burkina Faso.
+                                <h3 class="fw-bold mb-4" style="color: #1e3a8a;">À propos de WiLink Tickets</h3>
+                                <p class="lead mb-4" style="font-size: 1.1rem; color: #334155;">
+                                    <span class="fw-bold" style="color: #2563eb;">WiLink Tickets</span> est une plateforme innovante conçue pour révolutionner la vente de tickets WiFi Zone au Burkina Faso.
                                 </p>
-                                <p class="text-muted mb-4">
+                                <p class="mb-4" style="color: #64748b;">
                                     Nous permettons aux gérants de WiFi Zone de digitaliser entièrement leur activité. Plus besoin de présence physique constante : vos clients achètent leurs tickets en toute autonomie, 24h/24 et 7j/7.
                                 </p>
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="stats-mini p-3 rounded-4" style="background: #eff6ff; border: 1px solid #dbeafe;">
-                                        <h4 class="fw-bold mb-0" style="color: var(--primary);">100%</h4>
-                                        <small class="text-muted">Sécurisé</small>
+                                        <h4 class="fw-bold mb-0" style="color: #1e40af;">100%</h4>
+                                        <small style="color: #64748b;">Sécurisé</small>
                                     </div>
                                     <div class="stats-mini p-3 rounded-4" style="background: #f0fdf4; border: 1px solid #dcfce7;">
-                                        <h4 class="fw-bold mb-0" style="color: var(--success);">Fiable</h4>
-                                        <small class="text-muted">Disponibilité</small>
+                                        <h4 class="fw-bold mb-0" style="color: #15803d;">Fiable</h4>
+                                        <small style="color: #64748b;">Disponibilité</small>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-6 mt-5 mt-lg-0" data-aos="fade-left" data-aos-delay="200">
-                            <div class="p-4 rounded-4" style="background: #f0fdf4; border: 1px dashed #10b981;">
-                                <h5 class="fw-bold mb-3" style="color: var(--success-dark);">Un processus simplifié :</h5>
+                            <div class="p-4 rounded-4" style="background: #f0fdf4; border: 1px dashed #10b981; color: #1e293b;">
+                                <h5 class="fw-bold mb-3" style="color: #065f46;">Un processus simplifié :</h5>
                                 <ul class="list-unstyled">
                                     <li class="mb-3 d-flex align-items-start">
-                                        <i class="ri-checkbox-circle-fill me-3" style="color: var(--success); font-size: 1.25rem;"></i>
+                                        <i class="ri-checkbox-circle-fill me-3" style="color: #10b981; font-size: 1.25rem;"></i>
                                         <span>Inscrivez-vous et configurez votre WiFi Zone en 2 minutes.</span>
                                     </li>
                                     <li class="mb-3 d-flex align-items-start">
-                                        <i class="ri-checkbox-circle-fill me-3" style="color: var(--success); font-size: 1.25rem;"></i>
+                                        <i class="ri-checkbox-circle-fill me-3" style="color: #10b981; font-size: 1.25rem;"></i>
                                         <span>Importez vos tickets et fixez vos tarifs librement.</span>
                                     </li>
                                     <li class="mb-3 d-flex align-items-start">
-                                        <i class="ri-checkbox-circle-fill me-3" style="color: var(--success); font-size: 1.25rem;"></i>
+                                        <i class="ri-checkbox-circle-fill me-3" style="color: #10b981; font-size: 1.25rem;"></i>
                                         <span>Suivez vos revenus et demandez vos retraits instantanément.</span>
                                     </li>
                                 </ul>
