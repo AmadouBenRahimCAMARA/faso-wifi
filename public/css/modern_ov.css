@@ -18,11 +18,10 @@ body {
 
 /* Header Glassmorphism */
 #header {
-    background: var(--glass-bg) !important;
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--glass-border);
+    background: #ffffff !important;
+    border-bottom: 1px solid #f1f5f9;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
     z-index: 10000 !important;
 }
 
@@ -34,7 +33,7 @@ body {
 #header .logo a {
     font-weight: 800;
     letter-spacing: -1px;
-    color: #ffffff !important;
+    color: var(--primary) !important;
 }
 
 #header .logo a span {
@@ -45,25 +44,10 @@ body {
 .navbar a, .navbar a:focus {
     font-size: 0.95rem;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.9) !important;
-}
-
-.navbar a:hover, .navbar .active, .navbar .active:focus, .navbar li:hover > a {
-    color: #ffffff !important;
-}
-
-/* Styles quand on scrolle */
-#header.header-scrolled .logo a {
-    color: var(--primary) !important;
-}
-
-#header.header-scrolled .navbar a, 
-#header.header-scrolled .navbar a:focus {
     color: var(--text-main) !important;
 }
 
-#header.header-scrolled .navbar a:hover, 
-#header.header-scrolled .navbar .active {
+.navbar a:hover, .navbar .active, .navbar .active:focus, .navbar li:hover > a {
     color: var(--primary) !important;
 }
 
