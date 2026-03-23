@@ -172,7 +172,7 @@
                     </div>
 
                     <div class="col-lg-7">
-                        <div class="contact-card p-5 modern-card" style="background: #f0fdf4; border: 1px solid #dcfce7; border-radius: 35px !important;">
+                        <div class="contact-card p-5 modern-card" style="background: #f0f7ff; border: 1px solid #e0f2fe; border-radius: 35px !important;">
                             <form action="{{ route('contact.send') }}" method="post" role="form" class="php-email-form">
                                 @csrf
                                 <div class="row g-3">
