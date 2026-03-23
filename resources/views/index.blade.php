@@ -90,7 +90,7 @@
                     </div>
                     <div class="col-lg-4">
                         <div class="feature-item p-5 text-center modern-card h-100" style="background: #f0fdf4; border: 1px solid #dcfce7;">
-                            <div class="icon-box mb-4 mx-auto d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background: rgba(16, 185, 129, 0.1); border-radius: 20px;">
+                            <div class="icon-box mb-4 mx-auto d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background: rgba(16, 185, 129, 0.1); border-radius: 24px;">
                                 <i class="ri-shield-check-line" style="font-size: 2.5rem; color: var(--success);"></i>
                             </div>
                             <h4 class="fw-bold mb-3" style="color: var(--success-dark);">Sécurité Totale</h4>
@@ -99,7 +99,7 @@
                     </div>
                     <div class="col-lg-4">
                         <div class="feature-item p-5 text-center modern-card h-100" style="background: #f0f7ff; border: 1px solid #e0f2fe;">
-                            <div class="icon-box mb-4 mx-auto d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background: rgba(59, 130, 246, 0.1); border-radius: 20px;">
+                            <div class="icon-box mb-4 mx-auto d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background: rgba(59, 130, 246, 0.1); border-radius: 24px;">
                                 <i class="ri-pie-chart-2-line" style="font-size: 2.5rem; color: var(--primary-light);"></i>
                             </div>
                             <h4 class="fw-bold mb-3" style="color: var(--primary);">Statistiques Live</h4>

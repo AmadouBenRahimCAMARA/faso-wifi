@@ -152,7 +152,7 @@ body {
 }
 
 .sidebar .nav-link {
-    border-radius: 12px;
+    border-radius: 16px;
     margin: 4px 10px;
     padding: 12px !important;
 }
