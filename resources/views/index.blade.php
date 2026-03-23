@@ -111,7 +111,7 @@
         </section>
 
         <!-- ======= Statistics Section ======= -->
-        <section id="stats" class="stats section-bg" style="background: var(--primary); padding: 80px 0; color: #fff;">
+        <section id="stats" class="stats section-bg" style="background: #1e3a8a; padding: 80px 0; color: #fff;">
             <div class="container">
                 <div class="row text-center g-4">
                     <div class="col-6 col-lg-3">

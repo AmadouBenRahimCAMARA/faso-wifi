@@ -1,14 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-    --primary: #1e293b; /* Deep Slate Navy - Less flashy */
-    --primary-dark: #0f172a;
-    --primary-light: #334155;
-    --success: #10B981;
-    --success-dark: #065F46;
-    --bg-slate: #F8FAFC;
-    --text-main: #0F172A;
-    --text-muted: #64748B;
+    --primary: #1e3a8a; /* Enterprise Navy */
+    --primary-dark: #172554;
+    --primary-light: #3b82f6;
+    --success: #10b981; /* Emerald Green */
+    --success-dark: #065f46;
+    --action-color: #10b981; /* Default action to green for better balance */
+    --bg-slate: #f8fafc;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
     --glass-bg: rgba(255, 255, 255, 0.85);
     --glass-border: rgba(255, 255, 255, 0.3);
 }
@@ -187,33 +188,34 @@ body {
 }
 
 .btn-primary, .btn-premium {
-    background: var(--primary) !important;
+    background: var(--action-color) !important;
     border: none !important;
     border-radius: 50px !important;
-    padding: 12px 30px !important;
-    font-weight: 600 !important;
+    padding: 12px 35px !important;
+    font-weight: 700 !important;
     color: #fff !important;
-    transition: 0.3s;
-    box-shadow: 0 4px 15px rgba(30, 58, 138, 0.15);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
 }
 
 .btn-premium:hover {
-    background: var(--primary-dark) !important;
+    background: var(--success-dark) !important;
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(30, 58, 138, 0.25);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
 }
 
 .form-control {
     border-radius: 16px !important;
     padding: 14px 20px !important;
-    border: 1px solid #e2e8f0 !important;
+    border: 1px solid #cbd5e1 !important; /* Slightly darker border */
     background: #ffffff !important;
     color: #1e293b !important;
+    font-size: 0.95rem !important;
 }
 
 .form-control::placeholder {
-    color: #94a3b8 !important;
-    opacity: 1 !important;
+    color: #64748b !important; /* Much darker placeholder */
+    opacity: 0.8 !important;
 }
 
 /* Footer Premium */
