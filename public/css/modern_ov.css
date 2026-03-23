@@ -104,9 +104,14 @@ body {
 }
 
 /* Cards & Components */
+.modern-card {
+    border-radius: 30px !important;
+    transition: all 0.3s ease;
+}
+
 .about-box-floating {
     background: #fff !important;
-    border-radius: 24px !important;
+    border-radius: 30px !important;
     padding: 40px !important;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05) !important;
     border: 1px solid #f1f5f9;
@@ -164,7 +169,7 @@ body {
 /* Auth Pages & Cards */
 .card {
     border: 1px solid #e2e8f0 !important;
-    border-radius: 20px !important;
+    border-radius: 30px !important;
     overflow: hidden;
     box-shadow: 0 10px 25px rgba(0,0,0,0.02) !important;
 }

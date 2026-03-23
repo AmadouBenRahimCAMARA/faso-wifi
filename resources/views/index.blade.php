@@ -36,11 +36,11 @@
                                     Nous permettons aux gérants de WiFi Zone de digitaliser entièrement leur activité. Plus besoin de présence physique constante : vos clients achètent leurs tickets en toute autonomie, 24h/24 et 7j/7.
                                 </p>
                                 <div class="d-flex align-items-center gap-3">
-                                    <div class="stats-mini p-3 rounded-4" style="background: #eff6ff; border: 1px solid #dbeafe;">
+                                    <div class="stats-mini p-3 rounded-5" style="background: #eff6ff; border: 1px solid #dbeafe;">
                                         <h4 class="fw-bold mb-0" style="color: #1e40af;">100%</h4>
                                         <small style="color: #64748b;">Sécurisé</small>
                                     </div>
-                                    <div class="stats-mini p-3 rounded-4" style="background: #f0fdf4; border: 1px solid #dcfce7;">
+                                    <div class="stats-mini p-3 rounded-5" style="background: #f0fdf4; border: 1px solid #dcfce7;">
                                         <h4 class="fw-bold mb-0" style="color: #15803d;">Fiable</h4>
                                         <small style="color: #64748b;">Disponibilité</small>
                                     </div>
@@ -48,7 +48,7 @@
                             </div>
                         </div>
                         <div class="col-lg-6 mt-5 mt-lg-0" data-aos="fade-left" data-aos-delay="200">
-                            <div class="p-4 rounded-4" style="background: #f0fdf4; border: 1px dashed #10b981; color: #1e293b;">
+                            <div class="p-4 rounded-5" style="background: #f0fdf4; border: 1px dashed #10b981; color: #1e293b;">
                                 <h5 class="fw-bold mb-3" style="color: #065f46;">Un processus simplifié :</h5>
                                 <ul class="list-unstyled">
                                     <li class="mb-3 d-flex align-items-start">
@@ -81,7 +81,7 @@
                 <div class="row g-4">
                     <div class="col-lg-4">
                         <div class="feature-item p-5 text-center modern-card h-100" style="background: #f0f7ff; border: 1px solid #e0f2fe;">
-                            <div class="icon-box mb-4 mx-auto d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background: rgba(30, 58, 138, 0.1); border-radius: 20px;">
+                            <div class="icon-box mb-4 mx-auto d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background: rgba(30, 58, 138, 0.1); border-radius: 24px;">
                                 <i class="ri-rocket-line" style="font-size: 2.5rem; color: var(--primary);"></i>
                             </div>
                             <h4 class="fw-bold mb-3" style="color: var(--primary);">Vente Instantanée</h4>
