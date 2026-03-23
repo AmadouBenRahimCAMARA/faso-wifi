@@ -111,24 +111,24 @@
         </section>
 
         <!-- ======= Statistics Section ======= -->
-        <section id="stats" class="stats section-bg" style="background: #1e3a8a; padding: 80px 0; color: #fff;">
+        <section id="stats" class="stats section-bg" style="background: #f8fafc; padding: 100px 0; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9;">
             <div class="container">
                 <div class="row text-center g-4">
                     <div class="col-6 col-lg-3">
-                        <span data-purecounter-start="0" data-purecounter-end="500" data-purecounter-duration="1" class="purecounter fw-bold d-block mb-2" style="font-size: 2.5rem;">0</span>
-                        <p class="mb-0 opacity-75">Vendeurs Actifs</p>
+                        <span data-purecounter-start="0" data-purecounter-end="500" data-purecounter-duration="1" class="purecounter fw-bold d-block mb-2" style="font-size: 3rem; color: #1e3a8a;">0</span>
+                        <p class="mb-0 fw-semibold" style="color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem;">Vendeurs Actifs</p>
                     </div>
                     <div class="col-6 col-lg-3">
-                        <span data-purecounter-start="0" data-purecounter-end="10000" data-purecounter-duration="1" class="purecounter fw-bold d-block mb-2" style="font-size: 2.5rem;">0</span>
-                        <p class="mb-0 opacity-75">Tickets Vendus</p>
+                        <span data-purecounter-start="0" data-purecounter-end="10000" data-purecounter-duration="1" class="purecounter fw-bold d-block mb-2" style="font-size: 3rem; color: #1e3a8a;">0</span>
+                        <p class="mb-0 fw-semibold" style="color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem;">Tickets Vendus</p>
                     </div>
                     <div class="col-6 col-lg-3">
-                        <span data-purecounter-start="0" data-purecounter-end="50" data-purecounter-duration="1" class="purecounter fw-bold d-block mb-2" style="font-size: 2.5rem;">0</span>
-                        <p class="mb-0 opacity-75">WiFi Zones</p>
+                        <span data-purecounter-start="0" data-purecounter-end="50" data-purecounter-duration="1" class="purecounter fw-bold d-block mb-2" style="font-size: 3rem; color: #1e3a8a;">0</span>
+                        <p class="mb-0 fw-semibold" style="color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem;">WiFi Zones</p>
                     </div>
                     <div class="col-6 col-lg-3">
-                        <span data-purecounter-start="0" data-purecounter-end="24" data-purecounter-duration="1" class="purecounter fw-bold d-block mb-2" style="font-size: 2.5rem;">0</span>
-                        <p class="mb-0 opacity-75">Support 24/7</p>
+                        <span data-purecounter-start="0" data-purecounter-end="24" data-purecounter-duration="1" class="purecounter fw-bold d-block mb-2" style="font-size: 3rem; color: #1e3a8a;">0</span>
+                        <p class="mb-0 fw-semibold" style="color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem;">Support 24/7</p>
                     </div>
                 </div>
             </div>
@@ -193,7 +193,7 @@
                                         <textarea class="form-control" name="message" rows="5" placeholder="Détaillez votre demande ici..." required></textarea>
                                     </div>
                                     <div class="col-12 text-center mt-4">
-                                        <button type="submit" class="btn-premium w-100 py-3">Envoyer le message</button>
+                                        <button type="submit" class="btn-outline-pro w-100 py-3">Envoyer le message</button>
                                     </div>
                                 </div>
                             </form>

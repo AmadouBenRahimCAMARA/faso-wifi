@@ -192,30 +192,41 @@ body {
     border: none !important;
     border-radius: 50px !important;
     padding: 12px 35px !important;
-    font-weight: 700 !important;
+    font-weight: 800 !important;
     color: #fff !important;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
 }
 
-.btn-premium:hover {
-    background: var(--success-dark) !important;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+/* Nouvel Outline Pro - Moins Flashy */
+.btn-outline-pro {
+    background: transparent !important;
+    border: 2px solid var(--primary) !important;
+    color: var(--primary) !important;
+    border-radius: 50px !important;
+    padding: 12px 35px !important;
+    font-weight: 700 !important;
+    transition: 0.3s;
+}
+
+.btn-outline-pro:hover {
+    background: var(--primary) !important;
+    color: #fff !important;
+    box-shadow: 0 10px 20px rgba(30, 58, 138, 0.1);
 }
 
 .form-control {
-    border-radius: 16px !important;
+    border-radius: 12px !important;
     padding: 14px 20px !important;
-    border: 1px solid #cbd5e1 !important; /* Slightly darker border */
+    border: 1px solid #e2e8f0 !important;
     background: #ffffff !important;
-    color: #1e293b !important;
-    font-size: 0.95rem !important;
+    color: var(--text-main) !important;
+    transition: 0.3s;
 }
 
-.form-control::placeholder {
-    color: #64748b !important; /* Much darker placeholder */
-    opacity: 0.8 !important;
+.form-control:focus {
+    border-color: var(--primary-light) !important;
+    background: #fff !important;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.05) !important;
 }
 
 /* Footer Premium */
