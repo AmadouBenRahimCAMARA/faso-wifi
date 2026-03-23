@@ -22,9 +22,9 @@
         </div>
     </section><!-- End Hero -->
         <!-- ======= About Section ======= -->
-        <section id="about" class="about" style="padding: 100px 0;">
+        <section id="about" class="about" style="padding: 100px 0; background: #f0f7ff;">
             <div class="container" data-aos="fade-up">
-                <div class="about-box-floating modern-card p-5" style="border-radius: 30px; background: #fff;">
+                <div class="about-box-floating modern-card p-5" style="border-radius: 30px; background: #fff; box-shadow: 0 15px 40px rgba(30, 58, 138, 0.08) !important;">
                     <div class="row align-items-center">
                         <div class="col-lg-6" data-aos="fade-right" data-aos-delay="100">
                             <div class="pe-lg-5">
@@ -36,11 +36,11 @@
                                     Nous permettons aux gérants de WiFi Zone de digitaliser entièrement leur activité. Plus besoin de présence physique constante : vos clients achètent leurs tickets en toute autonomie, 24h/24 et 7j/7.
                                 </p>
                                 <div class="d-flex align-items-center gap-3">
-                                    <div class="stats-mini p-3 rounded-4" style="background: var(--bg-slate);">
+                                    <div class="stats-mini p-3 rounded-4" style="background: #eff6ff; border: 1px solid #dbeafe;">
                                         <h4 class="fw-bold mb-0" style="color: var(--primary);">100%</h4>
                                         <small class="text-muted">Sécurisé</small>
                                     </div>
-                                    <div class="stats-mini p-3 rounded-4" style="background: var(--bg-slate);">
+                                    <div class="stats-mini p-3 rounded-4" style="background: #f0fdf4; border: 1px solid #dcfce7;">
                                         <h4 class="fw-bold mb-0" style="color: var(--success);">Fiable</h4>
                                         <small class="text-muted">Disponibilité</small>
                                     </div>
@@ -48,8 +48,8 @@
                             </div>
                         </div>
                         <div class="col-lg-6 mt-5 mt-lg-0" data-aos="fade-left" data-aos-delay="200">
-                            <div class="p-4 rounded-4" style="background: var(--bg-slate); border: 1px dashed var(--primary-light);">
-                                <h5 class="fw-bold mb-3">Un processus simplifié :</h5>
+                            <div class="p-4 rounded-4" style="background: #f0fdf4; border: 1px dashed #10b981;">
+                                <h5 class="fw-bold mb-3" style="color: var(--success-dark);">Un processus simplifié :</h5>
                                 <ul class="list-unstyled">
                                     <li class="mb-3 d-flex align-items-start">
                                         <i class="ri-checkbox-circle-fill me-3" style="color: var(--success); font-size: 1.25rem;"></i>
