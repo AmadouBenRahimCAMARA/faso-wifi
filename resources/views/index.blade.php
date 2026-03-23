@@ -21,6 +21,55 @@
             </div>
         </div>
     </section><!-- End Hero -->
+        <!-- ======= About Section ======= -->
+        <section id="about" class="about" style="padding: 100px 0;">
+            <div class="container" data-aos="fade-up">
+                <div class="about-box-floating modern-card p-5" style="border-radius: 30px; background: #fff;">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6" data-aos="fade-right" data-aos-delay="100">
+                            <div class="pe-lg-5">
+                                <h3 class="fw-bold mb-4" style="color: var(--primary);">À propos de WiLink Tickets</h3>
+                                <p class="lead mb-4" style="font-size: 1.1rem; color: var(--text-main);">
+                                    <span class="fw-bold" style="color: var(--primary-light);">WiLink Tickets</span> est une plateforme innovante conçue pour révolutionner la vente de tickets WiFi Zone au Burkina Faso.
+                                </p>
+                                <p class="text-muted mb-4">
+                                    Nous permettons aux gérants de WiFi Zone de digitaliser entièrement leur activité. Plus besoin de présence physique constante : vos clients achètent leurs tickets en toute autonomie, 24h/24 et 7j/7.
+                                </p>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="stats-mini p-3 rounded-4" style="background: var(--bg-slate);">
+                                        <h4 class="fw-bold mb-0" style="color: var(--primary);">100%</h4>
+                                        <small class="text-muted">Sécurisé</small>
+                                    </div>
+                                    <div class="stats-mini p-3 rounded-4" style="background: var(--bg-slate);">
+                                        <h4 class="fw-bold mb-0" style="color: var(--success);">Fiable</h4>
+                                        <small class="text-muted">Disponibilité</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mt-5 mt-lg-0" data-aos="fade-left" data-aos-delay="200">
+                            <div class="p-4 rounded-4" style="background: var(--bg-slate); border: 1px dashed var(--primary-light);">
+                                <h5 class="fw-bold mb-3">Un processus simplifié :</h5>
+                                <ul class="list-unstyled">
+                                    <li class="mb-3 d-flex align-items-start">
+                                        <i class="ri-checkbox-circle-fill me-3" style="color: var(--success); font-size: 1.25rem;"></i>
+                                        <span>Inscrivez-vous et configurez votre WiFi Zone en 2 minutes.</span>
+                                    </li>
+                                    <li class="mb-3 d-flex align-items-start">
+                                        <i class="ri-checkbox-circle-fill me-3" style="color: var(--success); font-size: 1.25rem;"></i>
+                                        <span>Importez vos tickets et fixez vos tarifs librement.</span>
+                                    </li>
+                                    <li class="mb-3 d-flex align-items-start">
+                                        <i class="ri-checkbox-circle-fill me-3" style="color: var(--success); font-size: 1.25rem;"></i>
+                                        <span>Suivez vos revenus et demandez vos retraits instantanément.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section><!-- End About Section -->
 
         <!-- ======= Features Section ======= -->
         <section id="features" class="features section-bg" style="background: #fff; padding: 100px 0;">
