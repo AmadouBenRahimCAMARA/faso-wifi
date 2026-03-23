@@ -62,9 +62,10 @@ body {
 }
 
 .get-started-btn:hover {
-    background: var(--primary-dark) !important;
+    background: var(--success) !important;
     transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(30, 58, 138, 0.2);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+    color: #fff !important;
 }
 
 /* Hero Section */
