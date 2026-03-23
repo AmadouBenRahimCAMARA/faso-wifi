@@ -29,7 +29,7 @@
 
     <!-- Template Main CSS File -->
     <link href="{{ asset('visitor/assets/css/style.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/modern_ov.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/modern_ov.css') }}?v={{ time() }}" rel="stylesheet">
 
     <!-- =======================================================
   * Template Name: Presento - v3.9.1

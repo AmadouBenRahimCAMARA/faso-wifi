@@ -89,7 +89,7 @@
                         </div>
                     </div>
                     <div class="col-lg-4">
-                        <div class="feature-item p-5 text-center modern-card h-100" style="background: #f0fdf4; border: 1px solid #dcfce7;">
+                        <div class="feature-item p-5 text-center modern-card h-100" style="background: #f0fdf4; border: 1px solid #dcfce7; border-radius: 40px !important;">
                             <div class="icon-box mb-4 mx-auto d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background: rgba(16, 185, 129, 0.1); border-radius: 24px;">
                                 <i class="ri-shield-check-line" style="font-size: 2.5rem; color: var(--success);"></i>
                             </div>

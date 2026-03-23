@@ -104,9 +104,13 @@ body {
 }
 
 /* Cards & Components */
-.modern-card {
-    border-radius: 30px !important;
+.modern-card, 
+.feature-item.modern-card,
+.info-card.modern-card,
+.contact-card.modern-card {
+    border-radius: 35px !important;
     transition: all 0.3s ease;
+    overflow: hidden !important;
 }
 
 .about-box-floating {
