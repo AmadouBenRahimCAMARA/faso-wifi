@@ -6,10 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Dashboard - Brand</title>
     <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/fonts/fontawesome-all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/modern_ov.css') }}">
 
 </head>
 
@@ -21,7 +23,7 @@
         </div>
     @endif
     <div id="wrapper">
-        <nav class="navbar align-items-start sidebar sidebar-dark accordion p-0 navbar-dark" style="background-color: #1D4ED8 !important;">
+        <nav class="navbar align-items-start sidebar sidebar-dark accordion p-0 navbar-dark">
             <div class="container-fluid d-flex flex-column p-0"><a
                     class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0"
                     href="{{ route('index') }}">

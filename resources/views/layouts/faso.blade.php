@@ -14,9 +14,9 @@
     <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
-    <link
-        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Vendor CSS Files -->
     <link href="{{ asset('visitor/assets/vendor/aos/aos.css') }}" rel="stylesheet">
@@ -29,6 +29,7 @@
 
     <!-- Template Main CSS File -->
     <link href="{{ asset('visitor/assets/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/modern_ov.css') }}" rel="stylesheet">
 
     <!-- =======================================================
   * Template Name: Presento - v3.9.1

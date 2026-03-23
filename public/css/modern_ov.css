@@ -1,0 +1,197 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --primary: #1E3A8A;
+    --primary-dark: #1e1b4b;
+    --primary-light: #3B82F6;
+    --success: #10B981;
+    --success-dark: #065F46;
+    --bg-slate: #F8FAFC;
+    --text-main: #0F172A;
+    --text-muted: #64748B;
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.3);
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    background-color: var(--bg-slate) !important;
+    color: var(--text-main) !important;
+}
+
+/* Header Glassmorphism */
+#header {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--glass-border);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+}
+
+#header.header-scrolled {
+    background: rgba(255, 255, 255, 0.95) !important;
+    padding: 10px 0 !important;
+}
+
+#header .logo a {
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: var(--primary) !important;
+}
+
+#header .logo a span {
+    color: var(--success) !important;
+}
+
+/* Navbar Modernization */
+.navbar a, .navbar a:focus {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-main) !important;
+}
+
+.navbar a:hover, .navbar .active, .navbar .active:focus, .navbar li:hover > a {
+    color: var(--primary) !important;
+}
+
+.get-started-btn {
+    background: var(--primary) !important;
+    color: #fff !important;
+    border-radius: 50px !important;
+    padding: 10px 25px !important;
+    font-weight: 600 !important;
+    transition: 0.3s;
+    border: none !important;
+}
+
+.get-started-btn:hover {
+    background: var(--primary-dark) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(30, 58, 138, 0.2);
+}
+
+/* Hero Section */
+#hero {
+    background: linear-gradient(135deg, #1E3A8A 0%, #172554 100%) !important;
+    position: relative;
+    overflow: hidden;
+    padding-top: 120px;
+}
+
+#hero::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    right: -10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+}
+
+#hero h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    color: #fff !important;
+    margin-bottom: 20px;
+}
+
+#hero h2 {
+    font-size: 1.25rem;
+    color: #E2E8F0 !important;
+    font-weight: 400;
+}
+
+/* Cards & Components */
+.about-box-floating {
+    background: #fff !important;
+    border-radius: 24px !important;
+    padding: 40px !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05) !important;
+    border: 1px solid #f1f5f9;
+    margin-top: -80px;
+}
+
+.section-title h2 {
+    font-weight: 800;
+    color: var(--primary) !important;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.section-title h2::after {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 4px;
+    background: var(--success);
+    bottom: 0;
+    left: 0;
+    border-radius: 10px;
+}
+
+/* Footer Modern */
+#footer {
+    background: #0F172A !important;
+    color: #94A3B8 !important;
+}
+
+#footer h3, #footer h4 {
+    color: #fff !important;
+}
+
+/* Admin Sidebar Overrides */
+.sidebar {
+    background: #111827 !important; /* Tailwind Gray-900 */
+}
+
+.sidebar .nav-link {
+    border-radius: 12px;
+    margin: 4px 10px;
+    padding: 12px !important;
+}
+
+.sidebar .nav-link.active {
+    background: rgba(59, 130, 246, 0.1) !important;
+    color: #3B82F6 !important;
+}
+
+.sidebar .nav-link i {
+    font-size: 1.1rem !important;
+}
+
+/* Auth Pages & Cards */
+.card {
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 20px !important;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.02) !important;
+}
+
+.card-header {
+    background: #fff !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    padding: 20px 25px !important;
+    font-weight: 700 !important;
+    color: var(--primary) !important;
+}
+
+.form-control {
+    border-radius: 12px !important;
+    padding: 12px 18px !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+.form-control:focus {
+    border-color: var(--primary-light) !important;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1) !important;
+}
+
+.btn-primary {
+    background: var(--primary) !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 12px 25px !important;
+    font-weight: 600 !important;
+}
