@@ -172,7 +172,7 @@
                     </div>
 
                     <div class="col-lg-7">
-                        <div class="contact-card p-5 modern-card" style="background: #fff;">
+                        <div class="contact-card p-5 modern-card" style="background: #fff; border-radius: 35px !important;">
                             <form action="{{ route('contact.send') }}" method="post" role="form" class="php-email-form">
                                 @csrf
                                 <div class="row g-3">
@@ -193,7 +193,7 @@
                                         <textarea class="form-control" name="message" rows="5" placeholder="Détaillez votre demande ici..." required></textarea>
                                     </div>
                                     <div class="col-12 text-center mt-4">
-                                        <button type="submit" class="get-started-btn w-100 py-3">Envoyer le message</button>
+                                        <button type="submit" class="btn-premium w-100 py-3">Envoyer le message</button>
                                     </div>
                                 </div>
                             </form>
