@@ -2141,64 +2141,6 @@ section {
   color: var(--primary-color) !important;
 }
 
-/* Custom About Box Styling */
-.about-box-floating {
-  background-color: #1D4ED8; /* Bootstrap Primary Blue */
-  color: #fff;
-  padding: 40px;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-}
 
-.about-box-floating h3 {
-  color: #fff;
-  font-weight: 700;
-}
-
-.about-box-floating ul {
-  list-style: none;
-  padding: 0;
-}
-
-.about-box-floating ul li {
-  padding-bottom: 10px;
-  display: flex;
-  align-items: flex-start;
-}
-
-.about-box-floating ul i {
-  font-size: 20px;
-  margin-right: 8px;
-  color: #ffc107; /* A shade of yellow/gold for icons */
-}
-
-
-/* Dropdown Link Color Fix */
-#header .dropdown-menu a {
-  color: #343a40;
-}
-
-#header .dropdown-menu a:hover {
-  color: #15803D;
-  background-color: #f8f9fa;
-}
-
-
-/* Contact Form Input Styling on Blue BG */
-.contact .php-email-form input,
-.contact .php-email-form textarea {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.contact .php-email-form input::placeholder,
-.contact .php-email-form textarea::placeholder {
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.contact .php-email-form input:focus,
-.contact .php-email-form textarea:focus {
-  border-color: #fff;
-}
+/* Nettoyage des styles obsolètes effectué par Antigravity */
 
