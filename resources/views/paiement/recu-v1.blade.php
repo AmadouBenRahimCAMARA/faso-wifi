@@ -8,8 +8,8 @@
     <title>pdf</title>
     <style>
         :root {
-            --primary-color: #07298f;
-            --secondary-color: #2465dd;
+            --primary-color: #1D4ED8;
+            --secondary-color: #2563EB;
         }
 
         *,
@@ -91,7 +91,7 @@
         }
 
         .bg-primary {
-            background-color: blue;
+            background-color: #1D4ED8;
         }
 
         .table-container {
