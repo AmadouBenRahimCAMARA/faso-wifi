@@ -151,6 +151,7 @@ body {
 /* Admin Sidebar Overrides */
 .sidebar {
     background: var(--primary) !important; /* Navy Institutionnel */
+    overflow-x: hidden !important; /* EMPÊCHE TOUT DÉBORDEMENT */
 }
 
 .sidebar .sidebar-brand {
@@ -164,8 +165,10 @@ body {
 
 .sidebar .nav-link {
     border-radius: 12px;
-    margin: 4px 8px; /* Réduit pour éviter tout débordement */
+    margin: 4px 10px;
     padding: 10px 15px !important;
+    width: auto !important;
+    max-width: calc(100% - 20px) !important;
     color: #ffffff !important;
     transition: all 0.3s ease;
     display: flex;
