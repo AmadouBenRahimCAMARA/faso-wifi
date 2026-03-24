@@ -151,7 +151,6 @@ body {
 /* Admin Sidebar Overrides */
 .sidebar {
     background: var(--primary) !important; /* Navy Institutionnel */
-    overflow-x: hidden !important; /* EMPÊCHE TOUT DÉBORDEMENT */
 }
 
 .sidebar .sidebar-brand {
@@ -167,13 +166,10 @@ body {
     border-radius: 12px;
     margin: 4px 10px;
     padding: 10px 15px !important;
-    width: auto !important;
-    max-width: calc(100% - 20px) !important;
     color: #ffffff !important;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
-    position: relative;
 }
 
 .sidebar .nav-link:hover {
@@ -190,19 +186,8 @@ body {
 }
 
 .sidebar .nav-link.active {
-    background: rgba(16, 185, 129, 0.2) !important;
-    color: #10b981 !important;
-}
-
-.sidebar .nav-link.active::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 20%;
-    height: 60%;
-    width: 4px;
-    background: #10b981;
-    border-radius: 0 4px 4px 0;
+    background: rgba(16, 185, 129, 0.25) !important;
+    color: #ffffff !important;
 }
 
 .sidebar .nav-link i {
