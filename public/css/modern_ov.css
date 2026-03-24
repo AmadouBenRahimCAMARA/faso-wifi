@@ -341,11 +341,19 @@ body {
 }
 
 /* Tables Global Modernization */
-table.table td, 
+table.table td {
+    color: #1e293b !important; /* Ardoise foncé pour lisibilité maximale */
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 15px 15px !important;
+    background-color: transparent !important;
+    border: none;
+    vertical-align: middle;
+}
+
 table.table th {
     background-color: transparent !important;
     border: none;
-    padding: 18px 15px !important;
     vertical-align: middle;
 }
 
@@ -365,5 +373,5 @@ table.table tbody tr {
 }
 
 table.table tbody tr:hover {
-    background-color: rgba(248, 250, 252, 0.4) !important; /* Très léger effet au survol */
+    background-color: rgba(16, 185, 129, 0.03) !important; /* Très léger reflet vert au survol */
 }
