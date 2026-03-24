@@ -75,7 +75,7 @@
         <section id="features" class="features section-bg" style="background: #ffffff !important; padding: 100px 0;">
             <div class="container" data-aos="fade-up">
                 <div class="section-title text-center mb-5">
-                    <h2>Pourquoi nous choisir ?</h2>
+                    <h2 style="color: #10b981 !important;">Pourquoi nous choisir ?</h2>
                     <p>Découvrez les outils qui boostent votre activité WiFi Zone</p>
                 </div>
                 <div class="row g-4">
