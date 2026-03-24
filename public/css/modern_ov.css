@@ -185,13 +185,20 @@ body {
 }
 
 .btn-primary, .btn-premium {
-    background: var(--action-color) !important;
+    background: var(--primary) !important;
     border: none !important;
     border-radius: 50px !important;
     padding: 12px 35px !important;
     font-weight: 800 !important;
     color: #fff !important;
     transition: all 0.3s ease;
+}
+
+.btn-primary:hover, .btn-premium:hover {
+    background: var(--success) !important;
+    color: #fff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(5, 150, 105, 0.4);
 }
 
 /* Nouvel Outline Pro - Moins Flashy */
