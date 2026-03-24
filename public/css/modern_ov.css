@@ -153,6 +153,15 @@ body {
     background: var(--primary) !important; /* Navy Institutionnel */
 }
 
+.sidebar .sidebar-brand {
+    color: #10b981 !important;
+}
+
+.sidebar .sidebar-brand .sidebar-brand-text span,
+.sidebar .sidebar-brand .sidebar-brand-icon i {
+    color: #10b981 !important;
+}
+
 .sidebar .nav-link {
     border-radius: 16px;
     margin: 4px 10px;
