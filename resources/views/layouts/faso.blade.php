@@ -28,7 +28,7 @@
     <link href="{{ asset('visitor/assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
 
     <!-- Template Main CSS File -->
-    <link href="{{ asset('visitor/assets/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('visitor/assets/css/style.css') }}?v={{ time() }}" rel="stylesheet">
     <link href="{{ asset('css/modern_ov.css') }}?v={{ time() }}" rel="stylesheet">
 
     <!-- =======================================================
