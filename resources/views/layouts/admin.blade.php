@@ -82,10 +82,10 @@
                     </li>
                     @endif
 
-                    <li class="nav-item"><a class="nav-link @if (Route::currentRouteName() == 'retrait.index') active @endif"
+                    <li class="nav-item"><a class="nav-link"
                             href="{{ route('logout') }}" onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();"><i
-                                class="fas  fa-power-off"></i><span>Deconnection</span></a></li>
+                                class="fas  fa-power-off"></i><span>Déconnexion</span></a></li>
                     <!--li class="nav-item"><a class="nav-link @if (Route::currentRouteName() == 'paiement.index') active @endif" href="{{ route('paiement.index') }}"><i class="fas fa-comment-alt"></i><span>Api SMS</span></a></li-->
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                         @csrf
