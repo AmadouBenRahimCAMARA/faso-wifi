@@ -146,7 +146,7 @@
                 <div class="row g-5" data-aos="fade-up" data-aos-delay="100">
 
                     <div class="col-lg-5">
-                        <div class="info-card p-5 modern-card h-100" style="background: #f0fdf4; border: 1px solid #dcfce7;">
+                        <div class="info-card p-5 modern-card h-100" style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2);">
                             <div class="info-item d-flex mb-4">
                                 <i class="bx bx-map me-3" style="font-size: 1.5rem; color: var(--primary);"></i>
                                 <div>
@@ -172,7 +172,7 @@
                     </div>
 
                     <div class="col-lg-7">
-                        <div class="contact-card p-5 modern-card" style="background: #f0fdf4; border: 1px solid #dcfce7; border-radius: 35px !important;">
+                        <div class="contact-card p-5 modern-card" style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 35px !important;">
                             <form action="{{ route('contact.send') }}" method="post" role="form" class="bg-transparent" style="background: transparent !important;">
                                 @csrf
                                 <div class="row g-3">
