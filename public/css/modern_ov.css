@@ -157,6 +157,21 @@ body {
     border-radius: 16px;
     margin: 4px 10px;
     padding: 12px !important;
+    color: rgba(255, 255, 255, 0.75) !important;
+    transition: all 0.3s ease;
+}
+
+.sidebar .nav-link:hover {
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.sidebar .sidebar-heading {
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .sidebar .nav-link.active {
