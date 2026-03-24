@@ -341,7 +341,8 @@ body {
 }
 
 /* Tables Global Modernization */
-table.table td {
+table.table td, 
+table.table tbody th {
     color: #1e293b !important; /* Ardoise foncé pour lisibilité maximale */
     font-weight: 500;
     font-size: 0.95rem;

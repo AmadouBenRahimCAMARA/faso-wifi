@@ -105,15 +105,15 @@
                             @foreach ($datas as $idx => $values)
                                 <tbody>
                                     <tr>
-                                        <th>{{ $idx + 1 }}</th>
-                                        <th>{{ $values->nom }}</th>
-                                        <th>{{ $values->description }}</th>
-                                        <th>{{ date_format($values->created_at, 'd/m/Y H:i:s') }}</th>
+                                        <td>{{ $idx + 1 }}</td>
+                                        <td>{{ $values->nom }}</td>
+                                        <td>{{ $values->description }}</td>
+                                        <td>{{ date_format($values->created_at, 'd/m/Y H:i:s') }}</td>
                                         @if(Auth::user()->isAdmin())
-                                        <th>{{ $values->user->nom }} {{ $values->user->prenom }}</th>
+                                        <td>{{ $values->user->nom }} {{ $values->user->prenom }}</td>
                                         @endif
                                         <td><button class="btn btn-primary btn-fixed-width" data-bs-toggle="modal" data-bs-target="#modalCopier" onclick="copyCode('{{$values->slug}}')">copier le code</button></td>
-                                        <th class="d-flex justify-content-start align-items-center">
+                                        <td class="d-flex justify-content-start align-items-center">
                                             <button type="button" class="btn btn-primary btn-fixed-width me-1 mb-1"
                                                 data-bs-target="#view{{ $values->slug }}" data-bs-toggle="modal">Voir</button>
                                             <a href="{{ route('wifi.edit', $values->slug) }}"
@@ -122,10 +122,7 @@
                                             <button type="button" class="btn btn-danger btn-fixed-width me-1 mb-1"
                                                 data-bs-target="#delete{{ $values->slug }}"
                                                 data-bs-toggle="modal">Supprimer</button>
-
-
-
-                                        </th>
+                                        </td>
                                     </tr>
                                 </tbody>
                             @endforeach
