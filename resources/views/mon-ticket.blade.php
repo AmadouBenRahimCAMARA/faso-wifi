@@ -21,9 +21,9 @@
                 <div class="row justify-content-center">
                     <div class="col-md-6">
                         <div class="card modern-card border-0" style="background: #ffffff; box-shadow: 0 15px 40px rgba(30, 58, 138, 0.08);">
-                            <div class="card-header py-4 border-bottom-0 text-center" style="background: #059669;">
-                                <h4 class="fw-bold mb-2" style="color: #ffffff;">Récupérer mon ticket</h4>
-                                <p class="mb-0" style="color: rgba(255,255,255,0.8); font-size: 0.95rem;">Renseignez l'id de votre ticket afin de pouvoir le récupérer</p>
+                            <div class="card-header py-4 border-bottom-0 text-center" style="background: #10b981 !important;">
+                                <h4 class="fw-bold mb-2" style="color: #ffffff !important;">Récupérer mon ticket</h4>
+                                <p class="mb-0" style="color: rgba(255,255,255,0.9) !important; font-size: 0.95rem;">Renseignez l'id de votre ticket afin de pouvoir le récupérer</p>
                             </div>
 
                             <div class="card-body p-4 p-md-5 pt-0">
