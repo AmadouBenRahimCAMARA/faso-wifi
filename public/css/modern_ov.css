@@ -162,8 +162,8 @@ body {
 }
 
 .sidebar .nav-link:hover {
-    color: #f8fafc !important;
-    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff !important;
+    background: rgba(16, 185, 129, 0.15) !important;
 }
 
 .sidebar .sidebar-heading {
@@ -175,8 +175,9 @@ body {
 }
 
 .sidebar .nav-link.active {
-    background: rgba(59, 130, 246, 0.1) !important;
-    color: #3B82F6 !important;
+    background: rgba(16, 185, 129, 0.2) !important;
+    color: #10b981 !important;
+    border-left: 3px solid #10b981;
 }
 
 .sidebar .nav-link i {
