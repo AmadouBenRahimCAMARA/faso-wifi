@@ -153,7 +153,7 @@
                     &copy; {{ date('Y') }} <strong><span>WiLink Tickets</span></strong>. Tous droits réservés.
                 </div>
                 <div class="credits" style="font-size: 0.8rem; opacity: 0.6;">
-                    Propulsé par <span class="fw-bold">WiLink Tech</span>
+                    Propulsé par <span class="fw-bold">WiLink International SA</span>
                 </div>
             </div>
         </div>
