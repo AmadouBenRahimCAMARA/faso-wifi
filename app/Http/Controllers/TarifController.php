@@ -25,14 +25,56 @@ class TarifController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        if (Auth::user()->isAdmin()) {
-            $datas = Tarif::with('user')->latest()->paginate(10);
+        $isAdmin = Auth::user()->isAdmin();
+        $wifi_id = $request->get('wifi_id');
+        $user_id = $request->get('user_id');
+        $search = $request->get('search');
+
+        if ($isAdmin) {
+            $query = Tarif::with(['user', 'wifi']);
         } else {
-            $datas = Auth::user()->tarifs()->latest()->paginate(10);
+            $query = Auth::user()->tarifs()->with('wifi');
         }
-        return view("admin.tarif-liste",compact("datas"));
+
+        // Filtre par Vendeur (Admin uniquement)
+        if ($isAdmin && $user_id) {
+            $query->where('user_id', $user_id);
+        }
+
+        // Filtre par zone WiFi
+        if ($wifi_id) {
+            $query->where('wifi_id', $wifi_id);
+        }
+
+        // Recherche par forfait ou description
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('forfait', 'LIKE', '%' . $search . '%')
+                  ->orWhere('description', 'LIKE', '%' . $search . '%')
+                  ->orWhere('montant', 'LIKE', '%' . $search . '%');
+            });
+        }
+
+        $queryParams = $request->only(['wifi_id', 'user_id', 'search']);
+        $datas = $query->latest()->paginate(10)->appends($queryParams);
+
+        // Données pour les selects
+        if ($isAdmin) {
+            $users = \App\Models\User::where('is_admin', false)->orderBy('nom')->get();
+            // Si un vendeur est sélectionné, on restreint la liste des réseaux WiFi à ses réseaux
+            if ($user_id) {
+                $wifis = Wifi::where('user_id', $user_id)->orderBy('nom')->get();
+            } else {
+                $wifis = Wifi::orderBy('nom')->get();
+            }
+        } else {
+            $users = collect();
+            $wifis = Auth::user()->wifis()->orderBy('nom')->get();
+        }
+
+        return view("admin.tarif-liste", compact("datas", "wifis", "users", "wifi_id", "user_id", "search"));
     }
 
     /**

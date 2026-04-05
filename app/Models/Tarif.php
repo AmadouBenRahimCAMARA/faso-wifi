@@ -23,7 +23,7 @@ class Tarif extends Model
     }
 
     public function tickets(){
-        $this->hasMany(Ticket::class);
+        return $this->hasMany(Ticket::class);
     }
 
     public function user(){

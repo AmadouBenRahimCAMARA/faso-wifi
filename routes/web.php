@@ -49,15 +49,29 @@ Route::get('/inscription', function () {
 
 Auth::routes();
 
-Route::middleware(['auth'])->group(function () {
+// Contact Route
+Route::post('/nous-contacter', [App\Http\Controllers\HomeController::class, 'sendMessage'])->name('contact.send');
+
+// Email Verification Routes (OTP)
+// Email Verification Routes (OTP) - Accessible by guests/session
+Route::get('/email/verify', [App\Http\Controllers\Auth\OtpVerificationController::class, 'show'])->name('verification.notice');
+Route::post('/email/verify', [App\Http\Controllers\Auth\OtpVerificationController::class, 'verify'])->name('verification.verify.post');
+Route::get('/email/resend', [App\Http\Controllers\Auth\OtpVerificationController::class, 'resend'])->name('verification.resend');
+
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     
     Route::get('/paiement/retrait', [PaiementController::class, 'retrait'])->name('paiement.retrait');
     Route::resource('wifi', WifiController::class);
+    Route::post('/ticket/bulk-delete', [TicketController::class, 'bulkDestroy'])->name('ticket.bulkDestroy');
     Route::resource('ticket', TicketController::class);
     Route::resource('tarifs', TarifController::class);
     Route::resource('paiement', PaiementController::class);
     Route::resource('retrait', RetraitController::class);
+    
+    // Bilan
+    Route::get('/bilan', [App\Http\Controllers\BilanController::class, 'index'])->name('bilan.index');
+    Route::get('/bilan/download', [App\Http\Controllers\BilanController::class, 'downloadPdf'])->name('bilan.download');
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {
@@ -67,5 +81,16 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/users/{id}', [App\Http\Controllers\AdminController::class, 'show'])->name('admin.users.show');
     Route::get('/admin/users/{id}/edit', [App\Http\Controllers\AdminController::class, 'edit'])->name('admin.users.edit');
     Route::put('/admin/users/{id}', [App\Http\Controllers\AdminController::class, 'update'])->name('admin.users.update');
+    Route::get('/admin/users/{id}/impersonate', [App\Http\Controllers\AdminController::class, 'impersonate'])->name('admin.users.impersonate');
     Route::post('/admin/users/{id}/toggle-status', [App\Http\Controllers\AdminController::class, 'toggleUserStatus'])->name('admin.users.toggleStatus');
+    Route::delete('/admin/users/{id}', [App\Http\Controllers\AdminController::class, 'destroy'])->name('admin.users.destroy');
+    
+    // Contact Messages
+    Route::get('/admin/messages', [App\Http\Controllers\AdminController::class, 'messages'])->name('admin.messages');
+    Route::get('/admin/messages/{id}', [App\Http\Controllers\AdminController::class, 'showMessage'])->name('admin.messages.show');
+});
+
+// Impersonation Stop Route (Must be accessible by authenticated users, not just admins, because admin becomes user)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/stop-impersonation', [App\Http\Controllers\HomeController::class, 'stopImpersonate'])->name('stop.impersonation');
 });

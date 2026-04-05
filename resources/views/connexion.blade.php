@@ -20,14 +20,14 @@
             <div class="container" data-aos="fade-up">
                 <div class="row justify-content-center">
                     <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header bg-dark py-4 text-white text-center" >
-                                <h4 class="text-center fw-bold text-primary">Connexion</h4>
-                                Veuillez vous identifier en utilisant votre adresse e-mail <br>ainsi que votre mot de passe
+                        <div class="card modern-card border-0" style="background: #ffffff; box-shadow: 0 15px 40px rgba(30, 58, 138, 0.08);">
+                            <div class="card-header py-4 border-bottom-0 text-center" style="background: #10b981 !important;">
+                                <h4 class="fw-bold mb-2" style="color: #ffffff !important;">Connexion</h4>
+                                <p class="mb-0" style="color: rgba(255,255,255,0.9) !important; font-size: 0.95rem;">Veuillez vous identifier en utilisant votre adresse e-mail <br>ainsi que votre mot de passe</p>
                             </div>
 
-                            <div class="card-body">
-                                <form method="POST" action="{{ route('login') }}">
+                            <div class="card-body p-4 p-md-5 pt-0">
+                                <form method="POST" action="{{ route('login') }}" class="mt-4">
                                     @csrf
 
                                     <div class="row mb-3">
@@ -76,15 +76,15 @@
                                         </div>
                                     </div>
 
-                                    <div class="row mb-0">
-                                        <div class="col-md-8">
-                                            <button type="submit" class="btn btn-primary">
+                                    <div class="row mb-0 mt-4">
+                                        <div class="col-md-12 text-center">
+                                            <button type="submit" class="btn-premium w-100 py-3 mb-3">
                                                 {{ __('Se connecter') }}
                                             </button>
 
                                             @if (Route::has('password.request'))
-                                                <a class="btn btn-link text-primary" href="{{ route('password.request') }}">
-                                                    {{ __('Mot de passe oublier ?') }}
+                                                <a class="text-muted text-decoration-none" href="{{ route('password.request') }}" style="font-size: 0.9rem;">
+                                                    {{ __('Mot de passe oublié ?') }}
                                                 </a>
                                             @endif
                                         </div>

@@ -22,18 +22,25 @@ class AdminController extends Controller
         // Global Statistics for Super Admin
         $totalRevenue = Paiement::join('tickets', 'paiements.ticket_id', '=', 'tickets.id')
             ->join('tarifs', 'tickets.tarif_id', '=', 'tarifs.id')
+            ->where('paiements.status', 'completed')
             ->sum(DB::raw('CAST(tarifs.montant AS DECIMAL)'));
 
         $totalTicketsSold = Ticket::where('etat_ticket', 'VENDU')->count();
         $totalUsers = User::count();
         $totalWifis = Wifi::count();
 
-        $recentPayments = Paiement::with(['ticket.tarif', 'ticket.user'])
+        $recentPayments = Paiement::with(['ticket.tarif', 'ticket.owner'])
             ->latest()
             ->take(10)
             ->get();
+        
+        // Count pending withdrawals
+        $pendingRetraitsCount = 0;
+        try {
+            $pendingRetraitsCount = \App\Models\Retrait::where('statut', 'EN_ATTENTE')->count();
+        } catch (\Exception $e) {}
 
-        return view('admin.super_dashboard', compact('totalRevenue', 'totalTicketsSold', 'totalUsers', 'totalWifis', 'recentPayments'));
+        return view('admin.super_dashboard', compact('totalRevenue', 'totalTicketsSold', 'totalUsers', 'totalWifis', 'recentPayments', 'pendingRetraitsCount'));
     }
 
     public function users()
@@ -110,5 +117,81 @@ class AdminController extends Controller
         $user->save();
 
         return redirect()->back()->with('success', $message);
+    }
+
+    public function impersonate($id)
+    {
+        $user = User::findOrFail($id);
+        
+        // Prevent impersonating self or other admins (optional)
+        if ($user->id === Auth::id()) {
+            return redirect()->back()->with('error', 'Action impossible sur votre propre compte.');
+        }
+
+        // Store original admin id
+        session()->put('impersonator_id', Auth::id());
+        
+        // Log in as the user
+        Auth::loginUsingId($id);
+
+        return redirect()->route('home')->with('success', "Vous êtes connecté en tant que " . $user->nom);
+    }
+
+    /**
+     * List all contact messages.
+     */
+    public function messages()
+    {
+        $messages = \App\Models\ContactMessage::orderBy('created_at', 'desc')->paginate(15);
+        return view('admin.messages.index', compact('messages'));
+    }
+
+    /**
+     * Show a specific contact message and mark it as read.
+     */
+    public function showMessage($id)
+    {
+        $message = \App\Models\ContactMessage::findOrFail($id);
+        
+        if (!$message->is_read) {
+            $message->is_read = true;
+            $message->save();
+        }
+
+        return view('admin.messages.show', compact('message'));
+    }
+
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+
+        if ($user->id === Auth::id()) {
+            return redirect()->back()->with('error', 'Vous ne pouvez pas supprimer votre propre compte.');
+        }
+
+        // Delete related data manually to ensure cleanup
+        // 1. Delete Wifis (and their related data if not on cascade)
+        // Ideally Wifis should delete their tickets/tarifs, but let's be safe
+        foreach ($user->wifis as $wifi) {
+            $wifi->tarifs()->delete(); // Delete tarifs
+            $wifi->delete();
+        }
+
+        // 2. Delete Tickets owned by user
+        $user->tickets()->delete();
+
+        // 3. Delete Paiements related to user (Vendor) -- Optional: Keep for history? 
+        // If we delete user, paiements user_id will be orphan or fail.
+        // Let's delete them to be clean, or set Null if nullable.
+        // Assuming strict cleanup:
+        $user->paiements()->delete();
+
+        // 4. Delete Solde entries
+        \App\Models\Solde::where('user_id', $user->id)->delete();
+
+        // 5. Delete User
+        $user->delete();
+
+        return redirect()->route('admin.users')->with('success', 'Utilisateur et ses données supprimés avec succès.');
     }
 }

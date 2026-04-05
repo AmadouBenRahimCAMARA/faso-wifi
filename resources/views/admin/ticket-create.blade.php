@@ -26,16 +26,27 @@
                             <form method="POST" action="{{ route('ticket.store') }}" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row mb-3">
+                                    <label for="wifi_id" class="col-12 col-form-label">{{ __('Wifi Zone') }}</label>
+                                    <div class="col-md-6">
+                                        <select class="form-select" id="wifi_id" name="wifi_id" required>
+                                            <option value="">Sélectionnez une zone WiFi</option>
+                                            @foreach ($wifis as $item)
+                                                <option value="{{ $item->id }}">{{ $item->nom }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
                                     <label for="tarif_id" class="col-12 col-form-label">{{ __('Tarif') }}</label>
                                     <div class="col-md-6">
-                                        <select class="form-select" id="tarif_id" type="text"
-                                            class="form-control @error('tarif_id') is-invalid @enderror" name="tarif_id"
-                                            value="{{ old('tarif_id') }}" required autocomplete="tarif_id" autofocus>
-                                            <option value="">Sélectionnez un tarif</option>
+                                        <select class="form-select @error('tarif_id') is-invalid @enderror" id="tarif_id" name="tarif_id" required disabled>
+                                            <option value="">Sélectionnez d'abord une zone WiFi</option>
                                             @foreach ($tarifs as $item)
-                                                <option value="{{$item->id}}">{{$item->forfait}} - {{App\Models\Wifi::find($item->wifi_id)->nom}}</option>
+                                                <option value="{{ $item->id }}" data-wifi="{{ $item->wifi_id }}" style="display: none;">
+                                                    {{ $item->forfait }} - {{ number_format($item->montant, 0, ',', ' ') }} FCFA
+                                                </option>
                                             @endforeach
-
                                         </select>
 
                                         @error('tarif_id')
@@ -45,6 +56,33 @@
                                         @enderror
                                     </div>
                                 </div>
+
+                                <script>
+                                    document.getElementById('wifi_id').addEventListener('change', function() {
+                                        const wifiId = this.value;
+                                        const tarifSelect = document.getElementById('tarif_id');
+                                        const options = tarifSelect.querySelectorAll('option');
+
+                                        if (wifiId) {
+                                            tarifSelect.disabled = false;
+                                            tarifSelect.value = "";
+                                            options.forEach(option => {
+                                                if (option.value === "") {
+                                                    option.textContent = "Sélectionnez un tarif";
+                                                    option.style.display = "block";
+                                                } else if (option.getAttribute('data-wifi') === wifiId) {
+                                                    option.style.display = "block";
+                                                } else {
+                                                    option.style.display = "none";
+                                                }
+                                            });
+                                        } else {
+                                            tarifSelect.disabled = true;
+                                            tarifSelect.value = "";
+                                            options[0].textContent = "Sélectionnez d'abord une zone WiFi";
+                                        }
+                                    });
+                                </script>
                                 <div class="row mb-3">
                                     <label for="fichier" class="col-12 col-form-label">{{ __('Fichier') }}</label>
                                     <div class="col-md-6">

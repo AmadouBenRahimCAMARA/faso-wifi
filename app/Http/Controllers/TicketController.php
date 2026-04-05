@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ticket;
 use App\Models\Tarif;
+use App\Models\Wifi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Imports\TicketsImport;
@@ -32,29 +33,107 @@ class TicketController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        if (Auth::user()->isAdmin()) {
-            $datas = Ticket::with('owner')->latest()->paginate(10);
+        // Filtre par défaut : EN_VENTE (tickets disponibles)
+        $filter = $request->get('filter', 'en_vente');
+        $isAdmin = Auth::user()->isAdmin();
+        
+        if ($isAdmin) {
+            $baseQuery = Ticket::query();
+            $query = Ticket::with(['owner', 'tarif.wifi']);
         } else {
-            $datas = Auth::user()->tickets()->latest()->paginate(10);
+            $baseQuery = Auth::user()->tickets();
+            $query = Auth::user()->tickets()->with(['tarif.wifi']);
         }
-        return view("admin.ticket-liste",compact("datas"));
+
+        // --- Filtres avancés ---
+        $wifi_id = $request->get('wifi_id');
+        $tarif_id = $request->get('tarif_id');
+        $user_id = $request->get('user_id');
+        $search = $request->get('search');
+
+        // Closure pour appliquer les filtres avancés
+        $applyAdvancedFilters = function($q) use ($wifi_id, $tarif_id, $user_id, $search, $isAdmin) {
+            if ($wifi_id) {
+                $q->whereHas('tarif', function($tq) use ($wifi_id) {
+                    $tq->where('wifi_id', $wifi_id);
+                });
+            }
+            if ($tarif_id) {
+                $q->where('tarif_id', $tarif_id);
+            }
+            if ($isAdmin && $user_id) {
+                $q->where('user_id', $user_id);
+            }
+            if ($search) {
+                $q->where(function($sq) use ($search) {
+                    $sq->where('user', 'LIKE', '%' . $search . '%')
+                       ->orWhere('password', 'LIKE', '%' . $search . '%');
+                });
+            }
+            return $q;
+        };
+
+        $applyAdvancedFilters($baseQuery);
+        $applyAdvancedFilters($query);
+        
+        // Calculer les compteurs pour chaque état
+        $counts = [
+            'en_vente' => (clone $baseQuery)->where('etat_ticket', 'EN_VENTE')->count(),
+            'en_cours' => (clone $baseQuery)->where('etat_ticket', 'EN_COURS')->count(),
+            'vendu' => (clone $baseQuery)->where('etat_ticket', 'VENDU')->count(),
+            'tous' => (clone $baseQuery)->count(),
+        ];
+        
+        // Appliquer le filtre d'état
+        if ($filter === 'en_vente') {
+            $query->where('etat_ticket', 'EN_VENTE');
+        } elseif ($filter === 'vendu') {
+            $query->where('etat_ticket', 'VENDU');
+        } elseif ($filter === 'en_cours') {
+            $query->where('etat_ticket', 'EN_COURS');
+        }
+        // Si 'tous', pas de filtre sur etat_ticket
+        
+        // Préserver tous les paramètres dans la pagination
+        $queryParams = $request->only(['filter', 'wifi_id', 'tarif_id', 'user_id', 'search']);
+        $datas = $query->latest()->paginate(10)->appends($queryParams);
+        
+        // Données pour les selects de filtre
+        if ($isAdmin) {
+            $wifis = Wifi::orderBy('nom')->get();
+            $users = \App\Models\User::where('is_admin', false)->orderBy('nom')->get();
+        } else {
+            $wifis = Auth::user()->wifis()->orderBy('nom')->get();
+            $users = collect();
+        }
+
+        // Tarifs filtrés par wifi_id si sélectionné
+        if ($wifi_id) {
+            $tarifs = Tarif::where('wifi_id', $wifi_id)->orderBy('forfait')->get();
+        } else {
+            if ($isAdmin) {
+                $tarifs = Tarif::orderBy('forfait')->get();
+            } else {
+                $tarifs = Tarif::where('user_id', Auth::id())->orderBy('forfait')->get();
+            }
+        }
+        
+        return view("admin.ticket-liste", compact("datas", "filter", "counts", "wifis", "tarifs", "users", "wifi_id", "tarif_id", "user_id", "search"));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        if (Auth::user()->isAdmin()) {
-            $tarifs = Tarif::all(); // Admin can see all Tarifs
+        $user = Auth::user();
+        if ($user->isAdmin()) {
+            $wifis = Wifi::all();
+            $tarifs = Tarif::all();
         } else {
-            $tarifs = Auth::user()->tarifs()->get();
+            $wifis = $user->wifis()->get();
+            $tarifs = $user->tarifs()->get();
         }
-        return view("admin.ticket-create", compact('tarifs'));
+        return view("admin.ticket-create", compact('wifis', 'tarifs'));
     }
 
     /**
@@ -200,6 +279,30 @@ class TicketController extends Controller
         }else{
             return view('admin.404');
         }
+    }
+
+    /**
+     * Remove multiple resources from storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function bulkDestroy(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:tickets,slug',
+        ]);
+
+        $ids = $request->ids;
+
+        if (Auth::user()->isAdmin()) {
+            Ticket::whereIn('slug', $ids)->delete();
+        } else {
+             Auth::user()->tickets()->whereIn('slug', $ids)->delete();
+        }
+
+        return redirect()->back()->with('success', 'Tickets sélectionnés supprimés avec succès.');
     }
 
 }

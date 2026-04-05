@@ -1,0 +1,379 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --primary: #1e3a8a; /* Navy Institutionnel */
+    --primary-muted: #334155; /* Slate Pro - Pour le texte et éléments sobres */
+    --success: #059669; /* Vert Pro Muteé */
+    --bg-slate: #f8fafc;
+    --text-main: #0f172a;
+    --text-muted: #475569;
+    --border-pro: #cbd5e1;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    background-color: var(--bg-slate) !important;
+    color: var(--text-main) !important;
+}
+
+/* Header Glassmorphism */
+#header {
+    background: #ffffff !important;
+    border-bottom: 1px solid #f1f5f9;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+    z-index: 10000 !important;
+}
+
+#header.header-scrolled {
+    background: rgba(255, 255, 255, 0.95) !important;
+    padding: 10px 0 !important;
+}
+
+#header .logo a {
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: var(--primary) !important;
+}
+
+#header .logo a span {
+    color: #10b981 !important;
+}
+
+/* Navbar Modernization */
+.navbar a, .navbar a:focus {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-main) !important;
+}
+
+.navbar a:hover, .navbar .active, .navbar .active:focus, .navbar li:hover > a {
+    color: var(--primary) !important;
+}
+
+.get-started-btn {
+    background: var(--primary) !important;
+    color: #fff !important;
+    border-radius: 50px !important;
+    padding: 10px 25px !important;
+    font-weight: 600 !important;
+    transition: 0.3s;
+    border: none !important;
+}
+
+.get-started-btn:hover {
+    background: var(--success) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+    color: #fff !important;
+}
+
+/* Hero Section */
+#hero {
+    background: linear-gradient(135deg, #1E3A8A 0%, #172554 100%) !important;
+    position: relative;
+    overflow: hidden;
+    padding-top: 120px;
+}
+
+#hero::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    right: -10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+}
+
+#hero h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    color: #fff !important;
+    margin-bottom: 20px;
+}
+
+#hero h2 {
+    font-size: 1.25rem;
+    color: #E2E8F0 !important;
+    font-weight: 400;
+}
+
+/* Cards & Components */
+.modern-card, 
+.feature-item.modern-card,
+.info-card.modern-card,
+.contact-card.modern-card {
+    border-radius: 35px !important;
+    transition: all 0.3s ease;
+    overflow: hidden !important;
+}
+
+.about-box-floating {
+    background: #fff !important;
+    border-radius: 30px !important;
+    padding: 40px !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05) !important;
+    border: 1px solid #f1f5f9;
+    margin-top: -80px;
+}
+
+.section-title h2 {
+    font-weight: 800;
+    color: var(--primary) !important;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.section-title h2::after {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 4px;
+    background: var(--success);
+    bottom: 0;
+    left: 0;
+    border-radius: 10px;
+}
+
+/* Footer Modern */
+#footer {
+    background: #0F172A !important;
+    color: #94A3B8 !important;
+}
+
+#footer h3, #footer h4 {
+    color: #fff !important;
+}
+
+/* Admin Sidebar Overrides */
+.sidebar {
+    background: var(--primary) !important; /* Navy Institutionnel */
+}
+
+.sidebar .sidebar-brand {
+    color: #10b981 !important;
+}
+
+.sidebar .sidebar-brand .sidebar-brand-text span,
+.sidebar .sidebar-brand .sidebar-brand-icon i {
+    color: #10b981 !important;
+}
+
+.sidebar .nav-link {
+    border-radius: 12px;
+    margin: 4px 10px;
+    padding: 10px 15px !important;
+    color: #ffffff !important;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar .nav-link:hover {
+    color: #ffffff !important;
+    background: rgba(16, 185, 129, 0.15) !important;
+}
+
+.sidebar .sidebar-heading {
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.sidebar .nav-link.active {
+    background: rgba(16, 185, 129, 0.25) !important;
+    color: #ffffff !important;
+}
+
+.sidebar .nav-link i {
+    font-size: 1.1rem !important;
+}
+
+/* Auth Pages & Cards */
+.card {
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 30px !important;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.02) !important;
+}
+
+.card-header {
+    background: #fff !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    padding: 20px 25px !important;
+    font-weight: 700 !important;
+    color: var(--primary) !important;
+}
+
+.btn-primary, .btn-premium {
+    background: var(--primary) !important;
+    border: none !important;
+    border-radius: 50px !important;
+    padding: 12px 35px !important;
+    font-weight: 800 !important;
+    color: #fff !important;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover, .btn-premium:hover {
+    background: var(--success) !important;
+    color: #fff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(5, 150, 105, 0.4);
+}
+
+/* Nouvel Outline Pro - Moins Flashy */
+.btn-outline-pro {
+    background: transparent !important;
+    border: 2px solid var(--primary-muted) !important;
+    color: var(--primary-muted) !important;
+    border-radius: 50px !important;
+    padding: 12px 35px !important;
+    font-weight: 700 !important;
+    transition: 0.3s;
+}
+
+.btn-outline-pro:hover {
+    background: var(--primary-muted) !important;
+    color: #fff !important;
+}
+
+.form-control {
+    border-radius: 10px !important;
+    padding: 15px 20px !important;
+    border: 1px solid #94a3b8 !important; /* Bordure bien visible */
+    background: #ffffff !important;
+    color: #1e293b !important;
+    font-size: 1rem !important;
+}
+
+.form-control::placeholder {
+    color: #64748b !important; /* Placeholder Sombre */
+    opacity: 1 !important;
+}
+
+.form-label {
+    color: #1e293b !important;
+    font-weight: 600 !important;
+    margin-bottom: 8px !important;
+}
+
+/* Footer Premium */
+#footer {
+    background: #0F172A !important;
+    color: #94A3B8 !important;
+    padding: 80px 0 30px 0;
+    font-size: 0.9rem;
+}
+
+#footer .footer-top {
+    padding-bottom: 50px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+#footer h3, #footer h4 {
+    color: #fff !important;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+#footer .footer-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#footer .footer-links ul li {
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+}
+
+#footer .footer-links ul a {
+    color: #94A3B8;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+#footer .footer-links ul a:hover {
+    color: var(--primary-light);
+    transform: translateX(5px);
+}
+
+.footer-bottom {
+    padding-top: 30px;
+}
+
+.social-links a {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    border-radius: 50%;
+    margin-right: 10px;
+    transition: 0.3s;
+}
+
+.social-links a:hover {
+    background: var(--primary);
+    transform: translateY(-3px);
+}
+
+/* Custom Checkboxes */
+.form-check-input {
+    width: 1.2rem;
+    height: 1.2rem;
+    border-radius: 4px !important;
+    border: 2px solid #cbd5e1;
+    transition: all 0.2s ease;
+}
+
+.form-check-input:checked {
+    background-color: var(--success);
+    border-color: var(--success);
+}
+
+/* Tables Global Modernization */
+table.table td, 
+table.table tbody th {
+    color: #1e293b !important; /* Ardoise foncé pour lisibilité maximale */
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 15px 15px !important;
+    background-color: transparent !important;
+    border: none;
+    vertical-align: middle;
+}
+
+table.table th {
+    background-color: transparent !important;
+    border: none;
+    vertical-align: middle;
+}
+
+table.table thead th {
+    border-bottom: 2px solid #e2e8f0 !important;
+    color: #475569 !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+}
+
+table.table tbody tr {
+    background-color: transparent !important;
+    border-bottom: 1px solid #e2e8f0 !important; /* Contour fin en bas */
+    transition: all 0.2s ease;
+}
+
+table.table tbody tr:hover {
+    background-color: rgba(16, 185, 129, 0.03) !important; /* Très léger reflet vert au survol */
+}

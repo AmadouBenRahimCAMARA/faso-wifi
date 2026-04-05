@@ -25,15 +25,77 @@ class PaiementController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $limit = session()->has('view') ? session()->get('view') : 10;
-        if (Auth::user()->isAdmin()) {
-            $datas = Paiement::with('ticket.owner')->latest()->paginate($limit);
+        $search = $request->get('search');
+        $wifi_id = $request->get('wifi_id');
+        $tarif_id = $request->get('tarif_id');
+        $user_id = $request->get('user_id');
+
+        $isAdmin = Auth::user()->isAdmin();
+
+        if ($isAdmin) {
+            $query = Paiement::with(['ticket.owner', 'ticket.tarif.wifi']);
         } else {
-            $datas = Auth::user()->paiements()->latest()->paginate($limit);
+            $query = Auth::user()->paiements()->with(['ticket.tarif.wifi']);
         }
-        return view("admin.paiement-liste",compact("datas","limit"));
+
+        // --- Advanced Filters ---
+        if ($wifi_id) {
+            $query->whereHas('ticket.tarif', function($q) use ($wifi_id) {
+                $q->where('wifi_id', $wifi_id);
+            });
+        }
+        if ($tarif_id) {
+            $query->whereHas('ticket', function($q) use ($tarif_id) {
+                $q->where('tarif_id', $tarif_id);
+            });
+        }
+        if ($isAdmin && $user_id) {
+            $query->where('user_id', $user_id);
+        }
+
+        // --- Search ---
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('transaction_id', 'LIKE', '%' . $search . '%')
+                  ->orWhere('numero', 'LIKE', '%' . $search . '%')
+                  ->orWhere('moyen_de_paiement', 'LIKE', '%' . $search . '%');
+            });
+        }
+
+        $params = $request->only(['search', 'wifi_id', 'tarif_id', 'user_id']);
+        $datas = $query->latest()->paginate($limit)->appends($params);
+
+        // Data for filter selects
+        if ($isAdmin) {
+            $wifis = \App\Models\Wifi::orderBy('nom')->get();
+            $users = \App\Models\User::where('is_admin', false)->orderBy('nom')->get();
+        } else {
+            $wifis = Auth::user()->wifis()->orderBy('nom')->get();
+            $users = collect();
+        }
+
+        // Tarifs filtered by wifi if selected
+        if ($wifi_id) {
+            $tarifQuery = \App\Models\Tarif::where('wifi_id', $wifi_id);
+            if (!$isAdmin) {
+                $tarifQuery->where('user_id', Auth::id());
+            }
+            $tarifs = $tarifQuery->orderBy('forfait')->get();
+        } else {
+            if ($isAdmin) {
+                $tarifs = \App\Models\Tarif::orderBy('forfait')->get();
+            } else {
+                $tarifs = \App\Models\Tarif::where('user_id', Auth::id())->orderBy('forfait')->get();
+            }
+        }
+
+        return view("admin.paiement-liste", compact(
+            "datas", "limit", "search", "wifis", "tarifs", "users", 
+            "wifi_id", "tarif_id", "user_id"
+        ));
     }
 
     

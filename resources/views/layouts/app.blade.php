@@ -10,14 +10,22 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/modern_ov.css') }}">
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body>
     <div id="app">
+        @if(session()->has('impersonator_id'))
+            <div class="alert alert-danger text-center mb-0 fw-bold rounded-0" role="alert" style="z-index: 9999; position: relative;">
+                MODE ADMIN : Vous consultez le compte de {{ Auth::user()->nom }} {{ Auth::user()->prenom }}
+                <a href="{{ route('stop.impersonation') }}" class="btn btn-sm btn-outline-danger ms-3 bg-white text-danger">Retour à mon compte</a>
+            </div>
+        @endif
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">

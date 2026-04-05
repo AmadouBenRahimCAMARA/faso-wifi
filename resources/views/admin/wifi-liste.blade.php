@@ -5,10 +5,14 @@
         <nav class="navbar navbar-expand bg-white shadow mb-4 topbar static-top navbar-light">
             <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop"
                     type="button"><i class="fas fa-bars"></i></button>
-                <form class="d-none d-sm-inline-block me-auto ms-md-3 my-2 my-md-0 mw-100 navbar-search">
-                    <div class="input-group"><input class="bg-light form-control border-0 small" type="text"
-                            placeholder="Rechercher ..."><button class="btn btn-primary py-0" type="button"><i
-                                class="fas fa-search"></i></button></div>
+                <form class="d-none d-sm-inline-block me-auto ms-md-3 my-2 my-md-0 mw-100 navbar-search"
+                      method="GET" action="{{ route('wifi.index') }}">
+                    <div class="input-group">
+                        <input class="bg-light form-control border-0 small" type="text"
+                            name="search" value="{{ $search }}"
+                            placeholder="Rechercher par nom ou description...">
+                        <button class="btn btn-primary py-0" type="submit"><i class="fas fa-search"></i></button>
+                    </div>
                 </form>
             </div>
         </nav>
@@ -16,10 +20,55 @@
             <h3 class="text-dark mb-4">Wifi</h3>
             <div class="card shadow">
                 <div class="card-header py-3">
-                    <div class="d-flex">
-                        <p class="text-primary m-0 fw-bold me-auto">Liste des reseaux wifi</p>
-                        <a href="{{ route('wifi.create') }}" class="btn btn-primary">Ajouter</a>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <p class="text-primary m-0 fw-bold">Liste des reseaux wifi</p>
+                        <a href="{{ route('wifi.create') }}" class="btn btn-primary">
+                            <i class="fas fa-plus d-md-none"></i>
+                            <span class="d-none d-md-inline">Ajouter</span>
+                        </a>
                     </div>
+                    
+                    @if(Auth::user()->isAdmin())
+                    <!-- Filtre Vendeur -->
+                    <form method="GET" action="{{ route('wifi.index') }}" id="wifiFilterForm" class="mb-3">
+                        @if($search)<input type="hidden" name="search" value="{{ $search }}">@endif
+                        <div class="row g-2 align-items-end">
+                            <div class="col-12 col-sm-6 col-lg-3">
+                                <label class="form-label small text-muted mb-1"><i class="fas fa-user me-1"></i>Vendeur</label>
+                                <select name="user_id" class="form-select form-select-sm" onchange="this.form.submit()">
+                                    <option value="">Tous les vendeurs</option>
+                                    @foreach($users as $u)
+                                        <option value="{{ $u->id }}" {{ $user_id == $u->id ? 'selected' : '' }}>{{ $u->nom }} {{ $u->prenom }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-12 col-sm-6 col-lg-auto">
+                                @if($user_id || $search)
+                                    <a href="{{ route('wifi.index') }}" class="btn btn-sm btn-outline-danger w-100">
+                                        <i class="fas fa-times me-1"></i>Réinitialiser
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                    </form>
+                    @endif
+
+                    @if($search && !Auth::user()->isAdmin())
+                        <div class="d-flex align-items-center">
+                            <span class="small text-muted">Résultats pour "{{ $search }}"</span>
+                            <a href="{{ route('wifi.index') }}" class="btn btn-sm btn-outline-danger ms-2">
+                                <i class="fas fa-times me-1"></i>Réinitialiser
+                            </a>
+                        </div>
+                    @endif
+                    {{-- Barre de recherche mobile --}}
+                    <form method="GET" action="{{ route('wifi.index') }}" class="d-sm-none mt-2">
+                        <div class="input-group">
+                            <input class="form-control form-control-sm" type="text" name="search" value="{{ $search }}"
+                                placeholder="Nom ou description...">
+                            <button class="btn btn-sm btn-primary" type="submit"><i class="fas fa-search"></i></button>
+                        </div>
+                    </form>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -56,84 +105,24 @@
                             @foreach ($datas as $idx => $values)
                                 <tbody>
                                     <tr>
-                                        <th>{{ $idx + 1 }}</th>
-                                        <th>{{ $values->nom }}</th>
-                                        <th>{{ $values->description }}</th>
-                                        <th>{{ date_format($values->created_at, 'd/m/Y H:i:s') }}</th>
+                                        <td>{{ $idx + 1 }}</td>
+                                        <td>{{ $values->nom }}</td>
+                                        <td>{{ $values->description }}</td>
+                                        <td>{{ date_format($values->created_at, 'd/m/Y H:i:s') }}</td>
                                         @if(Auth::user()->isAdmin())
-                                        <th>{{ $values->user->nom }} {{ $values->user->prenom }}</th>
+                                        <td>{{ $values->user->nom }} {{ $values->user->prenom }}</td>
                                         @endif
                                         <td><button class="btn btn-primary btn-fixed-width" data-bs-toggle="modal" data-bs-target="#modalCopier" onclick="copyCode('{{$values->slug}}')">copier le code</button></td>
-                                        <th class="d-flex justify-content-start align-items-center">
-                                            <a href="" class="btn btn-primary btn-fixed-width me-1 mb-1"
-                                                data-bs-target="#view{{ $values->slug }}" data-bs-toggle="modal">Voir</a>
+                                        <td class="d-flex justify-content-start align-items-center">
+                                            <button type="button" class="btn btn-primary btn-fixed-width me-1 mb-1"
+                                                data-bs-target="#view{{ $values->slug }}" data-bs-toggle="modal">Voir</button>
                                             <a href="{{ route('wifi.edit', $values->slug) }}"
                                                 class="btn btn-warning btn-fixed-width me-1 mb-1">Editer</a>
 
-                                            <button href="" class="btn btn-danger btn-fixed-width me-1 mb-1"
+                                            <button type="button" class="btn btn-danger btn-fixed-width me-1 mb-1"
                                                 data-bs-target="#delete{{ $values->slug }}"
                                                 data-bs-toggle="modal">Supprimer</button>
-
-
-                                            <div class="modal fade" id="delete{{ $values->slug }}" tabindex="-1"
-                                                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Suppression
-                                                                des données
-                                                            </h1>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            Voulez-vous vraiment supprimer les données ?
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary"
-                                                                data-bs-dismiss="modal">Annuler</button>
-                                                            <form class="d-inline-block"
-                                                                action="{{ route('wifi.destroy', $values->slug) }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                <button type="submit" class="btn btn-danger">Continuer
-                                                                </button>
-                                                                @method('delete')
-                                                            </form>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal fade" id="view{{ $values->slug }}" tabindex="-1"
-                                                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">
-                                                                Informations
-                                                            </h1>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div>
-                                                                <span>Nom : </span>
-                                                                <span class="fw-bold">{{ $values->nom }}</span>
-                                                            </div>
-                                                            <div>
-                                                                <span>Description : </span>
-                                                                <span class="fw-bold">{{ $values->description }}</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary"
-                                                                data-bs-dismiss="modal">Fermer</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </th>
+                                        </td>
                                     </tr>
                                 </tbody>
                             @endforeach
@@ -141,6 +130,55 @@
 
                         </table>
                     </div>
+
+                    <!-- Modals outside table for stability -->
+                    @foreach ($datas as $values)
+                        <div class="modal fade" id="delete{{ $values->slug }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content bg-white text-dark">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5">Suppression des données</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Voulez-vous vraiment supprimer les données ?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Annuler</button>
+                                        <form class="d-inline-block" action="{{ route('wifi.destroy', $values->slug) }}" method="POST">
+                                            @csrf
+                                            @method('delete')
+                                            <button type="submit" class="btn btn-danger">Continuer</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="view{{ $values->slug }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content bg-white text-dark">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5">Informations</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div>
+                                            <span>Nom : </span>
+                                            <span class="fw-bold">{{ $values->nom }}</span>
+                                        </div>
+                                        <div>
+                                            <span>Description : </span>
+                                            <span class="fw-bold">{{ $values->description }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fermer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                     <div class="row">
                         <div class="col-md-6 align-self-center">
                             <!--p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p-->
@@ -154,7 +192,7 @@
                     <div class="modal fade" id="modalCopier" tabindex="-1"
                         aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
+                            <div class="modal-content bg-white text-dark">
                                 <div class="modal-header">
                                     <h1 class="modal-title fs-5" id="exampleModalLabel">
                                         Code d'integration

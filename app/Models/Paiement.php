@@ -16,6 +16,8 @@ class Paiement extends Model
         "moyen_de_paiement",
         "ticket_id",
         "user_id",
+        "status",
+        "provider_token"
     ];
 
     public function ticket(){

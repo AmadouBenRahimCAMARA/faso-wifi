@@ -9,6 +9,15 @@
             </div>
         </nav>
         <div class="container-fluid">
+            @if(isset($pendingRetraitsCount) && $pendingRetraitsCount > 0)
+            <div class="alert alert-danger d-flex align-items-center justify-content-between" role="alert">
+                <div>
+                   <i class="fas fa-exclamation-circle me-2"></i>
+                   <strong>Action requise :</strong> Vous avez {{ $pendingRetraitsCount }} demande(s) de retrait en attente.
+                </div>
+                <a href="{{ route('retrait.index') }}" class="btn btn-outline-danger btn-sm fw-bold">Voir les demandes</a>
+            </div>
+            @endif
             <div class="row">
                 <!-- Total Revenue -->
                 <div class="col-md-6 col-xl-3 mb-4">
@@ -85,6 +94,7 @@
                                     <th>Date</th>
                                     <th>Vendeur</th>
                                     <th>Montant</th>
+                                    <th>Statut</th>
                                     <th>Moyen de Paiement</th>
                                 </tr>
                             </thead>
@@ -93,8 +103,17 @@
                                 <tr>
                                     <td>{{ $payment->transaction_id }}</td>
                                     <td>{{ $payment->created_at->format('d/m/Y H:i') }}</td>
-                                    <td>{{ $payment->ticket->user->nom ?? 'Inconnu' }} {{ $payment->ticket->user->prenom ?? '' }}</td>
+                                    <td>{{ $payment->ticket->owner->nom ?? 'Inconnu' }} {{ $payment->ticket->owner->prenom ?? '' }}</td>
                                     <td>{{ $payment->ticket->tarif->montant ?? 0 }} FCFA</td>
+                                    <td>
+                                        @if($payment->status == 'completed')
+                                            <span class="badge bg-success">Payé</span>
+                                        @elseif($payment->status == 'failed')
+                                            <span class="badge bg-danger">Échoué</span>
+                                        @else
+                                            <span class="badge bg-warning text-dark">En attente</span>
+                                        @endif
+                                    </td>
                                     <td>{{ $payment->moyen_de_paiement }}</td>
                                 </tr>
                                 @endforeach

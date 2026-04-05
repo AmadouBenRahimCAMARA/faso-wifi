@@ -59,8 +59,8 @@
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <label for="montant" class="col-12 col-form-label">{{ __('Montant à retiré') }}
-                                        {{ ' (montant maxI : ' . $retrait . ' FCFA)' }}</label>
+                                    <label for="montant" class="col-12 col-form-label">{{ __('Montant à retirer') }}
+                                        <br><small class="text-muted">(Solde disponible : {{ $retrait }} FCFA - Minimum : 1000 FCFA)</small></label>
                                     <div class="col-md-6">
                                         <input id="montant" type="number" max={{ $retrait }}
                                             class="form-control @error('montant') is-invalid @enderror" name="montant"

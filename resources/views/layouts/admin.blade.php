@@ -6,16 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Dashboard - Brand</title>
     <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/fonts/fontawesome-all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/modern_ov.css') }}">
 
 </head>
 
 <body id="page-top">
+    @if(session()->has('impersonator_id'))
+        <div class="alert alert-danger text-center mb-0 fw-bold rounded-0" role="alert" style="z-index: 9999; position: relative;">
+            MODE ADMIN : Vous consultez le compte de {{ Auth::user()->nom }} {{ Auth::user()->prenom }}
+            <a href="{{ route('stop.impersonation') }}" class="btn btn-sm btn-outline-danger ms-3 bg-white text-danger">Retour à mon compte</a>
+        </div>
+    @endif
     <div id="wrapper">
-        <nav class="navbar align-items-start sidebar sidebar-dark accordion p-0 navbar-dark" style="background-color: #2196F3 !important;">
+        <nav class="navbar align-items-start sidebar sidebar-dark accordion p-0 navbar-dark">
             <div class="container-fluid d-flex flex-column p-0"><a
                     class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0"
                     href="{{ route('index') }}">
@@ -37,6 +45,14 @@
                     <li class="nav-item"><a class="nav-link @if (Route::currentRouteName() == 'admin.users') active @endif"
                             href="{{ route('admin.users') }}"><i class="fas fa-users"></i><span>Utilisateurs</span></a>
                     </li>
+                    <li class="nav-item"><a class="nav-link @if (Str::startsWith(Route::currentRouteName(), 'admin.messages')) active @endif"
+                            href="{{ route('admin.messages') }}"><i class="fas fa-envelope"></i><span>Messagerie</span>
+                            @php $unreadCount = \App\Models\ContactMessage::where('is_read', false)->count(); @endphp
+                            @if($unreadCount > 0)
+                                <span class="badge bg-danger ms-2">{{ $unreadCount }}</span>
+                            @endif
+                            </a>
+                    </li>
                     <hr class="sidebar-divider">
                     @endif
 
@@ -54,11 +70,22 @@
                                 class="fas fa-credit-card"></i><span>Paiements</span></a></li>
                     <li class="nav-item"><a class="nav-link @if (Route::currentRouteName() == 'retrait.index') active @endif"
                             href="{{ route('retrait.index') }}"><i
-                                class="fas fa-money-bill-wave"></i><span>Retraits</span></a></li>
-                    <li class="nav-item"><a class="nav-link @if (Route::currentRouteName() == 'retrait.index') active @endif"
+                                class="fas fa-money-bill-wave"></i><span>Retraits</span>
+                                @if(isset($pendingRetraitsCount) && $pendingRetraitsCount > 0 && Auth::user()->isAdmin())
+                                    <span class="badge bg-danger ms-2">{{ $pendingRetraitsCount }}</span>
+                                @endif
+                                </a></li>
+
+                    @if(!Auth::user()->isAdmin())
+                    <li class="nav-item"><a class="nav-link @if (Route::currentRouteName() == 'bilan.index') active @endif"
+                            href="{{ route('bilan.index') }}"><i class="fas fa-file-invoice-dollar"></i><span>Mon Bilan</span></a>
+                    </li>
+                    @endif
+
+                    <li class="nav-item"><a class="nav-link"
                             href="{{ route('logout') }}" onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();"><i
-                                class="fas  fa-power-off"></i><span>Deconnection</span></a></li>
+                                class="fas  fa-power-off"></i><span>Déconnexion</span></a></li>
                     <!--li class="nav-item"><a class="nav-link @if (Route::currentRouteName() == 'paiement.index') active @endif" href="{{ route('paiement.index') }}"><i class="fas fa-comment-alt"></i><span>Api SMS</span></a></li-->
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                         @csrf

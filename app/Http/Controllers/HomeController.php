@@ -18,7 +18,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['sendMessage']);
     }
 
     /**
@@ -31,13 +31,16 @@ class HomeController extends Controller
         $dateDuJour = Carbon::today(); // Récupère la date d'aujourd'hui
 
         if (Auth::user()->isAdmin()) {
-            $paiements = Paiement::latest()->paginate(10);
+            $paiements = Paiement::whereDate('updated_at', $dateDuJour)
+                        ->where('status', 'completed')
+                        ->latest()->paginate(10);
             $ticketsDuJour = Ticket::whereDate('updated_at', $dateDuJour)->where('etat_ticket', 'VENDU')->get();
             $ticketsTotalVendu = Ticket::where('etat_ticket', 'VENDU')->get();
             $solde = Solde::orderBy('id', 'desc')->first(); // This might need more thought for a global admin view
         } else {
             $paiements = Paiement::whereDate('updated_at', $dateDuJour)
                         ->where('user_id', Auth::user()->id)
+                        ->where('status', 'completed')
                         ->latest()->paginate(10);
 
             $ticketsDuJour = Ticket::whereDate('updated_at', $dateDuJour)
@@ -53,22 +56,62 @@ class HomeController extends Controller
                             ])
                             ->get();
 
-            $solde = Solde::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->first();
+            $solde = null; // No longer used for the final amount
         }
-        //dd($solde);
+        
+        $montant = Auth::user()->calculateBalance();
+
         $soldesDuJour = 0;
         foreach($ticketsDuJour as $ticket){
             $soldesDuJour = $soldesDuJour + $ticket->tarif->montant;
         }
-        $montant = isset($solde) ? $solde->solde : 0;
         $datas = [
             "solde_total" => $montant,
-            "retrait_total" => $montant - (25 * $montant)/100,
+            "retrait_total" => $montant,
             "solde_du_jour" => $soldesDuJour,
             "ticket_du_jour_vendu" => count($ticketsDuJour),
             "ticket_total_vendu" => count($ticketsTotalVendu),
         ];
        // dd(count($ticketsDuJour));
         return view('admin.index',compact('datas','paiements'));
+    }
+    public function stopImpersonate()
+    {
+        if (session()->has('impersonator_id')) {
+            // Log back in as admin
+            Auth::loginUsingId(session('impersonator_id'));
+            session()->forget('impersonator_id');
+            return redirect()->route('admin.users')->with('success', 'Restauration de la session administrateur.');
+        }
+        return redirect()->route('home');
+    }
+
+    public function sendMessage(\Illuminate\Http\Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email',
+            'subject' => 'required|string',
+            'message' => 'required|string',
+        ]);
+
+        $data = $request->all();
+
+        // Save to database
+        \App\Models\ContactMessage::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'subject' => $data['subject'],
+            'message' => $data['message'],
+        ]);
+
+        try {
+            // Send to the admin email defined in .env
+            \Illuminate\Support\Facades\Mail::to(config('mail.from.address'))->send(new \App\Mail\ContactMail($data));
+            return 'OK';
+        } catch (\Exception $e) {
+            // Message is saved even if email fails
+            return 'OK';
+        }
     }
 }
