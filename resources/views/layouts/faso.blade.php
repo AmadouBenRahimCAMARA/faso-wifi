@@ -16,7 +16,8 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
     <!-- Vendor CSS Files -->
     <link href="{{ asset('visitor/assets/vendor/aos/aos.css') }}" rel="stylesheet">
@@ -46,7 +47,8 @@
         <div class="container d-flex align-items-center">
             <h1 class="logo me-auto">
                 <a href="{{ route('index') }}" class="d-flex align-items-center">
-                    <img src="{{ asset('assets/img/logo.png') }}" alt="" style="height: 40px; margin-right: 10px; border-radius: 50%;">
+                    <img src="{{ asset('assets/img/logo.png') }}" alt=""
+                        style="height: 40px; margin-right: 10px; border-radius: 50%;">
                     WiLink Tickets<span>.</span>
                 </a>
             </h1>
@@ -70,9 +72,8 @@
                                 <a class="dropdown-item" href="{{ route('wifi.index') }}">
                                     {{ __('Mon compte') }}
                                 </a>
-                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                         document.getElementById('logout-form').submit();">
                                     {{ __('Déconnexion') }}
                                 </a>
 
@@ -106,12 +107,16 @@
                     <div class="col-lg-4 col-md-6 footer-contact">
                         <h3>WiLink Tickets<span style="color: var(--success);">.</span></h3>
                         <p class="mt-3">
-                            La solution leader pour la vente de tickets WiFi au Burkina Faso. Digitalisez votre activité dès aujourd'hui.
+                            La solution leader pour la vente de tickets WiFi au Burkina Faso. Digitalisez votre activité
+                            dès aujourd'hui.
                         </p>
                         <div class="contact-info mt-4">
-                            <p class="mb-2"><i class="ri-map-pin-line me-2" style="color: var(--success);"></i> Bobo-Dioulasso, Secteur 22</p>
-                            <p class="mb-2"><i class="ri-phone-line me-2" style="color: var(--success);"></i> (+226) 54 78 19 78</p>
-                            <p class="mb-0"><i class="ri-mail-line me-2" style="color: var(--success);"></i> info.wilink.ticket@gmail.com</p>
+                            <p class="mb-2"><i class="ri-map-pin-line me-2" style="color: var(--success);"></i>
+                                Bobo-Dioulasso, Secteur 22</p>
+                            <p class="mb-2"><i class="ri-phone-line me-2" style="color: var(--success);"></i> (+226) 54
+                                78 19 78</p>
+                            <p class="mb-0"><i class="ri-mail-line me-2" style="color: var(--success);"></i>
+                                info.wilink.ticket@gmail.com</p>
                         </div>
                     </div>
 
@@ -153,7 +158,7 @@
                     &copy; {{ date('Y') }} <strong><span>WiLink Tickets</span></strong>. Tous droits réservés.
                 </div>
                 <div class="credits" style="font-size: 0.8rem; opacity: 0.6;">
-                    Propulsé par <span class="fw-bold">WiLink International SA</span>
+                    Propulsé par <span class="fw-bold">WiLink International SARL</span>
                 </div>
             </div>
         </div>
