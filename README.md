@@ -127,4 +127,4 @@ Si les messages d'erreur restent en anglais malgré la configuration :
 2. Vider le cache de l'application : `php artisan cache:clear`
 
 ---
-*Document généré automatiquement - Dernière mise à jour : Janvier 2026*
+*Dernière mise à jour : Janvier 2026*
