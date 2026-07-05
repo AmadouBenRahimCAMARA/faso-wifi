@@ -123,10 +123,17 @@ class RetraitController extends Controller
             abort(403, "Les administrateurs ne peuvent pas faire de demande de retrait.");
         }
 
+        $soldeDisponible = Auth::user()->calculateBalance();
+
         $request->validate([
             'moyen_de_paiement' => 'required|string|max:255',
             'numero_paiement' => 'required|string|max:255',
-            'montant' => 'required|numeric|min:1000',
+            'montant' => [
+                'required',
+                'numeric',
+                'min:1000',
+                'max:' . $soldeDisponible,
+            ],
         ]);
 
         $request['slug'] = Str::slug(Str::random(10));
@@ -192,7 +199,21 @@ class RetraitController extends Controller
             // Let's assume $retrait->montant IS the amount to subtract.
             
             // Safety check: enough balance?
-            // Actually, we should check $retrait is <= calculated limit, but for now we trust the val stored.
+            if ($retrait->montant > $currentAmount) {
+                \Illuminate\Support\Facades\Log::warning(
+                    "Tentative de retrait avec solde insuffisant: " .
+                    "User ID {$retrait->user_id}, " .
+                    "Montant: {$retrait->montant}, " .
+                    "Solde: {$currentAmount}"
+                );
+                
+                return back()->with('error', 
+                    "❌ Impossible de valider ce retrait. " .
+                    "Montant demandé : {$retrait->montant} FCFA, " .
+                    "Solde disponible : {$currentAmount} FCFA. " .
+                    "Le montant dépasse le solde disponible."
+                );
+            }
             
             $newDistSolde = $currentAmount - $retrait->montant;
 
