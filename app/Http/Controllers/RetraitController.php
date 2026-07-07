@@ -6,6 +6,7 @@ use App\Models\Retrait;
 use App\Models\Paiement;
 use App\Models\Ticket;
 use App\Models\Solde;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
@@ -181,58 +182,57 @@ class RetraitController extends Controller
             'statut' => 'required|in:PAYE,REJETE'
         ]);
 
-        if($retrait->statut !== 'EN_ATTENTE'){
-             return back()->with('error', 'Ce retrait a déjà été traité.');
-        }
-
         if($request->statut === 'PAYE'){
-            // Logic to pay
-            // 1. Get User's last solde
-            $lastSolde = Solde::where('user_id', $retrait->user_id)->orderBy('id', 'desc')->first();
-            $currentAmount = $lastSolde ? $lastSolde->solde : 0;
-
-            // 2. Calculate New Balance
-            // Note: The withdrawal amount requested ($retrait->montant) is what they want to receive.
-            // But usually, logic implies the deduction from system balance.
-            // Assuming $retrait->montant is the amount to be DEDUCTED.
-            // If the math in Create was "Display = Solde - 25%", then the User requests an amount.
-            // Let's assume $retrait->montant IS the amount to subtract.
-            
-            // Safety check: enough balance?
-            if ($retrait->montant > $currentAmount) {
-                \Illuminate\Support\Facades\Log::warning(
-                    "Tentative de retrait avec solde insuffisant: " .
-                    "User ID {$retrait->user_id}, " .
-                    "Montant: {$retrait->montant}, " .
-                    "Solde: {$currentAmount}"
-                );
+            // 🔒 UTILISER UNE TRANSACTION AVEC VERROUILLAGE pour éviter la race condition
+            try {
+                DB::transaction(function () use ($retrait, $request) {
+                    // Re-verrouiller le retrait pour éviter le double traitement
+                    $lockedRetrait = Retrait::where('id', $retrait->id)->lockForUpdate()->first();
+                    
+                    if ($lockedRetrait->statut !== 'EN_ATTENTE') {
+                        throw new \Exception('Ce retrait a déjà été traité.');
+                    }
+                    
+                    // ✅ VÉRIFIER CONTRE calculateBalance() qui est la source de vérité
+                    $owner = User::find($lockedRetrait->user_id);
+                    if (!$owner) {
+                        throw new \Exception('Utilisateur introuvable.');
+                    }
+                    
+                    $soldeDisponible = $owner->calculateBalance();
+                    
+                    if ($lockedRetrait->montant > $soldeDisponible) {
+                        throw new \Exception(
+                            "Solde insuffisant. Disponible: {$soldeDisponible} FCFA, Demandé: {$lockedRetrait->montant} FCFA"
+                        );
+                    }
+                    
+                    // Créer l'entrée Solde avec le solde recalculé
+                    Solde::create([
+                        'solde' => $soldeDisponible - $lockedRetrait->montant,
+                        'type' => 'RETRAIT',
+                        'slug' => Str::slug(Str::random(10)),
+                        'user_id' => $lockedRetrait->user_id,
+                        'paiement_id' => null 
+                    ]);
+                    
+                    $lockedRetrait->update(['statut' => 'PAYE']);
+                });
                 
-                return back()->with('error', 
-                    "❌ Impossible de valider ce retrait. " .
-                    "Montant demandé : {$retrait->montant} FCFA, " .
-                    "Solde disponible : {$currentAmount} FCFA. " .
-                    "Le montant dépasse le solde disponible."
-                );
+                return back()->with('success', 'Retrait validé et solde mis à jour.');
+                
+            } catch (\Exception $e) {
+                return back()->with('error', '❌ ' . $e->getMessage());
             }
-            
-            $newDistSolde = $currentAmount - $retrait->montant;
-
-            // 3. Create new Solde entry
-            Solde::create([
-                'solde' => $newDistSolde,
-                'type' => 'RETRAIT',
-                'slug' => Str::slug(Str::random(10)),
-                'user_id' => $retrait->user_id,
-                'paiement_id' => null 
-            ]);
-
-            $retrait->update(['statut' => 'PAYE']);
-
-            return back()->with('success', 'Retrait validé et solde mis à jour.');
-
         } else {
             // Reject
-            $retrait->update(['statut' => 'REJETE']);
+            DB::transaction(function () use ($retrait) {
+                $lockedRetrait = Retrait::where('id', $retrait->id)->lockForUpdate()->first();
+                if ($lockedRetrait->statut !== 'EN_ATTENTE') {
+                    throw new \Exception('Ce retrait a déjà été traité.');
+                }
+                $lockedRetrait->update(['statut' => 'REJETE']);
+            });
             return back()->with('success', 'Retrait rejeté.');
         }
     }
