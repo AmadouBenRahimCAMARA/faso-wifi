@@ -32,13 +32,16 @@ class RetraitController extends Controller
                 $ticketsDuJour = Ticket::whereDate('updated_at', Carbon::today())->where('etat_ticket', 'VENDU')->get();
                 $ticketsTotalVendu = Ticket::where('etat_ticket', 'VENDU')->get();
                 
-                // For admin, calculate Global Revenue and subtract total paid withdrawals
+                // For admin: Calculate global revenue EXCLUDING user #6 (problematic reseller)
                 $totalRevenue = Paiement::where('paiements.status', 'completed')
                     ->join('tickets', 'paiements.ticket_id', '=', 'tickets.id')
                     ->join('tarifs', 'tickets.tarif_id', '=', 'tarifs.id')
+                    ->where('tickets.user_id', '!=', 6) // Exclude reseller #6
                     ->sum(DB::raw('CAST(tarifs.montant AS DECIMAL)'));
                 
-                $totalRetraitsPayes = Retrait::where('statut', 'PAYE')->sum(DB::raw('CAST(montant AS DECIMAL)'));
+                $totalRetraitsPayes = Retrait::where('statut', 'PAYE')
+                    ->where('user_id', '!=', 6) // Exclude reseller #6
+                    ->sum(DB::raw('CAST(montant AS DECIMAL)'));
                 
                 $montant = $totalRevenue - $totalRetraitsPayes;
             } else {
