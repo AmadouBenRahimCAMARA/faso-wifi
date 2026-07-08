@@ -112,19 +112,14 @@ class User extends Authenticatable
                 ->sum(\Illuminate\Support\Facades\DB::raw('CAST(tarifs.montant AS DECIMAL)'));
         }
 
-        // Reseller Logic: Align with Bilan View
-        $paiements = \App\Models\Paiement::whereHas('ticket', function($q) {
-            $q->where('user_id', $this->id);
-        })->where('status', 'completed')->get();
-
-        $chiffreAffairesTotal = 0;
-        foreach($paiements as $p){
-             // Load relationship if not loaded
-             $chiffreAffairesTotal += (float)$p->ticket->tarif->montant;
-        }
+        // Reseller Logic: Utiliser la colonne montant de paiements (ne dépend plus de tickets/tarifs)
+        $totalBrut = \Illuminate\Support\Facades\DB::table('paiements')
+            ->where('paiements.user_id', $this->id)
+            ->where('paiements.status', 'completed')
+            ->sum(\Illuminate\Support\Facades\DB::raw('CAST(montant AS DECIMAL)'));
 
         // 10% Commission
-        $netTotal = $chiffreAffairesTotal * 0.90;
+        $netTotal = $totalBrut * 0.90;
 
         // Paid Withdrawals
         $totalRetraits = \App\Models\Retrait::where('user_id', $this->id)

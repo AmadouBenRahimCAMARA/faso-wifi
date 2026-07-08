@@ -17,7 +17,8 @@ class Paiement extends Model
         "ticket_id",
         "user_id",
         "status",
-        "provider_token"
+        "provider_token",
+        "montant"
     ];
 
     public function ticket(){

@@ -86,7 +86,8 @@ class Controller extends BaseController
             'slug' => Str::random(10),
             'moyen_de_paiement' => 'Mobile Money', 
             'status' => 'pending',
-            'numero' => '' // Will be filled on confirmation
+            'numero' => '', // Will be filled on confirmation
+            'montant' => $tarif->montant // Save amount at creation time
         ]);
 
         session([

@@ -73,12 +73,13 @@ class WebhookController extends Controller
                 // Lock the payment row to prevent concurrent processing by Controller@statutPaiement
                 $lockedPaiement = Paiement::where('id', $paiement->id)->lockForUpdate()->first();
 
-                if ($lockedPaiement->status != 'completed') {
-                    // Update Paiement
-                    $lockedPaiement->status = 'completed';
-                    $lockedPaiement->moyen_de_paiement = $verifiedPayin->operator_name ?? 'Ligdicash';
-                    $lockedPaiement->numero = $verifiedPayin->customer ?? '';
-                    $lockedPaiement->save();
+                    if ($lockedPaiement->status != 'completed') {
+                        // Update Paiement
+                        $lockedPaiement->status = 'completed';
+                        $lockedPaiement->moyen_de_paiement = $verifiedPayin->operator_name ?? 'Ligdicash';
+                        $lockedPaiement->numero = $verifiedPayin->customer ?? '';
+                        $lockedPaiement->montant = $lockedPaiement->ticket->tarif->montant ?? 0;
+                        $lockedPaiement->save();
 
                     // Update Ticket
                     $ticket = Ticket::find($lockedPaiement->ticket_id);
