@@ -95,14 +95,18 @@ class WebhookController extends Controller
                             $ticket->owner->notify(new \App\Notifications\LowTicketAlert($ticket->tarif, $nombreRestant));
                         }
 
-                        // Update Solde (Credit Vendor) - SELF-CORRECTING LOGIC
-                        // We use the centralized calculateBalance() which sums real sales 
-                        // this instantly fixes any historical double-credit errors.
+                        // Update Solde (Credit Vendor)
                         $owner = \App\Models\User::find($lockedPaiement->user_id);
-                        $newTotalBalance = $owner->calculateBalance();
+                        $dernierSolde = \Illuminate\Support\Facades\DB::table('soldes')
+                            ->where('user_id', $lockedPaiement->user_id)
+                            ->orderBy('id', 'desc')
+                            ->first();
+                        $ancienSolde = $dernierSolde ? (float) $dernierSolde->solde : 0;
+                        $montantNet = (float) ($lockedPaiement->montant ?? 0);
+                        $nouveauSolde = $ancienSolde + $montantNet;
 
                         Solde::create([
-                            "solde" => $newTotalBalance,
+                            "solde" => $nouveauSolde,
                             "type" => "PAIEMENT",
                             "slug" => Str::slug(Str::random(10)),
                             "user_id" => $lockedPaiement->user_id,

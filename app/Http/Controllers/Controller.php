@@ -162,17 +162,23 @@ class Controller extends BaseController
                             $ticket->etat_ticket = 'VENDU';
                             $ticket->save();
 
-                            // Update Solde (Credit Vendor) - SELF-CORRECTING LOGIC
-                            $owner = \App\Models\User::find($lockedPaiement->user_id);
-                            $newTotalBalance = $owner->calculateBalance();
+                        // Update Solde (Credit Vendor)
+                        $owner = \App\Models\User::find($lockedPaiement->user_id);
+                        $dernierSolde = \Illuminate\Support\Facades\DB::table('soldes')
+                            ->where('user_id', $lockedPaiement->user_id)
+                            ->orderBy('id', 'desc')
+                            ->first();
+                        $ancienSolde = $dernierSolde ? (float) $dernierSolde->solde : 0;
+                        $montantNet = (float) ($lockedPaiement->montant ?? $lockedPaiement->ticket->tarif->montant ?? 0);
+                        $nouveauSolde = $ancienSolde + ($montantNet * 0.90);
 
-                            Solde::create([
-                                "solde" => $newTotalBalance,
-                                "type" => "PAIEMENT",
-                                "slug" => Str::slug(Str::random(10)),
-                                "user_id" => $lockedPaiement->user_id,
-                                "paiement_id" => $lockedPaiement->id
-                            ]);
+                        Solde::create([
+                            "solde" => $nouveauSolde,
+                            "type" => "PAIEMENT",
+                            "slug" => Str::slug(Str::random(10)),
+                            "user_id" => $lockedPaiement->user_id,
+                            "paiement_id" => $lockedPaiement->id
+                        ]);
                         }
                     }
                 });

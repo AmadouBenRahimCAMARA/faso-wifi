@@ -101,7 +101,7 @@ class User extends Authenticatable
     /**
      * Calculate the real-time balance for the user.
      * For Admin: Total Gross Revenue.
-     * For Reseller: (Total Net Gain) - (Total Paid Withdrawals).
+     * For Reseller: Uses the last entry in the soldes table (source of truth).
      */
     public function calculateBalance()
     {
@@ -112,20 +112,13 @@ class User extends Authenticatable
                 ->sum(\Illuminate\Support\Facades\DB::raw('CAST(tarifs.montant AS DECIMAL)'));
         }
 
-        // Reseller Logic: Utiliser la colonne montant de paiements (ne dépend plus de tickets/tarifs)
-        $totalBrut = \Illuminate\Support\Facades\DB::table('paiements')
-            ->where('paiements.user_id', $this->id)
-            ->where('paiements.status', 'completed')
-            ->sum(\Illuminate\Support\Facades\DB::raw('CAST(montant AS DECIMAL)'));
+        // Reseller Logic: Use the last solde entry as the source of truth
+        // This allows manual corrections without affecting other users
+        $dernierSolde = \Illuminate\Support\Facades\DB::table('soldes')
+            ->where('user_id', $this->id)
+            ->orderBy('id', 'desc')
+            ->first();
 
-        // 10% Commission
-        $netTotal = $totalBrut * 0.90;
-
-        // Paid Withdrawals
-        $totalRetraits = \App\Models\Retrait::where('user_id', $this->id)
-            ->where('statut', 'PAYE')
-            ->sum(\Illuminate\Support\Facades\DB::raw('CAST(montant AS DECIMAL)'));
-
-        return $netTotal - $totalRetraits;
+        return $dernierSolde ? (float) $dernierSolde->solde : 0;
     }
 }

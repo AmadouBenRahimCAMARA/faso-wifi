@@ -207,7 +207,7 @@ class RetraitController extends Controller
                         );
                     }
                     
-                    // Créer l'entrée Solde avec le solde recalculé
+                    // Créer l'entrée Solde avec le nouveau solde après retrait
                     Solde::create([
                         'solde' => $soldeDisponible - $lockedRetrait->montant,
                         'type' => 'RETRAIT',
